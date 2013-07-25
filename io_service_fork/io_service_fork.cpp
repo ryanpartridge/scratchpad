@@ -15,7 +15,9 @@
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 
-class Response
+class Response :
+    public boost::enable_shared_from_this<Response>,
+    private boost::noncopyable
 {
 public:
     explicit Response(int result) :
@@ -24,25 +26,12 @@ public:
     	std::cout << "creating response (default)" << std::endl;
     }
 
-    Response(const Response& other) :
-    	result_(other.result_)
-    {
-    	std::cout << "creating response (copy)" << std::endl;
-    }
-
-    Response& operator=(const Response& other)
-    {
-    	std::cout << "response assignment operator" << std::endl;
-    	result_ = other.result_;
-    	return *this;
-    }
-
     virtual ~Response()
     {
     	std::cout << "destroying response" << std::endl;
     }
 
-    void operator()()
+    void processResponse()
     {
         std::cout << "Return code: " << result_ << std::endl;
     }
@@ -61,6 +50,7 @@ public:
         responseService_(responseService),
         message_(message)
     {
+        std::cout << "creating request (default)" << std::endl;
         signal_.reset();
     }
 
@@ -98,7 +88,7 @@ public:
             signal_->cancel();
 
             std::cout << "[child] Exec-ing the new process" << std::endl;
-            const char* cmd = "/bin/true";
+            const char* cmd = "/bin/false";
             execl(cmd, cmd, NULL);
 
             // the execl call only returns if an error has occurred,
@@ -136,7 +126,8 @@ public:
             }
 
             std::cout << "posting the response back" << std::endl;
-            responseService_.post(Response(exitCode));
+            boost::shared_ptr<Response> response(boost::shared_ptr<Response>(new Response(exitCode)));
+            responseService_.post(boost::bind(&Response::processResponse, response));
         }
         else
         {
