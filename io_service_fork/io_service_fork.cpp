@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
@@ -17,10 +18,28 @@
 class Response
 {
 public:
-    Response(int result) :
+    explicit Response(int result) :
         result_(result)
     {
+    	std::cout << "creating response (default)" << std::endl;
+    }
 
+    Response(const Response& other) :
+    	result_(other.result_)
+    {
+    	std::cout << "creating response (copy)" << std::endl;
+    }
+
+    Response& operator=(const Response& other)
+    {
+    	std::cout << "response assignment operator" << std::endl;
+    	result_ = other.result_;
+    	return *this;
+    }
+
+    virtual ~Response()
+    {
+    	std::cout << "destroying response" << std::endl;
     }
 
     void operator()()
@@ -33,7 +52,8 @@ private:
 };
 
 class Request :
-    public boost::enable_shared_from_this<Request>
+    public boost::enable_shared_from_this<Request>,
+    private boost::noncopyable
 {
 public:
     Request(boost::asio::io_service& requestService, boost::asio::io_service& responseService, const std::string& message) :
@@ -46,6 +66,7 @@ public:
 
     virtual ~Request()
     {
+    	std::cout << "destroying request" << std::endl;
         if (signal_)
         {
             signal_->cancel();
@@ -53,7 +74,7 @@ public:
         signal_.reset();
     }
 
-    void operator()()
+    void processRequest()
     {
         std::cout << "Incoming request message: " << message_ << std::endl;
         signal_.reset();
@@ -96,7 +117,6 @@ public:
                 std::cout << "[parent] Capturing the child pid (" << pid << ")" << std::endl;
                 childPid_ = pid;
 
-                std::cout << "[parent] Start waiting for the child to exit" << std::endl;
                 startSignalWait();
             }
         }
@@ -106,21 +126,35 @@ public:
     {
         std::cout << "handling the SIGCHLD signal" << std::endl;
         int status;
-        if (waitpid(childPid_, &status, WNOHANG) > 0)
+        if (waitpid(childPid_, &status, 0) > 0)
         {
+        	std::cout << "got a signal on the child" << std::endl;
             int exitCode = -1;
             if (WIFEXITED(status))
             {
                 exitCode = WEXITSTATUS(status);
             }
+
+            std::cout << "posting the response back" << std::endl;
             responseService_.post(Response(exitCode));
         }
-        startSignalWait();
+        else
+        {
+        	startSignalWait();
+        }
     }
 
     void startSignalWait()
     {
-        signal_->async_wait(boost::bind(&Request::handleSignal, this));
+    	if (signal_)
+    	{
+            std::cout << "[parent] Start waiting for the child to exit" << std::endl;
+    		signal_->async_wait(boost::bind(&Request::handleSignal, this->shared_from_this()));
+    	}
+    	else
+    	{
+    		std::cout << "lost the signal set" << std::endl;
+    	}
     }
 
 private:
@@ -143,7 +177,8 @@ int main(int argc, char* argv[])
 
     std::cout << "Sending some work" << std::endl;
     boost::shared_ptr<Request> req(boost::shared_ptr<Request>(new Request(req_io_service, resp_io_service, "Hello world!")));
-    req_io_service.post(req));
+    req_io_service.post(boost::bind(&Request::processRequest, req));
+    req.reset();
 
     req_thread.join();
     resp_thread.join();
