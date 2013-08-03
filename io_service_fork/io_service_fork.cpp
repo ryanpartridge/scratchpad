@@ -48,7 +48,8 @@ public:
     Request(boost::asio::io_service& requestService, boost::asio::io_service& responseService, const std::string& message) :
         requestService_(requestService),
         responseService_(responseService),
-        message_(message)
+        message_(message),
+        childPid_(-1)
     {
         std::cout << "creating request (default)" << std::endl;
         signal_.reset();
