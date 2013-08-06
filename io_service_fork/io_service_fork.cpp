@@ -89,8 +89,9 @@ public:
             signal_->cancel();
 
             std::cout << "[child] Exec-ing the new process" << std::endl;
-            const char* cmd = "/bin/false";
-            execl(cmd, cmd, NULL);
+            const char* cmd = "/bin/sleep";
+            const char* arg1 = "5";
+            execl(cmd, cmd, arg1, NULL);
 
             // the execl call only returns if an error has occurred,
             // so exit immediately
@@ -113,7 +114,7 @@ public:
         }
     }
 
-    void handleSignal()
+    void handleSignal(const boost::system::error_code& ec)
     {
         std::cout << "handling the SIGCHLD signal" << std::endl;
         int status;
@@ -141,7 +142,7 @@ public:
     	if (signal_)
     	{
             std::cout << "[parent] Start waiting for the child to exit" << std::endl;
-    		signal_->async_wait(boost::bind(&Request::handleSignal, this->shared_from_this()));
+    		signal_->async_wait(boost::bind(&Request::handleSignal, this->shared_from_this(), boost::asio::placeholders::error));
     	}
     	else
     	{
