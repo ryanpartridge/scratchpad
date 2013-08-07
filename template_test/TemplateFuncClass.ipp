@@ -20,6 +20,7 @@ TemplateFuncClass::~TemplateFuncClass()
 template <typename Func>
 void TemplateFuncClass::execFunc(Func func)
 {
-
+    std::string hello("hello");
+    func(hello);
 }
 #endif
