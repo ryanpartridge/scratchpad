@@ -13,10 +13,14 @@
 #include <boost/chrono.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/bind/protect.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <Task.hpp>
 
 using namespace std;
+
+typedef boost::function<void(int)> VoidIntFunc;
 
 void freeFunction()
 {
@@ -28,10 +32,22 @@ void freeFunctionWithParam(int i)
     cout << "free function response handler with parameter (" << i << ")" << endl;
 }
 
-class Functor
+class Functor :
+    public FunctorBase
 {
 public:
     typedef void result_type;
+
+    Functor() :
+        FunctorBase()
+    {
+
+    }
+
+    virtual ~Functor()
+    {
+
+    }
 
     void operator()()
     {
@@ -44,7 +60,9 @@ public:
     }
 };
 
-class MemberFunction
+class MemberFunction :
+    public boost::enable_shared_from_this<MemberFunction>,
+    private boost::noncopyable
 {
 public:
     void handlerFunction()
@@ -68,7 +86,7 @@ int main(int argc, char* argv[])
     boost::thread responder(boost::bind(&boost::asio::io_service::run, boost::ref(responderService)));
     boost::thread worker(boost::bind(&boost::asio::io_service::run, boost::ref(workerService)));
 
-    boost::shared_ptr<Task> t = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService));
+    //boost::shared_ptr<Task> t = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService));
 
     // these work, but do not post to the io_service, which is the whole point
     //t->doWork(3, freeFunction); // works
@@ -83,6 +101,29 @@ int main(int argc, char* argv[])
     //workerService.post(boost::bind(&Task::doWorkWithParam<void(&)(int)>, t, 3, boost::ref(freeFunctionWithParam))); // works
     //workerService.post(boost::bind<void>(&Task::doWorkWithParam<Functor>, t, 3, Functor())); // works
     //workerService.post(boost::bind(&Task::doWorkWithParam<boost::function<void(int)> >, t, 3, boost::protect(boost::bind(&MemberFunction::handlerFunctionWithParam, MemberFunction(), _1)))); //works
+
+    //boost::shared_ptr<FreeFunctionTask> fft = boost::make_shared<FreeFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(freeFunctionWithParam));
+    //workerService.post(boost::bind(&FreeFunctionTask::doWorkWithParam, fft, 3)); // works
+
+    //Functor f;
+    //boost::shared_ptr<FunctorTask> ft = boost::make_shared<FunctorTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(f));
+    //workerService.post(boost::bind(&FunctorTask::doWorkWithParam, ft, 3));
+
+    //MemberFunction mfi;
+    //boost::function<void(int)> mf = boost::bind(&MemberFunction::handlerFunctionWithParam, boost::ref(mfi), _1);
+    //boost::shared_ptr<MemberFunctionTask> mft = boost::make_shared<MemberFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(mf));
+    //workerService.post(boost::bind(&MemberFunctionTask::doWorkWithParam, mft, 3)); // works
+
+    VoidIntFunc freeFunc(freeFunctionWithParam);
+    Functor f;
+    VoidIntFunc functorFunc(boost::ref(f));
+    MemberFunction mf;
+    VoidIntFunc memberFunc(boost::bind(&MemberFunction::handlerFunctionWithParam, boost::ref(mf), _1));
+
+    //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(freeFunc)); // works
+    //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(functorFunc)); // works
+    //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(memberFunc)); // works
+    //workerService.post(boost::bind(&BoostFunctionTask::doWorkWithParam, bft, 3));
 
     // shut down the worker thread
     cout << "waiting for worker thread to finish" << endl;
