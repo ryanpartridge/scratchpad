@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 
     VoidIntFunc freeFunc(freeFunctionWithParam);
     Functor f;
-    VoidIntFunc functorFunc(boost::ref(f));
+    VoidIntFunc functorFunc(boost::ref(Functor()));
     MemberFunction mf;
     VoidIntFunc memberFunc(boost::bind(&MemberFunction::handlerFunctionWithParam, boost::ref(mf), _1));
 
