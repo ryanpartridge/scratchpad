@@ -20,8 +20,6 @@
 
 using namespace std;
 
-typedef boost::function<void(int)> VoidIntFunc;
-
 void freeFunction()
 {
     cout << "free function response handler" << endl;
@@ -114,16 +112,31 @@ int main(int argc, char* argv[])
     //boost::shared_ptr<MemberFunctionTask> mft = boost::make_shared<MemberFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(mf));
     //workerService.post(boost::bind(&MemberFunctionTask::doWorkWithParam, mft, 3)); // works
 
-    VoidIntFunc freeFunc(freeFunctionWithParam);
-    Functor f;
-    VoidIntFunc functorFunc(boost::ref(Functor()));
-    MemberFunction mf;
-    VoidIntFunc memberFunc(boost::bind(&MemberFunction::handlerFunctionWithParam, boost::ref(mf), _1));
+//    CompletionHandler freeFunc(freeFunctionWithParam);
+//    Functor f;
+//    CompletionHandler functorFunc(boost::ref(f));
+//    MemberFunction mf;
+//    CompletionHandler memberFunc(boost::bind(&MemberFunction::handlerFunctionWithParam, boost::ref(mf), _1));
 
     //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(freeFunc)); // works
     //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(functorFunc)); // works
     //boost::shared_ptr<BoostFunctionTask> bft = boost::make_shared<BoostFunctionTask>(boost::ref(workerService), boost::ref(responderService), boost::ref(memberFunc)); // works
     //workerService.post(boost::bind(&BoostFunctionTask::doWorkWithParam, bft, 3));
+
+    // free function
+//    SP_CompletionHandler handler = BasicTask3::wrapHandler(freeFunctionWithParam); // works
+
+    // Functor
+//    Functor f;
+//    SP_CompletionHandler handler = BasicTask3::wrapHandler(f); // works
+
+    // member function
+//    MemberFunction mf;
+//    SP_CompletionHandler handler = BasicTask3::wrapHandler(mf, &MemberFunction::handlerFunctionWithParam); // works
+
+    // schedule the work
+//    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+//    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
 
     // shut down the worker thread
     cout << "waiting for worker thread to finish" << endl;

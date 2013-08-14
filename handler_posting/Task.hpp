@@ -10,6 +10,7 @@
 
 #include <BasicTask.hpp>
 #include <BasicTask2.hpp>
+#include <BasicTask3.hpp>
 
 class FunctorBase :
     public boost::enable_shared_from_this<FunctorBase>,
