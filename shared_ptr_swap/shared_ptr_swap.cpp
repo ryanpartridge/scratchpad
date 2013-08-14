@@ -54,6 +54,14 @@ int main(int argc, char* argv[])
     boost::shared_ptr<A> a1 = boost::make_shared<A>();
     a1 = boost::make_shared<A>();
 
+    cout << "make a copy of a1 via copy constructor" << endl;
+    boost::shared_ptr<A> a2(a1);
+    cout << endl;
+
+    cout << "make a copy of a1 via assignment" << endl;
+    boost::shared_ptr<A> a3 = a1;
+    cout << endl;
+
     cout << "all done" << endl;
     return 0;
 }

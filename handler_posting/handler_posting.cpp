@@ -39,12 +39,12 @@ public:
     Functor() :
         FunctorBase()
     {
-
+        cout << "Functor default constructor" << endl;
     }
 
     virtual ~Functor()
     {
-
+        cout << "Functor destructor" << endl;
     }
 
     void operator()()
@@ -63,6 +63,16 @@ class MemberFunction :
     private boost::noncopyable
 {
 public:
+    MemberFunction()
+    {
+        cout << "MemberFunction default constructor" << endl;
+    }
+
+    virtual ~MemberFunction()
+    {
+        cout << "MemberFunction destructor" << endl;
+    }
+
     void handlerFunction()
     {
         cout << "member function response handler" << endl;
@@ -73,6 +83,33 @@ public:
         cout << "member function response handler with parameter (" << i << ")" << endl;
     }
 };
+
+void testFreeFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
+{
+    CompletionHandler handler = BasicTask3::wrapHandler(freeFunctionWithParam);
+    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+}
+
+void testMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
+{
+    boost::shared_ptr<MemberFunction> mf = boost::make_shared<MemberFunction>();
+    CompletionHandler handler(boost::bind(&MemberFunction::handlerFunctionWithParam, mf, _1));
+    //CompletionHandler handler = BasicTask3(mf, &MemberFunction::handlerFunctionWithParam);
+    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+    //BasicTask3 bt(workerService, responderService, handler);
+    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+
+//    Functor f;
+//    CompletionHandler handler2(boost::ref(f));
+}
+
+void testSharedPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
+{
+    CompletionHandler handler = BasicTask3::wrapHandler<MemberFunction>(&MemberFunction::handlerFunctionWithParam);
+    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+}
 
 int main(int argc, char* argv[])
 {
@@ -124,7 +161,7 @@ int main(int argc, char* argv[])
     //workerService.post(boost::bind(&BoostFunctionTask::doWorkWithParam, bft, 3));
 
     // free function
-//    SP_CompletionHandler handler = BasicTask3::wrapHandler(freeFunctionWithParam); // works
+    //CompletionHandler handler = BasicTask3::wrapHandler(freeFunctionWithParam); // works
 
     // Functor
 //    Functor f;
@@ -134,9 +171,29 @@ int main(int argc, char* argv[])
 //    MemberFunction mf;
 //    SP_CompletionHandler handler = BasicTask3::wrapHandler(mf, &MemberFunction::handlerFunctionWithParam); // works
 
+    // member function that uses a shared_ptr
+//    SP_CompletionHandler handler = BasicTask3::wrapHandler<MemberFunction>(&MemberFunction::handlerFunctionWithParam);
+
     // schedule the work
 //    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
 //    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+
+//    cout << "calling free function life cycle test" << endl;
+//    testFreeFunctionCompletionLifeCycle(workerService, responderService);
+//    cout << "returned from free function life cycle test" << endl;
+//    cout << endl;
+//
+//    cout << "calling member function life cycle test" << endl;
+//    testMemberFunctionCompletionLifeCycle(workerService, responderService);
+//    cout << "returned from member function life cycle test" << endl;
+//    cout << endl;
+
+    cout << "calling shared pointer member function life cycle test" << endl;
+    testSharedPointerMemberFunctionCompletionLifeCycle(workerService, responderService);
+    cout << "returned from shared pointer member function life cycle test" << endl;
+    cout << endl;
+
+    boost::this_thread::sleep_for(boost::chrono::seconds(5));
 
     // shut down the worker thread
     cout << "waiting for worker thread to finish" << endl;
@@ -186,8 +243,8 @@ int main(int argc, char* argv[])
     {
         cout << "responder thread finished" << endl;
     }
-
     cout << endl;
+
     cout << "all work completed -- exiting" << endl;
     return 0;
 }
