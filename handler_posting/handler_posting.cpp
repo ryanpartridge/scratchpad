@@ -95,18 +95,31 @@ void testMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerServic
 {
     boost::shared_ptr<MemberFunction> mf = boost::make_shared<MemberFunction>();
     CompletionHandler handler(boost::bind(&MemberFunction::handlerFunctionWithParam, mf, _1));
-    //CompletionHandler handler = BasicTask3(mf, &MemberFunction::handlerFunctionWithParam);
     boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
-    //BasicTask3 bt(workerService, responderService, handler);
     workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
 
 //    Functor f;
 //    CompletionHandler handler2(boost::ref(f));
 }
 
-void testSharedPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
+void testImplicitSharedPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
 {
     CompletionHandler handler = BasicTask3::wrapHandler<MemberFunction>(&MemberFunction::handlerFunctionWithParam);
+    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+}
+
+void testExplicitSharedPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService)
+{
+    boost::shared_ptr<MemberFunction> mf = boost::make_shared<MemberFunction>();
+    CompletionHandler handler = BasicTask3::wrapHandler(mf, &MemberFunction::handlerFunctionWithParam);
+    boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
+    workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
+}
+
+void testRawPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService, MemberFunction* mf)
+{
+    CompletionHandler handler = BasicTask3::wrapHandler(mf, &MemberFunction::handlerFunctionWithParam);
     boost::shared_ptr<BasicTask3> bt = boost::make_shared<BasicTask3>(boost::ref(workerService), boost::ref(responderService), handler);
     workerService.post(boost::bind(&BasicTask3::doWorkWithParam, bt, 3));
 }
@@ -182,15 +195,26 @@ int main(int argc, char* argv[])
 //    testFreeFunctionCompletionLifeCycle(workerService, responderService);
 //    cout << "returned from free function life cycle test" << endl;
 //    cout << endl;
-//
+
 //    cout << "calling member function life cycle test" << endl;
 //    testMemberFunctionCompletionLifeCycle(workerService, responderService);
 //    cout << "returned from member function life cycle test" << endl;
 //    cout << endl;
 
-    cout << "calling shared pointer member function life cycle test" << endl;
-    testSharedPointerMemberFunctionCompletionLifeCycle(workerService, responderService);
-    cout << "returned from shared pointer member function life cycle test" << endl;
+//    cout << "calling implicit shared pointer member function life cycle test" << endl;
+//    testImplicitSharedPointerMemberFunctionCompletionLifeCycle(workerService, responderService);
+//    cout << "returned from implicit shared pointer member function life cycle test" << endl;
+//    cout << endl;
+
+//    cout << "calling explicit shared pointer member function life cycle test" << endl;
+//    testExplicitSharedPointerMemberFunctionCompletionLifeCycle(workerService, responderService);
+//    cout << "returned from explicit shared pointer member function life cycle test" << endl;
+//    cout << endl;
+
+    cout << "calling raw pointer member function life cycle test" << endl;
+    boost::shared_ptr<MemberFunction> mf = boost::make_shared<MemberFunction>();
+    testRawPointerMemberFunctionCompletionLifeCycle(workerService, responderService, mf.get());
+    cout << "returned from raw pointer member function life cycle test" << endl;
     cout << endl;
 
     boost::this_thread::sleep_for(boost::chrono::seconds(5));

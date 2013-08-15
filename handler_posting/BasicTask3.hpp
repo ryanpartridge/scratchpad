@@ -71,6 +71,20 @@ public:
         return CompletionHandler(boost::bind(handlerFunction, boost::ref(handlerObject), _1));
     }
 
+    // wrap a raw pointer to an object and a member function in a CompletionHandler
+    template <typename HandlerType, typename HandlerFunction>
+    static CompletionHandler wrapHandler(HandlerType* handlerPointer, HandlerFunction handlerFunction)
+    {
+        return CompletionHandler(boost::bind(handlerFunction, handlerPointer, _1));
+    }
+
+    // wrap a shared pointer to an object and a member function in a CompletionHandler
+    template <typename HandlerType, typename HandlerFunction>
+    static CompletionHandler wrapHandler(boost::shared_ptr<HandlerType> handlerPointer, HandlerFunction handlerFunction)
+    {
+        return CompletionHandler(boost::bind(handlerFunction, handlerPointer, _1));
+    }
+
     // create a shared pointer to an object and wrap it and the specified member function in a CompletionHandler
     template <typename HandlerType, typename HandlerFunction>
     static CompletionHandler wrapHandler(HandlerFunction handlerFunction)
