@@ -17,6 +17,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <Task.hpp>
+#include <TaskFactory.hpp>
 
 using namespace std;
 
@@ -147,6 +148,7 @@ void testRawPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& wo
 
 int main(int argc, char* argv[])
 {
+    cout << "starting up" << endl;
     boost::asio::io_service workerService, responderService;
     boost::asio::io_service::work workerWork(workerService), responderWork(responderService);
 
@@ -154,6 +156,8 @@ int main(int argc, char* argv[])
     // thread sends it a response
     boost::thread responder(boost::bind(&boost::asio::io_service::run, boost::ref(responderService)));
     boost::thread worker(boost::bind(&boost::asio::io_service::run, boost::ref(workerService)));
+
+    TaskFactory& tf = TaskFactory::Construct(workerService, responderService);
 
     //boost::shared_ptr<Task> t = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService));
 
@@ -223,11 +227,11 @@ int main(int argc, char* argv[])
 //    cout << "returned from functor reference life cycle test" << endl;
 //    cout << endl;
 
-    cout << "calling functor pointer life cycle test" << endl;
-    Functor g;
-    testFunctorPointerCompletionLifeCycle(workerService, responderService, &g);
-    cout << "returned from functor pointer life cycle test" << endl;
-    cout << endl;
+//    cout << "calling functor pointer life cycle test" << endl;
+//    Functor g;
+//    testFunctorPointerCompletionLifeCycle(workerService, responderService, &g);
+//    cout << "returned from functor pointer life cycle test" << endl;
+//    cout << endl;
 
 //    cout << "calling implicit shared pointer member function life cycle test" << endl;
 //    testImplicitSharedPointerMemberFunctionCompletionLifeCycle(workerService, responderService);
@@ -245,7 +249,7 @@ int main(int argc, char* argv[])
 //    cout << "returned from raw pointer member function life cycle test" << endl;
 //    cout << endl;
 
-    boost::this_thread::sleep_for(boost::chrono::seconds(5));
+//    boost::this_thread::sleep_for(boost::chrono::seconds(5));
 
     // shut down the worker thread
     cout << "waiting for worker thread to finish" << endl;
@@ -270,9 +274,9 @@ int main(int argc, char* argv[])
     {
         cout << "worker thread finished" << endl;
     }
+    cout << endl;
 
     // shut down the responder thread
-    cout << endl;
     cout << "waiting for responder thread to finish" << endl;
     if (!responder.try_join_for(boost::chrono::seconds(5)))
     {
@@ -297,6 +301,8 @@ int main(int argc, char* argv[])
     }
     cout << endl;
 
+    TaskFactory::Destroy();
     cout << "all work completed -- exiting" << endl;
+
     return 0;
 }

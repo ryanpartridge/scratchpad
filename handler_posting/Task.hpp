@@ -16,14 +16,12 @@
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
 #include <boost/bind.hpp>
-#include <boost/bind/protect.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/ref.hpp>
 
 //typedef void (*VoidIntFunction)(int);
 typedef boost::function<void(int)> CompletionHandler;
-typedef boost::shared_ptr<CompletionHandler> SP_CompletionHandler;
 
 class Task :
     public boost::enable_shared_from_this<Task>,
