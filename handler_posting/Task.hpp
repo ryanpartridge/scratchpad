@@ -33,12 +33,12 @@ public:
         responseService_(responseService),
         handler_(handler)
     {
-        std::cout << "Task constructor" << std::endl;
+        std::cout << "[Task] constructor" << std::endl;
     }
 
     virtual ~Task()
     {
-        std::cout << "Task destructor" << std::endl;
+        std::cout << "[Task] destructor" << std::endl;
     }
 
     inline void doWorkWithParam(int seconds)

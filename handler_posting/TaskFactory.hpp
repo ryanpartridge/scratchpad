@@ -14,6 +14,10 @@
 #include <boost/make_shared.hpp>
 #include <boost/noncopyable.hpp>
 
+#include <Task.hpp>
+
+typedef boost::shared_ptr<Task> SP_Task;
+
 class TaskFactory :
     private boost::noncopyable
 {
@@ -30,23 +34,69 @@ public:
         std::cout << "[TaskFactory] destructor" << std::endl;
     }
 
-    static TaskFactory& Instance()
-    {
-        return *instance_;
-    }
-
-    static TaskFactory& Construct(boost::asio::io_service& workerService, boost::asio::io_service& responseService)
+    static void Construct(boost::asio::io_service& workerService, boost::asio::io_service& responseService)
     {
         if (!instance_)
         {
             instance_ = boost::make_shared<TaskFactory>(boost::ref(workerService), boost::ref(responseService));
         }
-        return *instance_;
     }
 
     static void Destroy()
     {
         instance_.reset();
+    }
+
+    // wrap a function pointer or functor
+    template <typename FunctionObject>
+    static SP_Task createTask(FunctionObject& funcObj)
+    {
+        SP_Task task;
+        if (instance_)
+        {
+            CompletionHandler handler = Task::wrapHandler(funcObj);
+            task = boost::make_shared<Task>(boost::ref(instance_->workerService_), boost::ref(instance_->responseService_), handler);
+        }
+        return task;
+    }
+
+    // wrap an Object instance and member function
+    template <typename HandlerObject, typename HandlerFunction>
+    static SP_Task createTask(HandlerObject& handlerObject, HandlerFunction handler)
+    {
+        SP_Task task;
+        if (instance_)
+        {
+            CompletionHandler handler = Task::wrapHandler(handlerObject, handler);
+            task = boost::make_shared<Task>(boost::ref(instance_->workerService_), boost::ref(instance_->responseService_), handler);
+        }
+        return task;
+    }
+
+    // wrap a raw pointer to an Object instance and member function
+    template <typename HandlerObject, typename HandlerFunction>
+    static SP_Task createTask(HandlerObject* handlerPointer, HandlerFunction handler)
+    {
+        SP_Task task;
+        if (instance_)
+        {
+            CompletionHandler handler = Task::wrapHandler(handlerPointer, handler);
+            task = boost::make_shared<Task>(boost::ref(instance_->workerService_), boost::ref(instance_->responseService_), handler);
+        }
+        return task;
+    }
+
+    // wrap a shared pointer to an Object instance and member function
+    template <typename HandlerObject, typename HandlerFunction>
+    static SP_Task createTask(boost::shared_ptr<HandlerObject> handlerPointer, HandlerFunction handler)
+    {
+        SP_Task task;
+        if (instance_)
+        {
+            CompletionHandler handler = Task::wrapHandler(handlerPointer, handler);
+            task = boost::make_shared<Task>(boost::ref(instance_->workerService_), boost::ref(instance_->responseService_), handler);
+        }
+        return task;
     }
 
 private:

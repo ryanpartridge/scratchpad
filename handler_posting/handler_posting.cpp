@@ -23,12 +23,12 @@ using namespace std;
 
 void freeFunction()
 {
-    cout << "free function response handler" << endl;
+    cout << "[free function] response handler" << endl;
 }
 
 void freeFunctionWithParam(int i)
 {
-    cout << "free function response handler with parameter (" << i << ")" << endl;
+    cout << "[free function] response handler with parameter (" << i << ")" << endl;
 }
 
 class FunctorBase :
@@ -58,22 +58,22 @@ public:
     Functor() :
         FunctorBase()
     {
-        cout << "Functor default constructor" << endl;
+        cout << "[Functor] default constructor" << endl;
     }
 
     virtual ~Functor()
     {
-        cout << "Functor destructor" << endl;
+        cout << "[Functor] destructor" << endl;
     }
 
     void operator()()
     {
-        cout << "functor response handler" << endl;
+        cout << "[Functor] response handler" << endl;
     }
 
     void operator()(int i)
     {
-        cout << "functor response handler with parameter (" << i << ")" << endl;
+        cout << "[Functor] response handler with parameter (" << i << ")" << endl;
     }
 };
 
@@ -84,22 +84,22 @@ class MemberFunction :
 public:
     MemberFunction()
     {
-        cout << "MemberFunction default constructor" << endl;
+        cout << "[MemberFunction] default constructor" << endl;
     }
 
     virtual ~MemberFunction()
     {
-        cout << "MemberFunction destructor" << endl;
+        cout << "[MemberFunction] destructor" << endl;
     }
 
     void handlerFunction()
     {
-        cout << "member function response handler" << endl;
+        cout << "[MemberFunction] response handler" << endl;
     }
 
     void handlerFunctionWithParam(int i)
     {
-        cout << "member function response handler with parameter (" << i << ")" << endl;
+        cout << "[MemberFunction] response handler with parameter (" << i << ")" << endl;
     }
 };
 
@@ -120,6 +120,13 @@ void testFunctorReferenceCompletionLifeCycle(boost::asio::io_service& workerServ
 void testFunctorPointerCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService, Functor* f)
 {
     CompletionHandler handler = Task::wrapHandler(*f);
+    boost::shared_ptr<Task> bt = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService), handler);
+    workerService.post(boost::bind(&Task::doWorkWithParam, bt, 3));
+}
+
+void testMemberFunctionReferenceCompletionLifeCycle(boost::asio::io_service& workerService, boost::asio::io_service& responderService, MemberFunction* mf)
+{
+    CompletionHandler handler = Task::wrapHandler(*mf, &MemberFunction::handlerFunctionWithParam);
     boost::shared_ptr<Task> bt = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService), handler);
     workerService.post(boost::bind(&Task::doWorkWithParam, bt, 3));
 }
@@ -146,9 +153,27 @@ void testRawPointerMemberFunctionCompletionLifeCycle(boost::asio::io_service& wo
     workerService.post(boost::bind(&Task::doWorkWithParam, bt, 3));
 }
 
+void testFreeFunctionTaskFactory(boost::asio::io_service& workerService, boost::asio::io_service&)
+{
+    SP_Task task = TaskFactory::createTask(freeFunctionWithParam);
+    workerService.post(boost::bind(&Task::doWorkWithParam, task, 3));
+}
+
+void testFunctorReferenceTaskFactory(boost::asio::io_service& workerService, boost::asio::io_service& responderService, Functor& f)
+{
+    SP_Task task = TaskFactory::createTask(f);
+    workerService.post(boost::bind(&Task::doWorkWithParam, task, 3));
+}
+
+void testFunctorPointerTaskFactory(boost::asio::io_service& workerService, boost::asio::io_service& responderService, Functor* f)
+{
+    SP_Task task = TaskFactory::createTask(*f);
+    workerService.post(boost::bind(&Task::doWorkWithParam, task, 3));
+}
+
 int main(int argc, char* argv[])
 {
-    cout << "starting up" << endl;
+    cout << "[main] starting up" << endl;
     boost::asio::io_service workerService, responderService;
     boost::asio::io_service::work workerWork(workerService), responderWork(responderService);
 
@@ -157,7 +182,7 @@ int main(int argc, char* argv[])
     boost::thread responder(boost::bind(&boost::asio::io_service::run, boost::ref(responderService)));
     boost::thread worker(boost::bind(&boost::asio::io_service::run, boost::ref(workerService)));
 
-    TaskFactory& tf = TaskFactory::Construct(workerService, responderService);
+    TaskFactory::Construct(workerService, responderService);
 
     //boost::shared_ptr<Task> t = boost::make_shared<Task>(boost::ref(workerService), boost::ref(responderService));
 
@@ -249,60 +274,77 @@ int main(int argc, char* argv[])
 //    cout << "returned from raw pointer member function life cycle test" << endl;
 //    cout << endl;
 
-//    boost::this_thread::sleep_for(boost::chrono::seconds(5));
+//    cout << "[main] calling free function TaskFactory test" << endl;
+//    testFreeFunctionTaskFactory(workerService, responderService);
+//    cout << "[main] returned from free TaskFactory cycle test" << endl;
+//    cout << endl;
+
+    cout << "[main] calling functor reference TaskFactory test" << endl;
+    Functor f;
+    testFunctorReferenceTaskFactory(workerService, responderService, f);
+    cout << "[main] returned from functor reference life cycle test" << endl;
+    cout << endl;
+
+    cout << "[main] calling functor pointer TaskFactory test" << endl;
+    Functor g;
+    testFunctorPointerTaskFactory(workerService, responderService, &g);
+    cout << "[main] returned from functor pointer life cycle test" << endl;
+    cout << endl;
+
+    boost::this_thread::sleep_for(boost::chrono::seconds(5));
 
     // shut down the worker thread
-    cout << "waiting for worker thread to finish" << endl;
+    cout << "[main] waiting for worker thread to finish" << endl;
     if (!worker.try_join_for(boost::chrono::seconds(5)))
     {
-        cout << "worker thread still going, stopping the service" << endl;
+        cout << "[main] worker thread still going, stopping the service" << endl;
         workerService.stop();
-        cout << "waiting for worker thread to finish (second time)" << endl;
+        cout << "[main] waiting for worker thread to finish (second time)" << endl;
         if (!worker.try_join_for(boost::chrono::seconds(1)))
         {
-            cout << "worker thread still going, interrupting the thread" << endl;
+            cout << "[main] worker thread still going, interrupting the thread" << endl;
             worker.interrupt();
-            cout << "waiting for worker thread to finish (final time)" << endl;
+            cout << "[main] waiting for worker thread to finish (final time)" << endl;
             worker.try_join_for(boost::chrono::seconds(1));
         }
         else
         {
-            cout << "worker thread finished" << endl;
+            cout << "[main] worker thread finished" << endl;
         }
     }
     else
     {
-        cout << "worker thread finished" << endl;
+        cout << "[main] worker thread finished" << endl;
     }
     cout << endl;
 
     // shut down the responder thread
-    cout << "waiting for responder thread to finish" << endl;
+    cout << "[main] waiting for responder thread to finish" << endl;
     if (!responder.try_join_for(boost::chrono::seconds(5)))
     {
-        cout << "responder thread still going, stopping the service" << endl;
+        cout << "[main] responder thread still going, stopping the service" << endl;
         responderService.stop();
-        cout << "waiting for responder thread to finish (second time)" << endl;
+        cout << "[main] waiting for responder thread to finish (second time)" << endl;
         if (!responder.try_join_for(boost::chrono::seconds(1)))
         {
-            cout << "responder thread still going, interrupting the thread" << endl;
+            cout << "[main] responder thread still going, interrupting the thread" << endl;
             responder.interrupt();
-            cout << "waiting for responder thread to finish (final time)" << endl;
+            cout << "[main] waiting for responder thread to finish (final time)" << endl;
             responder.try_join_for(boost::chrono::seconds(1));
         }
         else
         {
-            cout << "responder thread finished" << endl;
+            cout << "[main] responder thread finished" << endl;
         }
     }
     else
     {
-        cout << "responder thread finished" << endl;
+        cout << "[main] responder thread finished" << endl;
     }
     cout << endl;
 
     TaskFactory::Destroy();
-    cout << "all work completed -- exiting" << endl;
+    cout << "[main] all work completed -- exiting" << endl;
 
     return 0;
 }
