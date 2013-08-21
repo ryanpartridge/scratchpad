@@ -21,7 +21,7 @@ typedef boost::shared_ptr<Task> SP_Task;
 class TaskFactory :
     private boost::noncopyable
 {
-public:
+private:
     TaskFactory(boost::asio::io_service& workerService, boost::asio::io_service& responseService) :
         workerService_(workerService),
         responseService_(responseService)
@@ -29,6 +29,7 @@ public:
         std::cout << "[TaskFactory] constructor" << std::endl;
     }
 
+public:
     virtual ~TaskFactory()
     {
         std::cout << "[TaskFactory] destructor" << std::endl;
@@ -38,7 +39,8 @@ public:
     {
         if (!instance_)
         {
-            instance_ = boost::make_shared<TaskFactory>(boost::ref(workerService), boost::ref(responseService));
+            // cannot use make_shared here because the constructor is private
+            instance_ = boost::shared_ptr<TaskFactory>(new TaskFactory(workerService, responseService));
         }
     }
 
