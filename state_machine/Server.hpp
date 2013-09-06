@@ -9,16 +9,23 @@
 #define SERVER_HPP_
 
 #include <boost/asio.hpp>
+#include <boost/smart_ptr/enable_shared_from_this.hpp>
 
-class Server
+#include <StateMachine.hpp>
+
+class Server :
+    public boost::enable_shared_from_this<Server>
 {
 public:
     Server(boost::asio::io_service& io_service);
     virtual ~Server();
 
-private:
-    boost::asio::io_service& io_service_;
-};
+    void start();
 
+private:
+    boost::asio::io_service& mainService_;
+    boost::asio::io_service workerService_;
+    StateMachine machine_;
+};
 
 #endif /* SERVER_HPP_ */
