@@ -9,7 +9,11 @@
 #define SERVER_HPP_
 
 #include <boost/asio.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
+#include <boost/thread.hpp>
+#include <boost/cstdint.hpp>
 
 #include <StateMachine.hpp>
 
@@ -21,11 +25,19 @@ public:
     virtual ~Server();
 
     void start();
+    void stop();
 
 private:
+    void handlePushTimer(const std::string message, const boost::system::error_code& ec);
+    void handleSignal(const boost::system::error_code& ec, boost::uint32_t signal);
+
     boost::asio::io_service& mainService_;
     boost::asio::io_service workerService_;
-    StateMachine machine_;
+    boost::asio::steady_timer pushTimer_;
+    boost::shared_ptr<StateMachine> machine_;
+    boost::shared_ptr<boost::thread> machineThread_;
+    boost::asio::signal_set signal_;
+    bool running_;
 };
 
 #endif /* SERVER_HPP_ */
