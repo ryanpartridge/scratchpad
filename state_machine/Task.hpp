@@ -8,6 +8,7 @@
 #ifndef TASK_HPP_
 #define TASK_HPP_
 
+#include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
 
 class StateMachine;
@@ -21,6 +22,8 @@ public:
     virtual void execute() = 0;
 
 protected:
+    boost::asio::io_service& io_service();
+    void taskComplete(boost::shared_ptr<Task> nextTask);
     StateMachine& machine_;
 };
 

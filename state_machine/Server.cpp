@@ -32,7 +32,8 @@ void Server::start()
     signal_.async_wait(boost::bind(&Server::handleSignal, shared_from_this(), boost::asio::placeholders::error, boost::asio::placeholders::signal_number));
     pushTimer_.expires_from_now(boost::chrono::seconds(2));
     machine_ = boost::make_shared<StateMachine>(boost::ref(workerService_), shared_from_this());
-    machineThread_ = boost::make_shared<boost::thread>(boost::bind(&StateMachine::start, boost::ref(machine_)));
+    workerService_.post(boost::bind(&StateMachine::start, boost::ref(machine_)));
+    machineThread_ = boost::make_shared<boost::thread>(boost::bind(&boost::asio::io_service::run, boost::ref(workerService_)));
     pushTimer_.async_wait(boost::bind(&Server::handlePushTimer, shared_from_this(), "hello", boost::asio::placeholders::error));
     running_ = true;
 }
@@ -47,6 +48,7 @@ void Server::stop()
 
         // tell the machine to stop and give it time to finish up
         machine_->stop();
+        workerService_.stop();
         if (!machineThread_->try_join_for(boost::chrono::seconds(1)))
         {
             std::cout << "[Server] interrupting machine thread" << std::endl;

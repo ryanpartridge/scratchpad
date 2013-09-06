@@ -25,9 +25,10 @@ public:
 
     void start();
     void stop();
+    boost::asio::io_service& io_service();
     void pushMessage(const std::string& message);
     const std::string popMessage();
-    void taskComplete(boost::shared_ptr<Task> nextTask);
+    void handleTaskComplete(boost::shared_ptr<Task> nextTask);
 
 private:
     boost::asio::io_service& service_;
@@ -36,6 +37,7 @@ private:
     mutable boost::mutex mutex_;
     boost::condition_variable  messageWaiting_;
     std::string message_;
+    bool running_;
 };
 
 #endif /* STATEMACHINE_HPP_ */

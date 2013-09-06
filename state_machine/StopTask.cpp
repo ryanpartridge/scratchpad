@@ -24,5 +24,5 @@ StopTask::~StopTask()
 void StopTask::execute()
 {
     std::cout << "[StopTask] execute" << std::endl;
-    machine_.taskComplete(boost::shared_ptr<Task>());
+    taskComplete(boost::shared_ptr<Task>());
 }

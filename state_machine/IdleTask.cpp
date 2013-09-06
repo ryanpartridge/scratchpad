@@ -31,11 +31,11 @@ void IdleTask::execute()
         std::cout << "[IdleTask] got message: " << message << std::endl;
         if (message == "stop")
         {
-            machine_.taskComplete(boost::shared_ptr<Task>(new StopTask(machine_)));
+            taskComplete(boost::shared_ptr<Task>(new StopTask(machine_)));
         }
         else
         {
-            machine_.taskComplete(boost::shared_ptr<Task>(new IdleTask(machine_)));
+            taskComplete(boost::shared_ptr<Task>(new IdleTask(machine_)));
         }
     }
     catch (const boost::thread_interrupted& )
