@@ -9,7 +9,7 @@
 #include <boost/smart_ptr.hpp>
 
 #include <StateMachine.hpp>
-#include <IdleTask.hpp>
+#include <IdleState.hpp>
 
 StateMachine::StateMachine(boost::asio::io_service& io_service, boost::shared_ptr<Server> server) :
     service_(io_service),
@@ -29,8 +29,8 @@ StateMachine::~StateMachine()
 void StateMachine::start()
 {
     std::cout << "[StateMachine] start" << std::endl;
-    boost::shared_ptr<Task> t = boost::shared_ptr<Task>(new IdleTask(*this));
-    service_.post(boost::bind(&Task::execute, t));
+    boost::shared_ptr<State> s = boost::shared_ptr<State>(new IdleState(*this));
+    service_.post(boost::bind(&State::execute, s));
     running_ = true;
 }
 
@@ -71,11 +71,11 @@ const std::string StateMachine::popMessage()
     return msg;
 }
 
-void StateMachine::handleTaskComplete(boost::shared_ptr<Task> nextTask)
+void StateMachine::handleStateComplete(boost::shared_ptr<State> nextState)
 {
-    std::cout << "[StateMachine] current task complete" << message_ << std::endl;
-    if (nextTask)
+    std::cout << "[StateMachine] current state complete" << message_ << std::endl;
+    if (nextState)
     {
-        service_.post(boost::bind(&Task::execute, nextTask));
+        service_.post(boost::bind(&State::execute, nextState));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Task.cpp
+ * State.cpp
  *
  *  Created on: Sep 6, 2013
  *      Author: rpartridge
@@ -8,26 +8,26 @@
 #include <iostream>
 #include <boost/ref.hpp>
 
-#include <Task.hpp>
+#include <State.hpp>
 #include <StateMachine.hpp>
 
-Task::Task(StateMachine& machine) :
+State::State(StateMachine& machine) :
     machine_(machine)
 {
     std::cout << "[Task] constructor" << std::endl;
 }
 
-Task::~Task()
+State::~State()
 {
     std::cout << "[Task] destructor" << std::endl;
 }
 
-boost::asio::io_service& Task::io_service()
+boost::asio::io_service& State::io_service()
 {
     return machine_.io_service();
 }
 
-void Task::taskComplete(boost::shared_ptr<Task> nextTask)
+void State::stateComplete(boost::shared_ptr<State> nextState)
 {
-    io_service().post(boost::bind(&StateMachine::handleTaskComplete, boost::ref(machine_), nextTask));
+    io_service().post(boost::bind(&StateMachine::handleStateComplete, boost::ref(machine_), nextState));
 }

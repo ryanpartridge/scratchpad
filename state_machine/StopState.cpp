@@ -1,5 +1,5 @@
 /*
- * StopTask.cpp
+ * StopState.cpp
  *
  *  Created on: Sep 6, 2013
  *      Author: rpartridge
@@ -7,22 +7,22 @@
 
 #include <iostream>
 
-#include <StopTask.hpp>
+#include <StopState.hpp>
 #include <StateMachine.hpp>
 
-StopTask::StopTask(StateMachine& machine) :
-    Task(machine)
+StopState::StopState(StateMachine& machine) :
+    State(machine)
 {
     std::cout << "[StopTask] constructor" << std::endl;
 }
 
-StopTask::~StopTask()
+StopState::~StopState()
 {
     std::cout << "[StopTask] destructor" << std::endl;
 }
 
-void StopTask::execute()
+void StopState::execute()
 {
     std::cout << "[StopTask] execute" << std::endl;
-    taskComplete(boost::shared_ptr<Task>());
+    stateComplete(boost::shared_ptr<State>());
 }

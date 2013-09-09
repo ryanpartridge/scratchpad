@@ -13,7 +13,7 @@
 #include <boost/weak_ptr.hpp>
 #include <string>
 
-#include <Task.hpp>
+#include <State.hpp>
 
 class Server;
 
@@ -28,7 +28,7 @@ public:
     boost::asio::io_service& io_service();
     void pushMessage(const std::string& message);
     const std::string popMessage();
-    void handleTaskComplete(boost::shared_ptr<Task> nextTask);
+    void handleStateComplete(boost::shared_ptr<State> nextState);
 
 private:
     boost::asio::io_service& service_;
