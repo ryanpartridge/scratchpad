@@ -12,8 +12,7 @@
 InitState::InitState() :
     State()
 {
-    // TODO Auto-generated constructor stub
-
+    name_ = "InitState";
 }
 
 InitState::~InitState()

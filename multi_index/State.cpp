@@ -9,18 +9,21 @@
 
 #include <State.hpp>
 
-State::State()
+State::State() :
+    name_("State")
 {
-    // TODO Auto-generated constructor stub
-
 }
 
 State::~State()
 {
-    // TODO Auto-generated destructor stub
 }
 
 boost::shared_ptr<State> State::createState()
 {
     return boost::make_shared<State>();
+}
+
+const std::string& State::name() const
+{
+    return name_;
 }
