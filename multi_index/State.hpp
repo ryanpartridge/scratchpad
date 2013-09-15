@@ -66,23 +66,40 @@ struct StateEntry
     {
         return type_ < entry.type_;
     }
-};
 
-
-
-struct se_hash
-{
-    size_t operator()(const StateType_t type) const
+    bool operator==(const StateEntry& entry) const
     {
-        return boost::hash<int>()(type);
+        return type_ == entry.type_;
     }
 };
+
+namespace boost
+{
+    template<>
+    struct hash<StateEntry> : public std::unary_function<const StateEntry&, std::size_t>
+    {
+        std::size_t operator()(const StateEntry& entry) const
+        {
+            return boost::hash<int>()(entry.type_);
+        }
+    };
+
+    template<>
+    struct hash<StateType_t> : public std::unary_function<const StateType_t, std::size_t>
+    {
+        std::size_t operator()(const StateType_t type) const
+        {
+            return boost::hash<int>()(type);
+        }
+    };
+}
 
 typedef boost::multi_index_container<
     StateEntry,
     boost::multi_index::indexed_by<
-        boost::multi_index::hashed_unique<boost::multi_index::member<StateEntry, const StateType_t, &StateEntry::type_>, se_hash>,
-        boost::multi_index::hashed_unique<boost::multi_index::member<StateEntry, const std::string, &StateEntry::umStateName_> >
+        boost::multi_index::hashed_unique<boost::multi_index::member<StateEntry, const StateType_t, &StateEntry::type_> >,
+        boost::multi_index::hashed_unique<boost::multi_index::member<StateEntry, const std::string, &StateEntry::umStateName_> >,
+        boost::multi_index::hashed_unique<boost::multi_index::identity<StateEntry> >
     >
 > StateSet;
 
