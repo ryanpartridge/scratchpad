@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/regex.hpp>
 
 typedef std::vector<std::string> StringVec;
 
@@ -96,6 +97,11 @@ int main(int argc, char* argv[])
     dpkgEntry = "";
     parts = splitOnPipe(dpkgEntry);
     printStringVec(parts);
+    cout << endl;
+
+    string sampleWithNewlines("hello\nworld\r\nthis is a new\rday for\n\n\n\n\nus\r\n\r\n");
+    cout << "original string: ***" << sampleWithNewlines << "***" << endl;
+    cout << "newlines replaced: ***" << boost::algorithm::replace_all_regex_copy(sampleWithNewlines, boost::regex("[\\r\\n]+"), string(" ")) << "***" << endl;
     cout << endl;
     return 0;
 }
