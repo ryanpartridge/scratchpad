@@ -8,6 +8,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/asio/steady_timer.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/bind.hpp>
 #include <dlfcn.h>
 
@@ -27,9 +28,12 @@ int main(int argc, char* argv[])
     boost::asio::io_service io;
 
     cout << "[main] setting timer" << endl;
-    boost::asio::steady_timer timer(io);
-    timer.expires_from_now(boost::chrono::seconds(5));
-    timer.async_wait(boost::bind(&onTimer, boost::asio::placeholders::error));
+    boost::asio::steady_timer sTimer(io);
+    sTimer.expires_from_now(boost::chrono::seconds(3));
+    boost::asio::deadline_timer dTimer(io);
+    dTimer.expires_from_now(boost::posix_time::seconds(5));
+    sTimer.async_wait(boost::bind(&onTimer, boost::asio::placeholders::error));
+    dTimer.async_wait(boost::bind(&onTimer, boost::asio::placeholders::error));
     cout << "[main] address of io_service: " << &io << endl;
 
     // load the library
