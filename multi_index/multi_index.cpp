@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <boost/foreach.hpp>
 
 #include <State.hpp>
 #include <InitState.hpp>
@@ -21,6 +22,14 @@ int main(int argc, char* argv[])
     StateCreatorFunction stopFunc(StopState::createState);
     entries.insert(StateEntry(STOP, "stop", stopFunc));
 
+    StateEntry entryArray[] =
+        {
+            StateEntry(INIT, "init", initFunc),
+            StateEntry(STOP, "stop", stopFunc)
+        };
+
+    StateSet entires2(entryArray, entryArray + (sizeof(entryArray) / sizeof(entryArray[0])));
+
     StateSet::iterator it = entries.find(INIT);
     boost::shared_ptr<State> s1 = it->creatorFunction_();
 
@@ -29,6 +38,11 @@ int main(int argc, char* argv[])
 
     std::cout << "State name: " << s1->name() << std::endl;
     std::cout << "State name: " << s2->name() << std::endl;
+
+    BOOST_FOREACH(const StateEntry& entry, entires2)
+    {
+        std::cout << entry.umStateName_ << std::endl;
+    }
 
     return 0;
 }
