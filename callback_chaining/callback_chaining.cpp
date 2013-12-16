@@ -7,15 +7,13 @@
 
 #include <iostream>
 #include <string>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 #include <boost/function.hpp>
-#include <boost/asio.hpp>
 
 typedef boost::function<void(int, const std::string)> LowLevelCallback;
 typedef boost::function<void(const std::string, bool)> HighLevelCallback;
+typedef boost::function<void(void)> voidFunc;
 
 void kicker(LowLevelCallback llc)
 {
@@ -33,13 +31,19 @@ void highLevelFunc(const std::string strVal, bool boolVal)
     std::cout << "[highLevelFunc] strVal: " << strVal << " boolVal: " << boolVal << std::endl;
 }
 
+void noLevelFunc()
+{
+    std::cout << "[noLevelFunc]" << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
-    boost::asio::io_service io_service;
-    std::cout << "[main] calling run" << std::endl;
+    std::cout << "[main] running" << std::endl;
     kicker(boost::bind(lowLevelFunc, _1, _2, highLevelFunc));
 
-    io_service.run();
-    std::cout << "[main] run complete" << std::endl;
+    voidFunc f = noLevelFunc;
+    f();
+
+    std::cout << "[main] complete" << std::endl;
     return 0;
 }
