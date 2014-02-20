@@ -103,5 +103,12 @@ int main(int argc, char* argv[])
     cout << "original string: ***" << sampleWithNewlines << "***" << endl;
     cout << "newlines replaced: ***" << boost::algorithm::replace_all_regex_copy(sampleWithNewlines, boost::regex("[\\r\\n]+"), string(" ")) << "***" << endl;
     cout << endl;
+
+    string cramfsManyLines("TEXT hello\nTEXT another line\nSUCCESS ok\n");
+    cout << "original string: ***" << cramfsManyLines << "***" << endl;
+    parts.clear();
+    boost::algorithm::trim(cramfsManyLines);
+    boost::algorithm::split(parts, cramfsManyLines, boost::algorithm::is_any_of("\n"), boost::algorithm::token_compress_on);
+    printStringVec(parts);
     return 0;
 }
