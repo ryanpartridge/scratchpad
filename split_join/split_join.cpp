@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include <boost/regex.hpp>
 
 typedef std::vector<std::string> StringVec;
 
@@ -110,5 +111,11 @@ int main(int argc, char* argv[])
     boost::algorithm::trim(cramfsManyLines);
     boost::algorithm::split(parts, cramfsManyLines, boost::algorithm::is_any_of("\n"), boost::algorithm::token_compress_on);
     printStringVec(parts);
+
+    string hostsLine("    127.0.0.1  \t  director    ");
+    boost::regex pattern("^[[:space:]]*[[:digit:]]{1,3}\\.[[:digit:]]{1,3}\\.[[:digit:]]{1,3}\\.[[:digit:]]{1,3}[[:space:]]+director[[:space:]]*$");
+    bool matches = boost::regex_match(hostsLine, pattern);
+    cout << "line matches: " << (matches ? "true" : "false") << endl;
+
     return 0;
 }
