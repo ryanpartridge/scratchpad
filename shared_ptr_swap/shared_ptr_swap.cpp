@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/make_shared.hpp>
 
 using namespace std;
@@ -57,10 +58,26 @@ int main(int argc, char* argv[])
     cout << "make a copy of a1 via copy constructor" << endl;
     boost::shared_ptr<A> a2(a1);
     cout << endl;
+    a2.reset();
 
     cout << "make a copy of a1 via assignment" << endl;
     boost::shared_ptr<A> a3 = a1;
     cout << endl;
+
+    boost::weak_ptr<A> w1 = a1;
+    cout << "weak pointer expired? " << (w1.expired() ? "true" : "false") << endl;
+    a3 = w1.lock();
+    a1.reset();
+    cout << "weak pointer expired? " << (w1.expired() ? "true" : "false") << endl;
+
+    w1.reset();
+    cout << "weak pointer expired? " << (w1.expired() ? "true" : "false") << endl;
+    w1 = a3;
+
+    a3.reset();
+    cout << "weak pointer expired? " << (w1.expired() ? "true" : "false") << endl;
+    a3 = w1.lock();
+    cout << "able to lock? " << (a3 ? "true" : "false") << endl;
 
     cout << "all done" << endl;
     return 0;

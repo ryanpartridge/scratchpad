@@ -117,5 +117,10 @@ int main(int argc, char* argv[])
     bool matches = boost::regex_match(hostsLine, pattern);
     cout << "line matches: " << (matches ? "true" : "false") << endl;
 
+    string updateUrl("http://services-beta2.control4.com/Updates2x-earlyaccess/v2_0/Updates.asmx ");
+    boost::regex urlPattern("^https?://[^ \t\n]+\\.control4.com/[^ \t\n]+$");
+    matches = boost::regex_match(updateUrl, urlPattern);
+    cout << "url matches: " << (matches ? "true" : "false") << endl;
+
     return 0;
 }
