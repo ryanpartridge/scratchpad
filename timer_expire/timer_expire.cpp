@@ -45,6 +45,7 @@ int main(int argc, char* argv[])
     {
         cout << "timer has not yet expired" << endl;
     }
+    timer->cancel();
     boost::this_thread::sleep_for(boost::chrono::seconds(4));
     if (timer)
     {
