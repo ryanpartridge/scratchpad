@@ -15,7 +15,11 @@ int main(int argc, char* argv[])
     boost::filesystem::directory_iterator it("/tmp"), end;
     BOOST_FOREACH(const boost::filesystem::path& p, std::make_pair(it, end))
     {
-        cout << p.string() << endl;
+        cout << p.filename().string() << endl;
+        if (p.filename().string()[0] == 'h')
+        {
+            break;
+        }
     }
 
     return 0;
