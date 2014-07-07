@@ -12,6 +12,7 @@
 #include <State.hpp>
 #include <InitState.hpp>
 #include <StopState.hpp>
+#include <DeviceUpdateInfo.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -43,6 +44,52 @@ int main(int argc, char* argv[])
     {
         std::cout << entry.umStateName_ << std::endl;
     }
+
+    DeviceUpdateInfoSet infoSet;
+    DeviceUpdateInfo dui1(1);
+    dui1.ipAddress("192.168.1.10");
+
+    DeviceUpdateInfo dui2(2);
+    dui2.ipAddress("192.168.1.9");
+
+    DeviceUpdateInfo dui3(3);
+    dui3.ipAddress("192.168.1.8");
+
+    infoSet.insert(dui1);
+    infoSet.insert(dui2);
+    infoSet.insert(dui3);
+
+    std::cout << std::endl;
+    std::cout << "indexed by device id" << std::endl;
+    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+    {
+        std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "indexed by ip address" << std::endl;
+    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_address>())
+    {
+        std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
+    }
+
+    DeviceUpdateInfoSet::index<by_address>::type::iterator addrIt = infoSet.get<by_address>().find("192.168.1.9");
+    if (addrIt != infoSet.get<by_address>().end())
+    {
+        DeviceUpdateInfo foundInfo = *addrIt;
+        foundInfo.ipAddress("192.168.1.5");
+        infoSet.get<by_address>().replace(addrIt, foundInfo);
+
+        std::cout << std::endl;
+        std::cout << "indexed by device id (after replacement)" << std::endl;
+        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+        {
+            std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
+        }
+    }
+
+    std::cout << std::endl;
+    std::cout << "finished" << std::endl;
 
     return 0;
 }
