@@ -10,6 +10,7 @@
 
 #include <string>
 #include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/member.hpp>
@@ -48,6 +49,8 @@ private:
     boost::uint32_t bindingId_;
 };
 
+typedef boost::shared_ptr<DeviceUpdateInfo> SP_DeviceUpdateInfo;
+
 struct device_id_key_extractor
 {
     typedef boost::uint32_t result_type;
@@ -66,9 +69,28 @@ struct binding_id_key_extractor
     result_type operator()(const DeviceUpdateInfo& dui) const { return dui.bindingId(); }
 };
 
+struct sp_device_id_key_extractor
+{
+	typedef boost::uint32_t result_type;
+	result_type operator()(SP_DeviceUpdateInfo dui) const { return dui->deviceId(); }
+};
+
+struct sp_ip_address_key_extractor
+{
+	typedef std::string result_type;
+	result_type operator()(SP_DeviceUpdateInfo dui) const { return dui->ipAddress(); }
+};
+
+struct sp_binding_id_key_extractor
+{
+	typedef boost::uint32_t result_type;
+	result_type operator()(SP_DeviceUpdateInfo dui) const { return dui->bindingId(); }
+};
+
 struct by_device{};
 struct by_address{};
 struct by_binding{};
+
 
 typedef boost::multi_index_container<
     DeviceUpdateInfo,
@@ -78,5 +100,14 @@ typedef boost::multi_index_container<
         boost::multi_index::hashed_non_unique<boost::multi_index::tag<by_binding>, binding_id_key_extractor>
     >
 > DeviceUpdateInfoSet;
+
+typedef boost::multi_index_container<
+    SP_DeviceUpdateInfo,
+    boost::multi_index::indexed_by<
+        boost::multi_index::hashed_unique<boost::multi_index::tag<by_device>, sp_device_id_key_extractor>,
+        boost::multi_index::hashed_non_unique<boost::multi_index::tag<by_address>, sp_ip_address_key_extractor>,
+        boost::multi_index::hashed_non_unique<boost::multi_index::tag<by_binding>, sp_binding_id_key_extractor>
+    >
+> SP_DeviceUpdateInfoSet;
 
 #endif /* DEVICEUPDATEINFO_HPP_ */

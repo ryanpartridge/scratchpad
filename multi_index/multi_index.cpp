@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 
 #include <State.hpp>
@@ -85,6 +86,49 @@ int main(int argc, char* argv[])
         BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
         {
             std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
+        }
+    }
+
+    SP_DeviceUpdateInfoSet spInfoSet;
+    SP_DeviceUpdateInfo spDui1 = boost::make_shared<DeviceUpdateInfo>(1);
+    spDui1->ipAddress("192.168.1.10");
+
+    SP_DeviceUpdateInfo spDui2 = boost::make_shared<DeviceUpdateInfo>(2);
+    spDui2->ipAddress("192.168.1.9");
+
+    SP_DeviceUpdateInfo spDui3 = boost::make_shared<DeviceUpdateInfo>(3);
+    spDui3->ipAddress("192.168.1.8");
+
+    spInfoSet.insert(spDui1);
+    spInfoSet.insert(spDui2);
+    spInfoSet.insert(spDui3);
+
+    std::cout << std::endl;
+    std::cout << "(sp) indexed by device id" << std::endl;
+    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+    {
+        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "(sp) indexed by ip address" << std::endl;
+    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_address>())
+    {
+        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+    }
+
+    SP_DeviceUpdateInfoSet::index<by_address>::type::iterator spAddrIt = spInfoSet.get<by_address>().find("192.168.1.9");
+    if (spAddrIt != spInfoSet.get<by_address>().end())
+    {
+        SP_DeviceUpdateInfo foundInfo = *spAddrIt;
+        foundInfo->ipAddress("192.168.1.5");
+        spInfoSet.get<by_address>().replace(spAddrIt, foundInfo);
+
+        std::cout << std::endl;
+        std::cout << "(sp) indexed by device id (after replacement)" << std::endl;
+        BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+        {
+            std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
         }
     }
 
