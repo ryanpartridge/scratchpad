@@ -26,6 +26,7 @@ public class SocketThread extends Thread
         try
         {
             buffer = ByteBuffer.allocate(4096);
+            buffer.mark();
             iso8859 = Charset.forName("ISO-8859-1");
         }
         catch (UnsupportedCharsetException uce)
@@ -98,6 +99,7 @@ public class SocketThread extends Thread
                 System.out.println("disconnecting existing connection with: "
                                 + ((InetSocketAddress)agentChannel.getRemoteAddress()).getHostString());
                 agentChannel.close();
+                agentKey.cancel();
             }
             channel.configureBlocking(false);
             agentKey = channel.register(selector, SelectionKey.OP_READ);
@@ -112,12 +114,35 @@ public class SocketThread extends Thread
     {
         try
         {
-            buffer.clear();
+            //ByteBuffer buffer = ByteBuffer.allocate(4096);
+            buffer.mark();
             int numRead = channel.read(buffer);
             if (numRead > 0)
             {
-                String message = new String(buffer.array(), 0, numRead);
-                System.out.println("incoming message: " + message);
+                System.out.println("read " + numRead + " bytes");
+                boolean cfFound = false;
+                //buffer.limit(buffer.position());
+                buffer.reset();
+                for (int i = 0; i < numRead - 1; ++i)
+                {
+                    byte b1 = buffer.get();
+                    byte b2 = buffer.get(buffer.position());
+                    System.out.println("buffer[" + (buffer.position() - 1) + "] = " + (char)b1 + "\tbuffer[" + buffer.position() + "] = " + (char)b2);
+                    if (b1 == '\r' && b2 == '\n')
+                    {
+                        cfFound = true;
+                        String message = new String(buffer.array(), 0, buffer.position());
+                        System.out.println("incoming message: " + message.trim());
+                        ByteBuffer tmpBuffer = ByteBuffer.allocate(4096);
+                        tmpBuffer.mark();
+                        tmpBuffer.put(buffer);
+                        buffer = tmpBuffer;
+                    }
+                }
+                if (!cfFound)
+                {
+                    buffer.mark();
+                }
             }
             else
             {
