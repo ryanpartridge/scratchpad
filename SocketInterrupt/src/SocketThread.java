@@ -14,7 +14,6 @@ import java.util.Set;
 public class SocketThread extends Thread
 {
     private InetSocketAddress localAddr;
-    private Charset iso8859;
     private Selector selector = null;
     private SelectionKey serverKey = null, agentKey = null;
     private ByteBuffer buffer;
@@ -23,16 +22,8 @@ public class SocketThread extends Thread
     {
         super("SocketThread");
         localAddr = new InetSocketAddress(5111);
-        try
-        {
-            buffer = ByteBuffer.allocate(4096);
-            buffer.mark();
-            iso8859 = Charset.forName("ISO-8859-1");
-        }
-        catch (UnsupportedCharsetException uce)
-        {
-            // this character set should always be supported
-        }
+        buffer = ByteBuffer.allocate(4096);
+        buffer.mark();
     }
 
     @Override
@@ -114,34 +105,41 @@ public class SocketThread extends Thread
     {
         try
         {
-            //ByteBuffer buffer = ByteBuffer.allocate(4096);
             buffer.mark();
             int numRead = channel.read(buffer);
             if (numRead > 0)
             {
                 System.out.println("read " + numRead + " bytes");
-                boolean cfFound = false;
-                //buffer.limit(buffer.position());
+                System.out.println("limit: " + buffer.limit() + "\tcapacity: " + buffer.capacity());
+                buffer.limit(buffer.position());
                 buffer.reset();
-                for (int i = 0; i < numRead - 1; ++i)
+                boolean endsWithMessage = false;
+                while (buffer.position() < buffer.limit() - 1)
                 {
                     byte b1 = buffer.get();
                     byte b2 = buffer.get(buffer.position());
-                    System.out.println("buffer[" + (buffer.position() - 1) + "] = " + (char)b1 + "\tbuffer[" + buffer.position() + "] = " + (char)b2);
+                    System.out.println("buffer[" + buffer.position() + "] = " + (char)b1 + "\tbuffer["
+                                    + (buffer.position() + 1) + "] = " + (char)b2);
                     if (b1 == '\r' && b2 == '\n')
                     {
-                        cfFound = true;
+                        // consume the last byte
+                        buffer.get();
+                        if (buffer.position() == buffer.limit())
+                        {
+                            endsWithMessage = true;
+                        }
                         String message = new String(buffer.array(), 0, buffer.position());
                         System.out.println("incoming message: " + message.trim());
-                        ByteBuffer tmpBuffer = ByteBuffer.allocate(4096);
-                        tmpBuffer.mark();
-                        tmpBuffer.put(buffer);
-                        buffer = tmpBuffer;
                     }
                 }
-                if (!cfFound)
+                if (endsWithMessage)
+                {
+                    buffer.clear();
+                }
+                else
                 {
                     buffer.mark();
+                    buffer.limit(buffer.capacity());
                 }
             }
             else
