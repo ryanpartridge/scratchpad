@@ -6,8 +6,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -105,7 +103,6 @@ public class SocketThread extends Thread
     {
         try
         {
-            buffer.mark();
             int numRead = channel.read(buffer);
             if (numRead > 0)
             {
@@ -113,8 +110,6 @@ public class SocketThread extends Thread
                 System.out.println("limit: " + buffer.limit() + "\tcapacity: " + buffer.capacity());
                 buffer.limit(buffer.position());
                 buffer.reset();
-                boolean endsWithMessage = false;
-                int messageStart = buffer.position();
                 while (buffer.position() < buffer.limit() - 1)
                 {
                     byte b1 = buffer.get();
@@ -125,15 +120,25 @@ public class SocketThread extends Thread
                     {
                         // consume the last byte
                         buffer.get();
-                        String message = new String(buffer.array(), messageStart, buffer.position());
+                        String message = new String(buffer.array(), 0, buffer.position());
                         System.out.println("incoming message: " + message.trim());
-                        messageStart = buffer.position();
+                        buffer.compact();
+                        buffer.limit(buffer.position());
+                        buffer.rewind();
                         buffer.mark();
                     }
                 }
-                buffer.reset();
-                buffer.compact();
-                buffer.mark();
+                if (buffer.position() == buffer.limit())
+                {
+                    buffer.clear();
+                    buffer.mark();
+                }
+                else
+                {
+                    buffer.mark();
+                    buffer.get();
+                    buffer.limit(buffer.capacity());
+                }
             }
             else
             {
