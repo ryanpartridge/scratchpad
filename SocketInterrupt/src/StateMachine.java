@@ -1,25 +1,27 @@
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class StateMachine
 {
-    SocketThread socketThread = null;
+    private SocketThread socketThread = null;
+    private LinkedBlockingQueue<String> toAgent = null, fromAgent = null;
 
     public StateMachine()
     {
+        toAgent = new LinkedBlockingQueue<String>();
+        fromAgent = new LinkedBlockingQueue<String>();
     }
 
     public void start()
     {
         try
         {
-
             System.out.println("starting thread");
-            socketThread = new SocketThread();
+            socketThread = new SocketThread(toAgent, fromAgent);
             socketThread.start();
-//            System.out.println("main thread going to sleep");
-//            Thread.sleep(5000);
-//            System.out.println("main thread woke up");
-//            System.out.println("interrupting listen thread");
-//            socketThread.interrupt();
+            System.out.println("giving socket thread time");
+            Thread.sleep(30000);
+            socketThread.interrupt();
         }
         catch (Exception e)
         {
