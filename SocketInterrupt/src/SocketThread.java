@@ -114,33 +114,26 @@ public class SocketThread extends Thread
                 buffer.limit(buffer.position());
                 buffer.reset();
                 boolean endsWithMessage = false;
+                int messageStart = buffer.position();
                 while (buffer.position() < buffer.limit() - 1)
                 {
                     byte b1 = buffer.get();
                     byte b2 = buffer.get(buffer.position());
-                    System.out.println("buffer[" + buffer.position() + "] = " + (char)b1 + "\tbuffer["
-                                    + (buffer.position() + 1) + "] = " + (char)b2);
+                    System.out.println("buffer[" + (buffer.position() - 1) + "] = " + (char)b1 + "\tbuffer["
+                                    + (buffer.position()) + "] = " + (char)b2);
                     if (b1 == '\r' && b2 == '\n')
                     {
                         // consume the last byte
                         buffer.get();
-                        if (buffer.position() == buffer.limit())
-                        {
-                            endsWithMessage = true;
-                        }
-                        String message = new String(buffer.array(), 0, buffer.position());
+                        String message = new String(buffer.array(), messageStart, buffer.position());
                         System.out.println("incoming message: " + message.trim());
+                        messageStart = buffer.position();
+                        buffer.mark();
                     }
                 }
-                if (endsWithMessage)
-                {
-                    buffer.clear();
-                }
-                else
-                {
-                    buffer.mark();
-                    buffer.limit(buffer.capacity());
-                }
+                buffer.reset();
+                buffer.compact();
+                buffer.mark();
             }
             else
             {
