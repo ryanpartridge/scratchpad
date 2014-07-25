@@ -1,19 +1,22 @@
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
+import java.net.NetworkInterface;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class SocketThread extends Thread
 {
-    private InetSocketAddress localAddr;
+    private InetSocketAddress localAddr = null, multicastAddr = null;
     private Selector selector = null;
     private SelectionKey serverKey = null, agentKey = null;
     private ByteBuffer buffer;
@@ -25,6 +28,7 @@ public class SocketThread extends Thread
     {
         super("SocketThread");
         localAddr = new InetSocketAddress(5111);
+        multicastAddr = new InetSocketAddress("239.255.255.251", 5151);
         this.toAgent = toAgent;
         this.fromAgent = fromAgent;
         buffer = ByteBuffer.allocate(4096);
@@ -128,9 +132,6 @@ public class SocketThread extends Thread
             int numRead = channel.read(buffer);
             if (numRead > 0)
             {
-                // System.out.println("read " + numRead + " bytes");
-                // System.out.println("limit: " + buffer.limit() +
-                // "\tcapacity: " + buffer.capacity());
                 buffer.limit(buffer.position());
                 buffer.reset();
                 while (buffer.position() < buffer.limit() - 1)
@@ -146,6 +147,7 @@ public class SocketThread extends Thread
                         buffer.get();
                         String message = new String(buffer.array(), 0, buffer.position()).trim();
                         System.out.println("incoming message: " + message);
+                        fromAgent.offer(message);
                         toAgent.offer(message);
                         buffer.compact();
                         buffer.limit(buffer.position());
@@ -167,10 +169,10 @@ public class SocketThread extends Thread
             }
             else
             {
-                System.out.println("broken connection");
-                channel.close();
                 synchronized (lock)
                 {
+                    System.out.println("broken connection");
+                    channel.close();
                     agentKey.cancel();
                     agentKey = null;
                 }
@@ -204,23 +206,63 @@ public class SocketThread extends Thread
                     System.out.println("sending to agent: " + message);
                     synchronized (lock)
                     {
-                        try
+                        if (agentKey != null && agentKey.isValid())
                         {
-                            if (agentKey != null && agentKey.isValid())
+                            try
                             {
                                 SocketChannel agentChannel = (SocketChannel)agentKey.channel();
                                 ByteBuffer messageBuffer = ByteBuffer.wrap(message.getBytes());
                                 agentChannel.write(messageBuffer);
                             }
-                            else
+                            catch (IOException ioe)
+                            {
+                                System.err.println("error sending on agent connection: " + ioe);
+                            }
+                        }
+                        else
+                        {
+                            try
                             {
                                 System.out.println("no agent connection -- sending via multicast");
                                 MulticastSocket mSocket = new MulticastSocket();
+                                mSocket.setReuseAddress(true);
+                                mSocket.setTimeToLive(8);
+                                mSocket.setLoopbackMode(true);
+
+                                DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(),
+                                                multicastAddr);
+
+                                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                                boolean sentToReal = false;
+                                while (interfaces.hasMoreElements())
+                                {
+                                    NetworkInterface n = interfaces.nextElement();
+                                    if (n.supportsMulticast())
+                                    {
+                                        boolean useInterface = false;
+                                        if (n.isVirtual() || n.isLoopback())
+                                        {
+                                            useInterface = true;
+                                        }
+                                        else if (!sentToReal)
+                                        {
+                                            sentToReal = true;
+                                            useInterface = true;
+                                        }
+
+                                        if (useInterface)
+                                        {
+                                            mSocket.setNetworkInterface(n);
+                                            mSocket.send(packet);
+                                        }
+                                    }
+                                }
+                                mSocket.close();
                             }
-                        }
-                        catch (IOException ioe)
-                        {
-                            System.err.println(ioe);
+                            catch (IOException ioe)
+                            {
+                                System.err.println("error sending via multicast: " + ioe);
+                            }
                         }
                     }
                 }
