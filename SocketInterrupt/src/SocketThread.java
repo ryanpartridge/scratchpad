@@ -52,10 +52,15 @@ public class SocketThread extends Thread
             serverKey = listenChannel.register(selector, SelectionKey.OP_ACCEPT);
             doSelect();
             toAgentThread.interrupt();
+            toAgentThread.join(2000);
         }
         catch (IOException ioe)
         {
             System.err.println(ioe);
+        }
+        catch (InterruptedException ie)
+        {
+            // System.err.println(ie);
         }
         System.out.println("socket thread complete");
     }
@@ -67,7 +72,7 @@ public class SocketThread extends Thread
             while (true)
             {
                 selector.select();
-                if (!isInterrupted())
+                if (!interrupted())
                 {
                     System.out.println("broke out of select");
                     Set<SelectionKey> selected = selector.selectedKeys();
@@ -125,47 +130,14 @@ public class SocketThread extends Thread
         }
     }
 
-    public void handleRead(SocketChannel channel)
+    private void handleRead(SocketChannel channel)
     {
         try
         {
             int numRead = channel.read(buffer);
             if (numRead > 0)
             {
-                buffer.limit(buffer.position());
-                buffer.reset();
-                while (buffer.position() < buffer.limit() - 1)
-                {
-                    byte b1 = buffer.get();
-                    byte b2 = buffer.get(buffer.position());
-                    // System.out.println("buffer[" + (buffer.position() - 1) +
-                    // "] = " + (char)b1 + "\tbuffer["
-                    // + (buffer.position()) + "] = " + (char)b2);
-                    if (b1 == '\r' && b2 == '\n')
-                    {
-                        // consume the last byte
-                        buffer.get();
-                        String message = new String(buffer.array(), 0, buffer.position()).trim();
-                        System.out.println("incoming message: " + message);
-                        fromAgent.offer(message);
-                        toAgent.offer(message);
-                        buffer.compact();
-                        buffer.limit(buffer.position());
-                        buffer.rewind();
-                        buffer.mark();
-                    }
-                }
-                if (buffer.position() == buffer.limit())
-                {
-                    buffer.clear();
-                    buffer.mark();
-                }
-                else
-                {
-                    buffer.mark();
-                    buffer.get();
-                    buffer.limit(buffer.capacity());
-                }
+                packetize();
             }
             else
             {
@@ -181,6 +153,47 @@ public class SocketThread extends Thread
         catch (IOException ioe)
         {
             System.err.println(ioe);
+        }
+    }
+
+    private void packetize()
+    {
+        buffer.limit(buffer.position());
+        buffer.reset();
+        while (buffer.position() < buffer.limit() - 1)
+        {
+            byte b1 = buffer.get();
+            byte b2 = buffer.get(buffer.position());
+            // System.out.println("buffer[" + (buffer.position() - 1) +
+            // "] = " + (char)b1 + "\tbuffer["
+            // + (buffer.position()) + "] = " + (char)b2);
+            if (b1 == '\r' && b2 == '\n')
+            {
+                // consume the last byte
+                buffer.get();
+                String message = new String(buffer.array(), 0, buffer.position()).trim();
+                if (!message.isEmpty())
+                {
+                    System.out.println("incoming message: " + message);
+                    fromAgent.offer(message);
+                    toAgent.offer(message);
+                }
+                buffer.compact();
+                buffer.limit(buffer.position());
+                buffer.rewind();
+                buffer.mark();
+            }
+        }
+        if (buffer.position() == buffer.limit())
+        {
+            buffer.clear();
+            buffer.mark();
+        }
+        else
+        {
+            buffer.mark();
+            buffer.get();
+            buffer.limit(buffer.capacity());
         }
     }
 
@@ -221,48 +234,8 @@ public class SocketThread extends Thread
                         }
                         else
                         {
-                            try
-                            {
-                                System.out.println("no agent connection -- sending via multicast");
-                                MulticastSocket mSocket = new MulticastSocket();
-                                mSocket.setReuseAddress(true);
-                                mSocket.setTimeToLive(8);
-                                mSocket.setLoopbackMode(true);
-
-                                DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(),
-                                                multicastAddr);
-
-                                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-                                boolean sentToReal = false;
-                                while (interfaces.hasMoreElements())
-                                {
-                                    NetworkInterface n = interfaces.nextElement();
-                                    if (n.supportsMulticast())
-                                    {
-                                        boolean useInterface = false;
-                                        if (n.isVirtual() || n.isLoopback())
-                                        {
-                                            useInterface = true;
-                                        }
-                                        else if (!sentToReal)
-                                        {
-                                            sentToReal = true;
-                                            useInterface = true;
-                                        }
-
-                                        if (useInterface)
-                                        {
-                                            mSocket.setNetworkInterface(n);
-                                            mSocket.send(packet);
-                                        }
-                                    }
-                                }
-                                mSocket.close();
-                            }
-                            catch (IOException ioe)
-                            {
-                                System.err.println("error sending via multicast: " + ioe);
-                            }
+                            System.out.println("no agent connection -- sending via multicast");
+                            multicast(message);
                         }
                     }
                 }
@@ -272,6 +245,50 @@ public class SocketThread extends Thread
                 // System.err.println(ie);
             }
             System.out.println("toAgent thread shutting down");
+        }
+
+        private void multicast(String message)
+        {
+            try
+            {
+                MulticastSocket mSocket = new MulticastSocket();
+                mSocket.setReuseAddress(true);
+                mSocket.setTimeToLive(8);
+                mSocket.setLoopbackMode(true);
+
+                DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), multicastAddr);
+
+                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                boolean sentToReal = false;
+                while (interfaces.hasMoreElements())
+                {
+                    NetworkInterface n = interfaces.nextElement();
+                    if (n.supportsMulticast())
+                    {
+                        boolean useInterface = false;
+                        if (n.isVirtual() || n.isLoopback())
+                        {
+                            useInterface = true;
+                        }
+                        else if (!sentToReal)
+                        {
+                            sentToReal = true;
+                            useInterface = true;
+                        }
+
+                        if (useInterface)
+                        {
+                            mSocket.setNetworkInterface(n);
+                            mSocket.send(packet);
+                        }
+                    }
+                }
+                mSocket.close();
+            }
+            catch (IOException ioe)
+            {
+                System.err.println("error sending via multicast: " + ioe);
+            }
         }
     }
 }

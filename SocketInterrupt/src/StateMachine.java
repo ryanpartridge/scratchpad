@@ -22,6 +22,7 @@ public class StateMachine
             System.out.println("giving socket thread time");
             Thread.sleep(30000);
             socketThread.interrupt();
+            socketThread.join(5000);
         }
         catch (Exception e)
         {
