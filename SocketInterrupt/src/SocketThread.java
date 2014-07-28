@@ -62,6 +62,15 @@ public class SocketThread extends Thread
         {
             // System.err.println(ie);
         }
+        serverKey.cancel();
+        try
+        {
+            selector.close();
+        }
+        catch (IOException e)
+        {
+            // ignore any exception here
+        }
         System.out.println("socket thread complete");
     }
 
@@ -216,7 +225,7 @@ public class SocketThread extends Thread
                     {
                         message += "\r\n";
                     }
-                    System.out.println("sending to agent: " + message);
+                    System.out.println("sending to agent: " + message.trim());
                     synchronized (lock)
                     {
                         if (agentKey != null && agentKey.isValid())
