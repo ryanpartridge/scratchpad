@@ -14,45 +14,41 @@ typedef std::map<int, int> PortMap;
 int main(int argc, char* argv[])
 {
 	PortMap portMap;
+	portMap[0] = 5800;
 	portMap[1] = 5111;
-	PortMap portMap2 = portMap;
+	portMap[2] = 5020;
 
 	std::cout << "start" << std::endl;
 
-	std::cout << "forward iterator" << std::endl;
-	for (PortMap::iterator it = portMap.begin(); it != portMap.end(); ++it)
-	{
-		std::cout << "entry[" << it->first << "]: " << it->second << std::endl;
-	}
-
 	std::cout << std::endl;
 	std::cout << "forward removal" << std::endl;
-	for (PortMap::iterator it = portMap.begin(); it != portMap.end(); ++it)
-	{
-		if (it->second == 5111)
-		{
-			std::cout << "removing item: " << it->first << " (" << it->second << ")" << std::endl;
-			portMap.erase(it->first);
-		}
-	}
-	std::cout << std::endl;
-	std::cout << "reverse iterator" << std::endl;
-	for (PortMap::reverse_iterator it = portMap2.rbegin(); it != portMap2.rend(); ++it)
+	PortMap::iterator it = portMap.begin();
+	PortMap::iterator end = portMap.end();
+	while (it != end)
 	{
 		std::cout << "entry[" << it->first << "]: " << it->second << std::endl;
-	}
-
-	std::cout << std::endl;
-	std::cout << "reverse removal" << std::endl;
-	for (PortMap::reverse_iterator it = portMap2.rbegin(); it != portMap2.rend(); ++it)
-	{
-		if (it->second == 5111)
+		if (it->second == 5020)
 		{
 			std::cout << "removing item: " << it->first << " (" << it->second << ")" << std::endl;
-			portMap2.erase(it->first);
+			portMap.erase(it++);
+		}
+		else
+		{
+			++it;
 		}
 	}
 
+	std::cout << std::endl;
+	std::cout << "forward iterator" << std::endl;
+	it = portMap.begin();
+	end = portMap.end();
+	while (it != end)
+	{
+		std::cout << "entry[" << it->first << "]: " << it->second << std::endl;
+		++it;
+	}
+
+	std::cout << std::endl;
 	std::cout << "end" << std::endl;
 
     return 0;
