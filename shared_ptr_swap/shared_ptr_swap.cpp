@@ -18,27 +18,34 @@ public:
     A()
     {
         id_ = count_;
-        cout << "A default constructor (" << id_ << ")" << endl;
+        value_ = id_;
+        cout << "A default constructor [id_: " << id_ << "][value_: " << value_  << "]" << endl;
         ++count_;
     }
 
     A(const A& a)
     {
-        id_ = a.id_;
-        cout << "A copy constructor (" << id_ << ")" << endl;
+        id_ = count_;
+        value_ = a.value_;
+        cout << "A copy constructor [id_: " << id_ << "][value_: " << value_ << "]" << endl;
+        ++count_;
     }
 
     virtual ~A()
     {
-        cout << "A destructor (" << id_ << ")" << endl;
+        cout << "A destructor [id_: " << id_ << "][value_: " << value_ << "]" << endl;
     }
 
     A& operator=(const A& a)
     {
-        id_ = a.id_;
-        cout << "A assignemnt operator (" << id_ << ")" << endl;
+        id_ = count_;
+        value_ = a.value_;
+        cout << "A assignemnt operator [id_: " << id_ << "][value_: " << value_ << "]" << endl;
+        ++count_;
         return *this;
     }
+
+    int value_;
 
 private:
     int id_;
@@ -78,6 +85,22 @@ int main(int argc, char* argv[])
     cout << "weak pointer expired? " << (w1.expired() ? "true" : "false") << endl;
     a3 = w1.lock();
     cout << "able to lock? " << (a3 ? "true" : "false") << endl;
+
+    if (a1)
+    {
+    	cout << "shared pointer still valid" << endl;
+    }
+    else
+    {
+    	try
+    	{
+    		cout << "bad pointer access on id: " << a1->value_ << endl;
+    	}
+    	catch (...)
+    	{
+    		cout << "caught an exception" << endl;
+    	}
+    }
 
     cout << "all done" << endl;
     return 0;
