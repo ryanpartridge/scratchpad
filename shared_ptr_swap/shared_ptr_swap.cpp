@@ -9,6 +9,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/optional.hpp>
 
 using namespace std;
 
@@ -86,22 +87,55 @@ int main(int argc, char* argv[])
     a3 = w1.lock();
     cout << "able to lock? " << (a3 ? "true" : "false") << endl;
 
-    if (a1)
+    boost::optional<bool> primary;
+    if (primary)
     {
-    	cout << "shared pointer still valid" << endl;
+        cout << "primary is set" << endl;
     }
     else
     {
-    	try
-    	{
-    		cout << "bad pointer access on id: " << a1->value_ << endl;
-    	}
-    	catch (...)
-    	{
-    		cout << "caught an exception" << endl;
-    	}
+        cout << "primary is not set" << endl;
+    }
+    primary = false;
+    if (primary)
+    {
+        cout << "primary is set: " << (*primary ? "true" : "false") << endl;
+    }
+    else
+    {
+        cout << "primary is not set" << endl;
     }
 
+    primary = boost::none;
+    if (primary != boost::none)
+    {
+        cout << "primary is set: " << (*primary ? "true" : "false") << endl;
+    }
+    else
+    {
+        cout << "primary is not set" << endl;
+    }
+
+    primary = true;
+    if (primary)
+    {
+        cout << "primary is set: " << (*primary ? "true" : "false") << endl;
+    }
+    else
+    {
+        cout << "primary is not set" << endl;
+    }
+
+    primary = boost::none;
+    if (primary != boost::none)
+    {
+        cout << "primary is set: " << (*primary ? "true" : "false") << endl;
+    }
+    else
+    {
+        cout << "primary is not set" << endl;
+    }
     cout << "all done" << endl;
+
     return 0;
 }
