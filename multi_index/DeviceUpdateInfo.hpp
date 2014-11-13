@@ -17,7 +17,6 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/tag.hpp>
 
-
 class DeviceUpdateInfo
 {
 public:
@@ -61,6 +60,22 @@ struct ip_address_key_extractor
 {
     typedef std::string result_type;
     result_type operator()(const DeviceUpdateInfo& dui) const { return dui.ipAddress(); }
+};
+
+struct update_ip_address
+{
+    update_ip_address(const std::string& ipAddress) :
+        ipAddress_(ipAddress)
+    {
+    }
+
+    void operator()(DeviceUpdateInfo& dui)
+    {
+        dui.ipAddress(ipAddress_);
+    }
+
+private:
+    std::string ipAddress_;
 };
 
 struct binding_id_key_extractor

@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
@@ -89,6 +90,24 @@ int main(int argc, char* argv[])
         }
     }
 
+    addrIt = infoSet.get<by_address>().find("192.168.1.5");
+    if (addrIt != infoSet.get<by_address>().end())
+    {
+        infoSet.get<by_address>().modify(addrIt, update_ip_address("192.168.1.20"));
+        std::cout << std::endl;
+        std::cout << "indexed by device id (after modification)" << std::endl;
+        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+        {
+            std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
+        }
+    }
+
+    addrIt = infoSet.get<by_address>().find("192.168.1.20");
+    const DeviceUpdateInfo& refDui = *addrIt;
+    std::cout << std::endl;
+    std::cout << "iterator access by const ref" << std::endl;
+    std::cout << "[device id: " << refDui.deviceId() << "][ip address: " << refDui.ipAddress() << "][binding id: " << refDui.bindingId() << "]" << std::endl;
+
     SP_DeviceUpdateInfoSet spInfoSet;
     SP_DeviceUpdateInfo spDui1 = boost::make_shared<DeviceUpdateInfo>(1);
     spDui1->ipAddress("192.168.1.10");
@@ -130,6 +149,20 @@ int main(int argc, char* argv[])
         {
             std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
         }
+    }
+
+    SP_DeviceUpdateInfo spDui4 = boost::make_shared<DeviceUpdateInfo>(3);
+    spDui4->ipAddress("192.168.1.50");
+    std::pair<SP_DeviceUpdateInfoSet::iterator, bool> p = spInfoSet.insert(spDui4);
+    if (p.first == spInfoSet.end())
+    {
+        std::cout << "did not insert" << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "(sp) indexed by device id (after duplicate id insert)" << std::endl;
+    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+    {
+        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
 
     std::cout << std::endl;
