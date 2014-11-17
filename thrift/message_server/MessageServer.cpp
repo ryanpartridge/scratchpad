@@ -50,10 +50,10 @@ private:
 
 int main(int argc, char **argv)
 {
-    int port = 9090;
+    std::string path = "/tmp/thrift-sample";
     shared_ptr<MessageServiceHandler> handler(new MessageServiceHandler());
     shared_ptr<TProcessor> processor(new MessageServiceProcessor(handler));
-    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+    shared_ptr<TServerTransport> serverTransport(new TServerSocket(path));
     shared_ptr<TTransportFactory> transportFactory(
         new TBufferedTransportFactory());
     shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
