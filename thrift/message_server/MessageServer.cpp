@@ -7,6 +7,8 @@
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <boost/thread.hpp>
+#include <boost/chrono.hpp>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -37,6 +39,7 @@ public:
         {
             _return.value = std::string();
         }
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
     }
 
     void setMessage(const Message& message)

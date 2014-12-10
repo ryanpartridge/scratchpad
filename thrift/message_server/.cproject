@@ -44,6 +44,8 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="messageservice"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="thrift"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_thread"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_system"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.471305115" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -98,6 +100,8 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="messageservice"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="thrift"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_thread"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_system"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1637886411" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/rpartridge/thrift/thrift-0.9.2/lib/cpp/.libs"/>

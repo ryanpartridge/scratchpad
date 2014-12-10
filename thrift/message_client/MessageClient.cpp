@@ -28,8 +28,8 @@ int main(int argc, char* argv[])
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     MessageServiceClient client(protocol);
 
-    char* buffer = new char[1024];
-    memset(buffer, 1024, 'a');
+    char* buffer = new char[2048];
+    memset(buffer, 2048, 'a');
 
     std::string contents = "";
 
@@ -37,31 +37,26 @@ int main(int argc, char* argv[])
     {
         transport->open();
 
-        for (int i = 0; i < 15; ++i)
+        for (int i = 0; i < 1000; ++i)
         {
-            //std::cout << "putting entry: " << i << std::endl;
-            Message msg1;
-            msg1.key = i;
-            if (i == 0)
-            {
-                contents = std::string(buffer, 1024);
-            }
-            else
-            {
-                contents += contents;
-            }
-            std::cout << "message size: " << contents.size() << std::endl;
-            msg1.value = contents;
-            client.setMessage(msg1);
+            int key = i % 100;
+            //std::cout << "putting entry: " << key << std::endl;
+//            Message msg1;
+//            msg1.key = key;
+//            contents = std::string(buffer, 2048);
+//            //std::cout << "message size: " << contents.size() << std::endl;
+//            msg1.value = contents;
+//            client.setMessage(msg1);
 
             Message msg2;
-            //std::cout << "getting entry: " << i << std::endl;
-            client.getMessage(msg2, i);
-            if (msg2.value != contents)
-            {
-                std::cerr << "fetched value for " << i << " does not match!" << std::endl;
-                break;
-            }
+            //std::cout << "getting entry: " << key << std::endl;
+            client.getMessage(msg2, key);
+//            if (msg2.value != contents)
+//            {
+//                std::cerr << "fetched value for " << key << " does not match!"
+//                    << std::endl;
+//                break;
+//            }
             //std::cout << "success" << std::endl;
         }
         transport->close();
