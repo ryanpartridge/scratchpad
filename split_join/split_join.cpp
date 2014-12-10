@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include <boost/range/algorithm/replace_if.hpp>
 #include <boost/regex.hpp>
 
 typedef std::vector<std::string> StringVec;
@@ -36,6 +37,24 @@ void compressSpaces(string& buffer)
 	cout << "input: " << buffer << endl;
 	boost::algorithm::erase_all(buffer, "\n");
 	cout << "modified: " << buffer << endl;
+}
+
+void replaceDisallowedChars(string& buffer)
+{
+    cout << "input: " << buffer << endl;
+    boost::algorithm::replace_all(buffer, "][", "?");
+    string disallowed = "\"\'\\!@#$%*+={}|[]:;<>?/";
+    boost::replace_if(buffer, boost::algorithm::is_any_of(disallowed), '_');
+    cout << "modified: " << buffer << endl;
+}
+
+void replaceDisallowedCharsCompact(string& buffer)
+{
+    cout << "input: " << buffer << endl;
+    boost::algorithm::replace_all(buffer, "][", "?");
+    string disallowed = "\"\'\\!@#$%*+={}|[]:;<>?/";
+    boost::algorithm::replace_all_regex(buffer, boost::regex("[\"\'\\\\!@#$%*+={}|[\\]:;<>?/]+"), string("_"));
+    cout << "modified: " << buffer << endl;
 }
 
 StringVec splitOnPipe(string& buffer)
@@ -121,6 +140,14 @@ int main(int argc, char* argv[])
     boost::regex urlPattern("^https?://[^ \t\n]+\\.control4.com/[^ \t\n]+$");
     matches = boost::regex_match(updateUrl, urlPattern);
     cout << "url matches: " << (matches ? "true" : "false") << endl;
+
+    cout << endl;
+    string disallowedNameChars("Some ? name \\ with \" invalid start ___ end ][@$# characters ] %#$@{}  \"\'\\!@#$%*+={}|[]:;<>?/");
+    replaceDisallowedChars(disallowedNameChars);
+
+    cout << endl;
+    string disallowedNameCharsCompact("Some ? name \\ with \" invalid start ___ end ][@$# characters ] %#$@{}  \"\'\\!@#$%*+={}|[]:;<>?/");
+    replaceDisallowedCharsCompact(disallowedNameCharsCompact);
 
     return 0;
 }
