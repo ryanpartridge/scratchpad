@@ -44,7 +44,7 @@ public:
 
     void setMessage(const Message& message)
     {
-        messageMap_[message.key] = message;
+        messageMap_.insert(std::make_pair<int32_t, Message>(message.key, message));
     }
 
 private:
