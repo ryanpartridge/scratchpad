@@ -31,26 +31,38 @@ void handler(const boost::system::error_code& ec)
     }
 }
 
-void useTimer(boost::asio::io_service& service, boost::asio::yield_context yield)
+void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(3));
-    cout << "staring timer" << endl;
-    timer.async_wait(yield[ec]);
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(5));
+    cout << "staring timer 1" << endl;
+    timer.async_wait(yld[ec]);
     if (!ec)
     {
-        cout << "timer expired normally" << endl;
+        cout << "timer 1 expired normally" << endl;
     }
     else
     {
-        cout << "timer expired with error: " << ec.message() << endl;
+        cout << "timer 1 expired with error: " << ec.message() << endl;
     }
-    cout << "done with timer" << endl;
+    cout << "done with timer 1" << endl;
 }
 
-void useTimer2(boost::asio::io_service& service, int num)
+void useTimer2(boost::asio::io_service& service, boost::asio::yield_context yld)
 {
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(num));
+    boost::system::error_code ec;
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(2));
+    cout << "starting timer 2" << endl;
+    timer.async_wait(yld[ec]);
+    if (!ec)
+    {
+        cout << "timer 2 expired normally" << endl;
+    }
+    else
+    {
+        cout << "timer 2 expired with error: " << ec.message() << endl;
+    }
+    cout << "done with timer 2" << endl;
 }
 
 int main(int argc, char* argv[])
@@ -59,6 +71,9 @@ int main(int argc, char* argv[])
 
     boost::asio::io_service service;
     boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
+    boost::asio::spawn(service, boost::bind(&useTimer2, boost::ref(service), _1));
+    boost::this_thread::sleep_for(boost::chrono::seconds(5));
+    cout << "calling run()" << endl;
     service.run();
 
     cout << "exiting main" << endl;
