@@ -16,6 +16,8 @@
 #include <boost/ref.hpp>
 #include <boost/function.hpp>
 #include <boost/asio/spawn.hpp>
+#include <boost/coroutine/all.hpp>
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -65,16 +67,70 @@ void useTimer2(boost::asio::io_service& service, boost::asio::yield_context yld)
     cout << "done with timer 2" << endl;
 }
 
+//typedef boost::function<void(boost::coroutines::asymmetric_coroutine<int>::push_type&)> fibCoFunc;
+void coFib(boost::coroutines::asymmetric_coroutine<int>::push_type& sink)
+{
+    int first = 1, second = 1;
+    sink(first);
+    sink(second);
+
+    for (int i = 0; i < 8; ++i)
+    {
+        int third = first + second;
+        first = second;
+        second = third;
+        sink(third);
+    }
+}
+
+typedef boost::function<void(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)> symCoFunc;
+
+void symCoC(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
+{
+    int i = yield.get();
+    cout << "symCoC input: " << i << endl;
+    yield();
+}
+
+void symCoB(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
+{
+    int i = yield.get();
+    cout << "symCoB input: " << i << endl;
+    boost::coroutines::symmetric_coroutine<int>::call_type func(&symCoC);
+    func(3);
+    cout << "leaving symCoB" << endl;
+}
+
+void symCoA(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
+{
+    int i = yield.get();
+    cout << "symCoA input: " << i << endl;
+    boost::coroutines::symmetric_coroutine<int>::call_type func(&symCoB);
+    func(2);
+    cout << "leaving symCoA" << endl;
+}
+
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
-    boost::asio::io_service service;
-    boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
-    boost::asio::spawn(service, boost::bind(&useTimer2, boost::ref(service), _1));
-    boost::this_thread::sleep_for(boost::chrono::seconds(5));
-    cout << "calling run()" << endl;
-    service.run();
+//    boost::asio::io_service service;
+//    boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
+//    boost::asio::spawn(service, boost::bind(&useTimer2, boost::ref(service), _1));
+//    boost::this_thread::sleep_for(boost::chrono::seconds(2));
+//    cout << "calling run()" << endl;
+//    service.run();
+
+    boost::coroutines::asymmetric_coroutine<int>::pull_type source(&coFib);
+
+    BOOST_FOREACH (const int i, source)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    boost::coroutines::symmetric_coroutine<int>::call_type func(&symCoA);
+    func(1);
 
     cout << "exiting main" << endl;
     return 0;
