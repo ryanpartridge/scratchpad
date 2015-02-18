@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         for (int i = 0; i < 1000; ++i)
         {
             int key = i % 100;
-            std::cout << "putting entry: " << key << std::endl;
+            //std::cout << "putting entry: " << key << std::endl;
             Message msg1;
             msg1.key = key;
             contents = std::string(buffer, 2048);
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
             client.setMessage(msg1);
 
             Message msg2;
-            std::cout << "getting entry: " << key << std::endl;
+            //std::cout << "getting entry: " << key << std::endl;
             client.getMessage(msg2, key);
             if (msg2.value != contents)
             {
