@@ -98,7 +98,8 @@ private:
 	{
 		std::cout << "sending message: " << boost::trim_copy(message) << std::endl;
 		pendingWrites_.fetch_add(1);
-		socket_->async_send(boost::asio::buffer(message.data(), message.size()), boost::bind(&Server::handleWrite, shared_from_this(), boost::asio::placeholders::error));
+//		boost::asio::async_write(*socket, boost::asio::buffer(message.data(), message.size()), boost::bind(&Server::handleWrite, shared_from_this(), boost::asio::placeholders::error));
+		boost::asio::async_write(*socket_, boost::asio::buffer(message.data(), message.size()), boost::bind(&Server::handleWrite, shared_from_this(), boost::asio::placeholders::error));
 	}
 
 	void handleAccept(const boost::system::error_code& ec)
@@ -111,13 +112,6 @@ private:
 				std::ostringstream out;
 				out << "message # " << count << std::endl;
 				asyncWrite(out.str());
-				if (count == 0)
-				{
-//					stop();
-//					std::cout << "closing socket" << std::endl;
-//					socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-//					socket_->close();
-				}
 			}
 		}
 	}
@@ -134,9 +128,9 @@ int main(int argc, char* argv[])
     std::cout << "starting threads" << std::endl;
     boost::asio::io_service clientService, serverService;
     //boost::asio::io_service::work serverWork(serverService);
-    boost::shared_ptr<Client> c = boost::make_shared<Client>(boost::ref(clientService));
-    boost::shared_ptr<Server> s = boost::make_shared<Server>(boost::ref(serverService));
-    s->start();
+    boost::shared_ptr<Client> client = boost::make_shared<Client>(boost::ref(clientService));
+    boost::shared_ptr<Server> server = boost::make_shared<Server>(boost::ref(serverService));
+    server->start();
 
     boost::thread serverThread(boost::bind(&boost::asio::io_service::run, boost::ref(serverService)));
 //    boost::this_thread::sleep_for(boost::chrono::seconds(5));
