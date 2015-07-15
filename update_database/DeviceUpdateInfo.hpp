@@ -12,8 +12,6 @@
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/multi_index_container.hpp>
-#include <boost/multi_index/identity.hpp>
-#include <boost/multi_index/member.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -23,24 +21,13 @@ class DeviceUpdateInfo
 public:
     typedef boost::shared_ptr<DeviceUpdateInfo> Ptr;
 
-    DeviceUpdateInfo(unsigned int deviceId_);
+    explicit DeviceUpdateInfo(unsigned int deviceId);
     virtual ~DeviceUpdateInfo();
 
     boost::uint32_t deviceId() const { return deviceId_; }
     const std::string& ipAddress() const { return ipAddress_; }
     boost::uint32_t bindingId() const { return bindingId_; }
 
-/*
-    bool operator<(const DeviceUpdateInfo& dui) const
-    {
-        return deviceId_ < dui.deviceId_;
-    }
-
-    bool operator==(const DeviceUpdateInfo& dui) const
-    {
-        return deviceId_ == dui.deviceId_;
-    }
-*/
 private:
     void ipAddress(const std::string& ipAddress);
 

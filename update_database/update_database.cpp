@@ -12,6 +12,8 @@
 #include <boost/foreach.hpp>
 
 #include <DeviceUpdateInfo.hpp>
+#include <DeviceType.hpp>
+#include <Package.hpp>
 
 int main(int argc, char* argv[])
 {
