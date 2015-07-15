@@ -7,17 +7,11 @@
 
 #include <DeviceUpdateInfo.hpp>
 
-DeviceUpdateInfo::DeviceUpdateInfo() :
-    deviceId_(0),
-    ipAddress_(""),
-    bindingId_(0)
-{
-}
+boost::uint32_t DeviceUpdateInfo::nextBindingId_ = 9299;
 
 DeviceUpdateInfo::DeviceUpdateInfo(boost::uint32_t deviceId) :
     deviceId_(deviceId),
-    ipAddress_(""),
-    bindingId_(0)
+    bindingId_(++nextBindingId_)
 {
 }
 

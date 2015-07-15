@@ -63,59 +63,60 @@ int main(int argc, char* argv[])
 
     std::cout << std::endl;
     std::cout << "indexed by device id" << std::endl;
-    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<DeviceUpdateInfo::by_device>())
     {
         std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
     }
 
     std::cout << std::endl;
     std::cout << "indexed by ip address" << std::endl;
-    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_address>())
+    BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<DeviceUpdateInfo::by_address>())
     {
         std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
     }
 
-    DeviceUpdateInfoSet::index<by_address>::type::iterator addrIt = infoSet.get<by_address>().find("192.168.1.9");
-    if (addrIt != infoSet.get<by_address>().end())
+    DeviceUpdateInfoSet::index<DeviceUpdateInfo::by_address>::type::iterator addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.9");
+    if (addrIt != infoSet.get<DeviceUpdateInfo::by_address>().end())
     {
         DeviceUpdateInfo foundInfo = *addrIt;
         foundInfo.ipAddress("192.168.1.5");
-        infoSet.get<by_address>().replace(addrIt, foundInfo);
+        infoSet.get<DeviceUpdateInfo::by_address>().replace(addrIt, foundInfo);
 
         std::cout << std::endl;
         std::cout << "indexed by device id (after replacement)" << std::endl;
-        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<DeviceUpdateInfo::by_device>())
         {
             std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
         }
     }
 
-    addrIt = infoSet.get<by_address>().find("192.168.1.5");
-    if (addrIt != infoSet.get<by_address>().end())
+    addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.5");
+    if (addrIt != infoSet.get<DeviceUpdateInfo::by_address>().end())
     {
-        infoSet.get<by_address>().modify(addrIt, update_ip_address("192.168.1.20"));
+        infoSet.get<DeviceUpdateInfo::by_address>().modify(addrIt, DeviceUpdateInfo::update_ip_address("192.168.1.20"));
         std::cout << std::endl;
         std::cout << "indexed by device id (after modification)" << std::endl;
-        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<by_device>())
+        BOOST_FOREACH(const DeviceUpdateInfo& info, infoSet.get<DeviceUpdateInfo::by_device>())
         {
             std::cout << "[device id: " << info.deviceId() << "][ip address: " << info.ipAddress() << "][binding id: " << info.bindingId() << "]" << std::endl;
         }
     }
 
-    addrIt = infoSet.get<by_address>().find("192.168.1.20");
+    addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.20");
     const DeviceUpdateInfo& refDui = *addrIt;
     std::cout << std::endl;
     std::cout << "iterator access by const ref" << std::endl;
     std::cout << "[device id: " << refDui.deviceId() << "][ip address: " << refDui.ipAddress() << "][binding id: " << refDui.bindingId() << "]" << std::endl;
 
-    SP_DeviceUpdateInfoSet spInfoSet;
-    SP_DeviceUpdateInfo spDui1 = boost::make_shared<DeviceUpdateInfo>(1);
+
+    DeviceUpdateInfoPtrSet spInfoSet;
+    DeviceUpdateInfo::Ptr spDui1 = boost::make_shared<DeviceUpdateInfo>(1);
     spDui1->ipAddress("192.168.1.10");
 
-    SP_DeviceUpdateInfo spDui2 = boost::make_shared<DeviceUpdateInfo>(2);
+    DeviceUpdateInfo::Ptr spDui2 = boost::make_shared<DeviceUpdateInfo>(2);
     spDui2->ipAddress("192.168.1.9");
 
-    SP_DeviceUpdateInfo spDui3 = boost::make_shared<DeviceUpdateInfo>(3);
+    DeviceUpdateInfo::Ptr spDui3 = boost::make_shared<DeviceUpdateInfo>(3);
     spDui3->ipAddress("192.168.1.8");
 
     spInfoSet.insert(spDui1);
@@ -124,43 +125,44 @@ int main(int argc, char* argv[])
 
     std::cout << std::endl;
     std::cout << "(sp) indexed by device id" << std::endl;
-    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, spInfoSet.get<DeviceUpdateInfo::by_device>())
     {
         std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
 
     std::cout << std::endl;
     std::cout << "(sp) indexed by ip address" << std::endl;
-    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_address>())
+    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, spInfoSet.get<DeviceUpdateInfo::by_address>())
     {
         std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
 
-    SP_DeviceUpdateInfoSet::index<by_address>::type::iterator spAddrIt = spInfoSet.get<by_address>().find("192.168.1.9");
-    if (spAddrIt != spInfoSet.get<by_address>().end())
+    DeviceUpdateInfoPtrSet::index<DeviceUpdateInfo::by_address>::type::iterator spAddrIt = spInfoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.9");
+    if (spAddrIt != spInfoSet.get<DeviceUpdateInfo::by_address>().end())
     {
-        SP_DeviceUpdateInfo foundInfo = *spAddrIt;
+        DeviceUpdateInfo::Ptr foundInfo = *spAddrIt;
         foundInfo->ipAddress("192.168.1.5");
-        spInfoSet.get<by_address>().replace(spAddrIt, foundInfo);
+        spInfoSet.get<DeviceUpdateInfo::by_address>().replace(spAddrIt, foundInfo);
 
         std::cout << std::endl;
         std::cout << "(sp) indexed by device id (after replacement)" << std::endl;
-        BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+        BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, spInfoSet.get<DeviceUpdateInfo::by_device>())
         {
             std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
         }
     }
 
-    SP_DeviceUpdateInfo spDui4 = boost::make_shared<DeviceUpdateInfo>(3);
+    DeviceUpdateInfo::Ptr spDui4 = boost::make_shared<DeviceUpdateInfo>(3);
     spDui4->ipAddress("192.168.1.50");
-    std::pair<SP_DeviceUpdateInfoSet::iterator, bool> p = spInfoSet.insert(spDui4);
-    if (p.first == spInfoSet.end())
+    std::pair<DeviceUpdateInfoPtrSet::iterator, bool> p = spInfoSet.insert(spDui4);
+    if (!p.second)
     {
+        std::cout << std::endl;
         std::cout << "did not insert" << std::endl;
     }
     std::cout << std::endl;
     std::cout << "(sp) indexed by device id (after duplicate id insert)" << std::endl;
-    BOOST_FOREACH(const SP_DeviceUpdateInfo info, spInfoSet.get<by_device>())
+    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, spInfoSet.get<DeviceUpdateInfo::by_device>())
     {
         std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
