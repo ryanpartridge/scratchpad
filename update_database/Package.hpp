@@ -41,6 +41,27 @@ private:
     std::string platform_;
 
 public:
+    struct by_filename{};
+    struct by_name{};
+    struct by_size{};
 };
+
+typedef boost::multi_index_container<
+    Package::Ptr,
+    boost::multi_index::indexed_by<
+        boost::multi_index::hashed_non_unique<
+            boost::multi_index::tag<Package::by_filename>,
+            boost::multi_index::const_mem_fun<Package, const std::string&, &Package::filename>
+        >,
+        boost::multi_index::ordered_non_unique<
+            boost::multi_index::tag<Package::by_name>,
+            boost::multi_index::const_mem_fun<Package, const std::string&, &Package::name>
+        >,
+        boost::multi_index::ordered_non_unique<
+            boost::multi_index::tag<Package::by_size>,
+            boost::multi_index::const_mem_fun<Package, boost::uint32_t, &Package::size>
+        >
+    >
+> PackageSet;
 
 #endif /* PACKAGE_HPP_ */
