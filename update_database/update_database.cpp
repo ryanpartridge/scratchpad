@@ -17,8 +17,8 @@
 
 int main(int argc, char* argv[])
 {
-    DeviceUpdateInfoSet infoSet;
-    std::pair<DeviceUpdateInfoSet::iterator, bool> insertPair = infoSet.insert(boost::make_shared<DeviceUpdateInfo>(1));
+    Devices infoSet;
+    std::pair<Devices::iterator, bool> insertPair = infoSet.insert(boost::make_shared<DeviceUpdateInfo>(1));
     if (insertPair.second && insertPair.first != infoSet.end())
     {
         infoSet.modify(insertPair.first, DeviceUpdateInfo::update_ip_address("192.168.1.10"));
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
 
-    DeviceUpdateInfoSet::index<DeviceUpdateInfo::by_address>::type::iterator addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.9");
+    Devices::index<DeviceUpdateInfo::by_address>::type::iterator addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.9");
     if (addrIt != infoSet.get<DeviceUpdateInfo::by_address>().end())
     {
         infoSet.get<DeviceUpdateInfo::by_address>().modify(addrIt, DeviceUpdateInfo::update_ip_address("192.168.1.20"));
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     }
 
     DeviceUpdateInfo::Ptr dui4 = boost::make_shared<DeviceUpdateInfo>(3);
-    std::pair<DeviceUpdateInfoSet::iterator, bool> p = infoSet.insert(dui4);
+    std::pair<Devices::iterator, bool> p = infoSet.insert(dui4);
     if (!p.second)
     {
         std::cout << std::endl;

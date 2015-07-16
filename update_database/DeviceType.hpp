@@ -11,13 +11,15 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 
-class DeviceType
+class DeviceType :
+    public boost::enable_shared_from_this<DeviceType>
 {
 public:
     typedef boost::shared_ptr<DeviceType> Ptr;
@@ -57,6 +59,6 @@ typedef boost::multi_index_container<
             boost::multi_index::const_mem_fun<DeviceType, const std::string&, &DeviceType::targetVersion>
         >
     >
-> DeviceTypeSet;
+> DeviceTypes;
 
 #endif /* DEVICETYPE_HPP_ */

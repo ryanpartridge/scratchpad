@@ -11,12 +11,16 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 
-class DeviceUpdateInfo
+#include <DeviceType.hpp>
+
+class DeviceUpdateInfo :
+    public boost::enable_shared_from_this<DeviceUpdateInfo>
 {
 public:
     typedef boost::shared_ptr<DeviceUpdateInfo> Ptr;
@@ -27,6 +31,7 @@ public:
     boost::uint32_t deviceId() const { return deviceId_; }
     const std::string& ipAddress() const { return ipAddress_; }
     boost::uint32_t bindingId() const { return bindingId_; }
+    DeviceType::Ptr deviceType() const { return deviceType_; }
 
 private:
     void ipAddress(const std::string& ipAddress);
@@ -34,6 +39,7 @@ private:
     boost::uint32_t deviceId_;
     std::string ipAddress_;
     boost::uint32_t bindingId_;
+    DeviceType::Ptr deviceType_;
 
     static boost::uint32_t nextBindingId_;
 
@@ -82,6 +88,6 @@ typedef boost::multi_index_container<
             boost::multi_index::const_mem_fun<DeviceUpdateInfo, boost::uint32_t, &DeviceUpdateInfo::bindingId>
         >
     >
-> DeviceUpdateInfoSet;
+> Devices;
 
 #endif /* DEVICEUPDATEINFO_HPP_ */

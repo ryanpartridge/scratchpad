@@ -11,13 +11,15 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 
-class Package
+class Package :
+    public boost::enable_shared_from_this<Package>
 {
 public:
     typedef boost::shared_ptr<Package> Ptr;
@@ -62,6 +64,6 @@ typedef boost::multi_index_container<
             boost::multi_index::const_mem_fun<Package, boost::uint32_t, &Package::size>
         >
     >
-> PackageSet;
+> Packages;
 
 #endif /* PACKAGE_HPP_ */
