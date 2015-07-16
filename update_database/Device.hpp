@@ -1,12 +1,12 @@
 /*
- * DeviceUpdateInfo.hpp
+ * Device.hpp
  *
  *  Created on: Jul 3, 2014
  *      Author: ryan
  */
 
-#ifndef DEVICEUPDATEINFO_HPP_
-#define DEVICEUPDATEINFO_HPP_
+#ifndef DEVICE_HPP_
+#define DEVICE_HPP_
 
 #include <string>
 #include <boost/cstdint.hpp>
@@ -19,14 +19,14 @@
 
 #include <DeviceType.hpp>
 
-class DeviceUpdateInfo :
-    public boost::enable_shared_from_this<DeviceUpdateInfo>
+class Device :
+    public boost::enable_shared_from_this<Device>
 {
 public:
-    typedef boost::shared_ptr<DeviceUpdateInfo> Ptr;
+    typedef boost::shared_ptr<Device> Ptr;
 
-    explicit DeviceUpdateInfo(unsigned int deviceId);
-    virtual ~DeviceUpdateInfo();
+    explicit Device(unsigned int deviceId);
+    virtual ~Device();
 
     boost::uint32_t deviceId() const { return deviceId_; }
     const std::string& ipAddress() const { return ipAddress_; }
@@ -57,12 +57,12 @@ public:
         {
         }
 
-        void operator()(DeviceUpdateInfo& dui)
+        void operator()(Device& dui)
         {
             dui.ipAddress(ipAddress_);
         }
 
-        void operator()(DeviceUpdateInfo::Ptr dui)
+        void operator()(Device::Ptr dui)
         {
             dui->ipAddress(ipAddress_);
         }
@@ -73,21 +73,21 @@ public:
 };
 
 typedef boost::multi_index_container<
-    DeviceUpdateInfo::Ptr,
+    Device::Ptr,
     boost::multi_index::indexed_by<
         boost::multi_index::hashed_unique<
-            boost::multi_index::tag<DeviceUpdateInfo::by_device>,
-            boost::multi_index::const_mem_fun<DeviceUpdateInfo, boost::uint32_t, &DeviceUpdateInfo::deviceId>
+            boost::multi_index::tag<Device::by_device>,
+            boost::multi_index::const_mem_fun<Device, boost::uint32_t, &Device::deviceId>
         >,
         boost::multi_index::hashed_non_unique<
-            boost::multi_index::tag<DeviceUpdateInfo::by_address>,
-            boost::multi_index::const_mem_fun<DeviceUpdateInfo, const std::string&, &DeviceUpdateInfo::ipAddress>
+            boost::multi_index::tag<Device::by_address>,
+            boost::multi_index::const_mem_fun<Device, const std::string&, &Device::ipAddress>
         >,
         boost::multi_index::hashed_unique<
-            boost::multi_index::tag<DeviceUpdateInfo::by_binding>,
-            boost::multi_index::const_mem_fun<DeviceUpdateInfo, boost::uint32_t, &DeviceUpdateInfo::bindingId>
+            boost::multi_index::tag<Device::by_binding>,
+            boost::multi_index::const_mem_fun<Device, boost::uint32_t, &Device::bindingId>
         >
     >
 > Devices;
 
-#endif /* DEVICEUPDATEINFO_HPP_ */
+#endif /* DEVICE_HPP_ */

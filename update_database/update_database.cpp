@@ -11,53 +11,53 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 
-#include <DeviceUpdateInfo.hpp>
+#include <Device.hpp>
 #include <DeviceType.hpp>
 #include <Package.hpp>
 
 int main(int argc, char* argv[])
 {
-    Devices infoSet;
-    std::pair<Devices::iterator, bool> insertPair = infoSet.insert(boost::make_shared<DeviceUpdateInfo>(1));
-    if (insertPair.second && insertPair.first != infoSet.end())
+    Devices devices;
+    std::pair<Devices::iterator, bool> insertPair = devices.insert(boost::make_shared<Device>(1));
+    if (insertPair.second && insertPair.first != devices.end())
     {
-        infoSet.modify(insertPair.first, DeviceUpdateInfo::update_ip_address("192.168.1.10"));
+        devices.modify(insertPair.first, Device::update_ip_address("192.168.1.10"));
     }
 
-    insertPair = infoSet.insert(boost::make_shared<DeviceUpdateInfo>(2));
-    if (insertPair.second && insertPair.first != infoSet.end())
+    insertPair = devices.insert(boost::make_shared<Device>(2));
+    if (insertPair.second && insertPair.first != devices.end())
     {
-        infoSet.modify(insertPair.first, DeviceUpdateInfo::update_ip_address("192.168.1.9"));
+        devices.modify(insertPair.first, Device::update_ip_address("192.168.1.9"));
     }
 
-    insertPair = infoSet.insert(boost::make_shared<DeviceUpdateInfo>(3));
-    if (insertPair.second && insertPair.first != infoSet.end())
+    insertPair = devices.insert(boost::make_shared<Device>(3));
+    if (insertPair.second && insertPair.first != devices.end())
     {
-        infoSet.modify(insertPair.first, DeviceUpdateInfo::update_ip_address("192.168.1.8"));
+        devices.modify(insertPair.first, Device::update_ip_address("192.168.1.8"));
     }
 
     std::cout << "indexed by device id" << std::endl;
-    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, infoSet)
+    BOOST_FOREACH(const Device::Ptr device, devices)
     {
-        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+        std::cout << "[device id: " << device->deviceId() << "][ip address: " << device->ipAddress() << "][binding id: " << device->bindingId() << "]" << std::endl;
     }
 
     std::cout << std::endl;
     std::cout << "indexed by ip address" << std::endl;
-    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, infoSet.get<DeviceUpdateInfo::by_address>())
+    BOOST_FOREACH(const Device::Ptr device, devices.get<Device::by_address>())
     {
-        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+        std::cout << "[device id: " << device->deviceId() << "][ip address: " << device->ipAddress() << "][binding id: " << device->bindingId() << "]" << std::endl;
     }
 
-    Devices::index<DeviceUpdateInfo::by_address>::type::iterator addrIt = infoSet.get<DeviceUpdateInfo::by_address>().find("192.168.1.9");
-    if (addrIt != infoSet.get<DeviceUpdateInfo::by_address>().end())
+    Devices::index<Device::by_address>::type::iterator addrIt = devices.get<Device::by_address>().find("192.168.1.9");
+    if (addrIt != devices.get<Device::by_address>().end())
     {
-        infoSet.get<DeviceUpdateInfo::by_address>().modify(addrIt, DeviceUpdateInfo::update_ip_address("192.168.1.20"));
+        devices.get<Device::by_address>().modify(addrIt, Device::update_ip_address("192.168.1.20"));
         std::cout << std::endl;
         std::cout << "indexed by device id (after modification)" << std::endl;
-        BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, infoSet)
+        BOOST_FOREACH(const Device::Ptr device, devices)
         {
-            std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+            std::cout << "[device id: " << device->deviceId() << "][ip address: " << device->ipAddress() << "][binding id: " << device->bindingId() << "]" << std::endl;
         }
     }
     else
@@ -65,8 +65,8 @@ int main(int argc, char* argv[])
         std::cout << "did not find" << std::endl;
     }
 
-    DeviceUpdateInfo::Ptr dui4 = boost::make_shared<DeviceUpdateInfo>(3);
-    std::pair<Devices::iterator, bool> p = infoSet.insert(dui4);
+    Device::Ptr dui4 = boost::make_shared<Device>(3);
+    std::pair<Devices::iterator, bool> p = devices.insert(dui4);
     if (!p.second)
     {
         std::cout << std::endl;
@@ -74,9 +74,9 @@ int main(int argc, char* argv[])
     }
     std::cout << std::endl;
     std::cout << "indexed by device id (after duplicate id insert)" << std::endl;
-    BOOST_FOREACH(const DeviceUpdateInfo::Ptr info, infoSet)
+    BOOST_FOREACH(const Device::Ptr device, devices)
     {
-        std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
+        std::cout << "[device id: " << device->deviceId() << "][ip address: " << device->ipAddress() << "][binding id: " << device->bindingId() << "]" << std::endl;
     }
 
     std::cout << std::endl;
