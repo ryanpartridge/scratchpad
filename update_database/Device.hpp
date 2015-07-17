@@ -17,7 +17,7 @@
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 
-#include <DeviceType.hpp>
+#include <DevicePackage.hpp>
 
 class Device :
     public boost::enable_shared_from_this<Device>
@@ -25,13 +25,14 @@ class Device :
 public:
     typedef boost::shared_ptr<Device> Ptr;
 
-    explicit Device(unsigned int deviceId);
+    explicit Device(boost::uint32_t deviceId);
     virtual ~Device();
 
     boost::uint32_t deviceId() const { return deviceId_; }
     const std::string& ipAddress() const { return ipAddress_; }
     boost::uint32_t bindingId() const { return bindingId_; }
-    DeviceType::Ptr deviceType() const { return deviceType_; }
+    const std::string& deviceType() const { return deviceType_; }
+    void deviceType(const std::string& deviceType);
 
 private:
     void ipAddress(const std::string& ipAddress);
@@ -39,7 +40,8 @@ private:
     boost::uint32_t deviceId_;
     std::string ipAddress_;
     boost::uint32_t bindingId_;
-    DeviceType::Ptr deviceType_;
+    std::string deviceType_;
+    DevicePackages packages_;
 
     static boost::uint32_t nextBindingId_;
 

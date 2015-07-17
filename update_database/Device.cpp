@@ -23,3 +23,8 @@ void Device::ipAddress(const std::string& ipAddress)
 {
     ipAddress_ = ipAddress;
 }
+
+void Device::deviceType(const std::string& deviceType)
+{
+    deviceType_ = deviceType;
+}

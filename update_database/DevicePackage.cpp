@@ -7,8 +7,8 @@
 
 #include <DevicePackage.hpp>
 
-DevicePackage::DevicePackage(boost::uint32_t device, Package::Ptr package) :
-    device_(device),
+DevicePackage::DevicePackage(boost::uint32_t deviceId, Package::Ptr package) :
+    deviceId_(deviceId),
     package_(package),
     downloaded_(false),
     updated_(false)
@@ -17,4 +17,14 @@ DevicePackage::DevicePackage(boost::uint32_t device, Package::Ptr package) :
 
 DevicePackage::~DevicePackage()
 {
+}
+
+void DevicePackage::downloaded(bool downloaded)
+{
+    downloaded_ = downloaded;
+}
+
+void DevicePackage::updated(bool updated)
+{
+    updated_ = updated;
 }

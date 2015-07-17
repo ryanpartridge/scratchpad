@@ -18,6 +18,8 @@
 #include <boost/multi_index/tag.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 
+#include <DeviceTypePackage.hpp>
+
 class DeviceType :
     public boost::enable_shared_from_this<DeviceType>
 {
@@ -35,6 +37,7 @@ private:
     std::string name_;
     std::string platform_;
     std::string targetVersion_;
+    DeviceTypePackages packages_;
 
 public:
     // for multi-index tags
