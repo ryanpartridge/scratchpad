@@ -5,11 +5,12 @@
  *      Author: rpartridge
  */
 
+#include <boost/make_shared.hpp>
+
 #include <DeviceType.hpp>
 
-DeviceType::DeviceType(const std::string& name, const std::string& platform, const std::string& targetVersion) :
+DeviceType::DeviceType(const std::string& name, const std::string& targetVersion) :
     name_(name),
-    platform_(platform),
     targetVersion_(targetVersion)
 {
 }
@@ -18,3 +19,13 @@ DeviceType::~DeviceType()
 {
 }
 
+void DeviceType::clearPackages()
+{
+    packages_.clear();
+}
+
+void DeviceType::addPackage(Package::Ptr package)
+{
+    DeviceTypePackage::Ptr devPackage = boost::make_shared<DeviceTypePackage>(name_, package);
+    packages_.push_back(devPackage);
+}

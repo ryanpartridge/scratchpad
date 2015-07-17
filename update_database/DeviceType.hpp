@@ -26,23 +26,23 @@ class DeviceType :
 public:
     typedef boost::shared_ptr<DeviceType> Ptr;
 
-    DeviceType(const std::string& name, const std::string& platform, const std::string& targetVersion);
+    DeviceType(const std::string& name, const std::string& targetVersion);
     virtual ~DeviceType();
 
     const std::string& name() const { return name_; }
-    const std::string& platform() const { return platform_; }
     const std::string& targetVersion() const { return targetVersion_; }
+
+    void clearPackages();
+    void addPackage(Package::Ptr package);
 
 private:
     std::string name_;
-    std::string platform_;
     std::string targetVersion_;
     DeviceTypePackages packages_;
 
 public:
     // for multi-index tags
     struct by_name{};
-    struct by_platform{};
     struct by_targetVersion{};
 };
 
@@ -52,10 +52,6 @@ typedef boost::multi_index_container<
         boost::multi_index::hashed_unique<
             boost::multi_index::tag<DeviceType::by_name>,
             boost::multi_index::const_mem_fun<DeviceType, const std::string&, &DeviceType::name>
-        >,
-        boost::multi_index::ordered_non_unique<
-            boost::multi_index::tag<DeviceType::by_platform>,
-            boost::multi_index::const_mem_fun<DeviceType, const std::string&, &DeviceType::platform>
         >,
         boost::multi_index::ordered_non_unique<
             boost::multi_index::tag<DeviceType::by_targetVersion>,

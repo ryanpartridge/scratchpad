@@ -24,7 +24,11 @@ class Package :
 public:
     typedef boost::shared_ptr<Package> Ptr;
 
-    Package();
+    Package(const std::string& filename,
+        const std::string& name,
+        boost::uint32_t size,
+        const std::string& checksum,
+        const std::string& location);
     virtual ~Package();
 
     const std::string& filename() const { return filename_; }
@@ -32,7 +36,6 @@ public:
     boost::uint32_t size() const { return size_; }
     const std::string& checksum() const { return checksum_; }
     const std::string& location() const { return location_; }
-    const std::string& platform() const { return platform_; }
 
 private:
     std::string filename_;
@@ -40,7 +43,6 @@ private:
     boost::uint32_t size_;
     std::string checksum_;
     std::string location_;
-    std::string platform_;
 
 public:
     struct by_filename{};

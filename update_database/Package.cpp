@@ -7,14 +7,20 @@
 
 #include <Package.hpp>
 
-Package::Package()
+Package::Package(const std::string& filename,
+    const std::string& name,
+    boost::uint32_t size,
+    const std::string& checksum,
+    const std::string& location) :
+    filename_(filename),
+    name_(name),
+    size_(size),
+    checksum_(checksum),
+    location_(location)
 {
-    // TODO Auto-generated constructor stub
-
 }
 
 Package::~Package()
 {
-    // TODO Auto-generated destructor stub
 }
 

@@ -18,3 +18,7 @@ DeviceTypePackage::~DeviceTypePackage()
 {
 }
 
+void DeviceTypePackage::downloaded(bool downloaded)
+{
+    downloaded_ = downloaded;
+}
