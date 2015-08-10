@@ -7,7 +7,8 @@
 
 #include <DeviceType.hpp>
 
-DeviceType::DeviceType(bool markedForDownload, double ratio) :
+DeviceType::DeviceType(const std::string& name, bool markedForDownload, double ratio) :
+    name_(name),
     markedForDownload_(markedForDownload),
     ratio_(ratio)
 {

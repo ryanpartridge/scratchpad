@@ -7,14 +7,17 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <State.hpp>
 #include <InitState.hpp>
 #include <StopState.hpp>
 #include <DeviceUpdateInfo.hpp>
+#include <DeviceType.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -166,6 +169,59 @@ int main(int argc, char* argv[])
     {
         std::cout << "[device id: " << info->deviceId() << "][ip address: " << info->ipAddress() << "][binding id: " << info->bindingId() << "]" << std::endl;
     }
+
+    DeviceTypes deviceTypes;
+    DeviceType::Ptr dt = boost::make_shared<DeviceType>("hc800", true, 1.19278);
+    deviceTypes.insert(dt);
+
+    dt = boost::make_shared<DeviceType>("hc250", false, 13.8862);
+    deviceTypes.insert(dt);
+
+//    dt = boost::make_shared<DeviceType>("c5", true, 11.9274);
+    dt = boost::make_shared<DeviceType>("c5", true, 0.0);
+    deviceTypes.insert(dt);
+
+    dt = boost::make_shared<DeviceType>("glassedge10", true, 329.868);
+    deviceTypes.insert(dt);
+
+//  dt = boost::make_shared<DeviceType>("speakerpoint", false, 0.437582);
+    dt = boost::make_shared<DeviceType>("speakerpoint", false, 0.0);
+    deviceTypes.insert(dt);
+
+    std::cout << std::endl;
+    std::cout << "device types by name" << std::endl;
+    BOOST_FOREACH(DeviceType::Ptr devType, deviceTypes)
+    {
+        std::cout << "[device name: " << devType->name() << "][ratio: " << devType->ratio() << "][marked: " << (devType->markedForDownload() ? "true" : "false") << "]" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "device types by marked ratio" << std::endl;
+    DeviceTypeByMarkedRatio::iterator ratioIt(deviceTypes.get<DeviceType::by_marked_ratio>().begin());
+    DeviceTypeByMarkedRatio::iterator ratioEnd(deviceTypes.get<DeviceType::by_marked_ratio>().end());
+    BOOST_FOREACH(DeviceType::Ptr devType, std::make_pair(ratioIt, ratioEnd))
+    {
+        std::cout << "[device name: " << devType->name() << "][ratio: " << devType->ratio() << "][marked: " << (devType->markedForDownload() ? "true" : "false") << "]" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "device types marked forward ratio" << std::endl;
+    ratioIt = deviceTypes.get<DeviceType::by_marked_ratio>().upper_bound(boost::make_tuple(true, 0.0));
+    ratioEnd = deviceTypes.get<DeviceType::by_marked_ratio>().upper_bound(true);
+    BOOST_FOREACH(DeviceType::Ptr devType, std::make_pair(ratioIt, ratioEnd))
+    {
+        std::cout << "[device name: " << devType->name() << "][ratio: " << devType->ratio() << "][marked: " << (devType->markedForDownload() ? "true" : "false") << "]" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "device types marked backward ratio" << std::endl;
+    DeviceTypeByMarkedRatio::reverse_iterator reverseRatioIt(deviceTypes.get<DeviceType::by_marked_ratio>().upper_bound(true));
+    DeviceTypeByMarkedRatio::reverse_iterator reverseRatioEnd(deviceTypes.get<DeviceType::by_marked_ratio>().upper_bound(boost::make_tuple(true, 0.0)));
+    BOOST_FOREACH(DeviceType::Ptr devType, std::make_pair(reverseRatioIt, reverseRatioEnd))
+    {
+        std::cout << "[device name: " << devType->name() << "][ratio: " << devType->ratio() << "][marked: " << (devType->markedForDownload() ? "true" : "false") << "]" << std::endl;
+    }
+
 
     std::cout << std::endl;
     std::cout << "finished" << std::endl;
