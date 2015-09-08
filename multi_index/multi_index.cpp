@@ -12,12 +12,25 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/bind.hpp>
+#include <boost/iterator/transform_iterator.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <State.hpp>
 #include <InitState.hpp>
 #include <StopState.hpp>
 #include <DeviceUpdateInfo.hpp>
 #include <DeviceType.hpp>
+
+const std::string& extract(DeviceType::Ptr devType)
+{
+    return devType->name();
+}
+
+int twice(int i)
+{
+    return i * 2;
+}
 
 int main(int argc, char* argv[])
 {
@@ -222,6 +235,21 @@ int main(int argc, char* argv[])
         std::cout << "[device name: " << devType->name() << "][ratio: " << devType->ratio() << "][marked: " << (devType->markedForDownload() ? "true" : "false") << "]" << std::endl;
     }
 
+    std::cout << std::endl;
+    std::cout << "device types names" << std::endl;
+
+    typedef boost::function<const std::string&(DeviceType::Ptr)> Extractor;
+    typedef boost::transform_iterator<Extractor, DeviceTypes::iterator> DevNameIterator;
+    DevNameIterator devNameIt = boost::make_transform_iterator(deviceTypes.begin(), &extract);
+    DevNameIterator devNameEnd = boost::make_transform_iterator(deviceTypes.end(), &extract);
+
+    BOOST_FOREACH(const std::string& devName, std::make_pair(devNameIt, devNameEnd))
+    {
+        std::cout << "device name: " << devName << std::endl;
+    }
+
+    std::string joined = boost::join(std::make_pair(devNameIt, devNameEnd), ",");
+    std::cout << "device names (joined): " << joined << std::endl;
 
     std::cout << std::endl;
     std::cout << "finished" << std::endl;
