@@ -70,6 +70,7 @@ void useTimer2(boost::asio::io_service& service, boost::asio::yield_context yld)
 //typedef boost::function<void(boost::coroutines::asymmetric_coroutine<int>::push_type&)> fibCoFunc;
 void coFib(boost::coroutines::asymmetric_coroutine<int>::push_type& sink)
 {
+    cout << "entering coFib" << endl;
     int first = 1, second = 1;
     sink(first);
     sink(second);
@@ -81,6 +82,7 @@ void coFib(boost::coroutines::asymmetric_coroutine<int>::push_type& sink)
         second = third;
         sink(third);
     }
+    cout << endl << "exiting coFib" << endl;
 }
 
 typedef boost::function<void(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)> symCoFunc;
@@ -89,7 +91,8 @@ void symCoC(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
 {
     int i = yield.get();
     cout << "symCoC input: " << i << endl;
-    yield();
+//    yield();
+    cout << "leaving symCoC" << endl;
 }
 
 void symCoB(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
@@ -121,8 +124,10 @@ int main(int argc, char* argv[])
 //    cout << "calling run()" << endl;
 //    service.run();
 
+    cout << "instantiating pull_type with coFib" << endl;
     boost::coroutines::asymmetric_coroutine<int>::pull_type source(&coFib);
 
+    cout << "starting loop" << endl;
     BOOST_FOREACH (const int i, source)
     {
         cout << i << " ";

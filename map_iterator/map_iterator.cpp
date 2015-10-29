@@ -17,6 +17,8 @@ int main(int argc, char* argv[])
 	portMap[0] = 5800;
 	portMap[1] = 5111;
 	portMap[2] = 5020;
+	portMap[3] = 5021;
+	portMap[4] = 5116;
 
 	std::cout << "start" << std::endl;
 

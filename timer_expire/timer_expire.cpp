@@ -15,7 +15,7 @@
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 #include <boost/function.hpp>
-#include <boost/phoenix.hpp>
+//#include <boost/phoenix.hpp>
 
 using namespace std;
 
@@ -36,16 +36,21 @@ int main(int argc, char* argv[])
     cout << "entering main" << endl;
 
     boost::asio::io_service io_service;
-    boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(boost::ref(io_service), boost::chrono::seconds(5));
+    boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(boost::ref(io_service), boost::chrono::seconds(10));
     timer->async_wait(&handler);
+    cout << "starting io_service thread" << endl;
     boost::shared_ptr<boost::thread> timer_thread = boost::make_shared<boost::thread>(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
 
     boost::this_thread::sleep_for(boost::chrono::seconds(2));
-    if (timer->expires_from_now() > boost::chrono::seconds(1))
+    if (timer->expires_at() > boost::chrono::steady_clock::now())
     {
         cout << "timer has not yet expired" << endl;
     }
-    timer->cancel();
+    //timer->cancel();
+
+    cout << "stopping io_service" << endl;
+    io_service.stop();
+    cout << "io_service stopped" << endl;
     boost::this_thread::sleep_for(boost::chrono::seconds(4));
     if (timer)
     {
@@ -60,10 +65,12 @@ int main(int argc, char* argv[])
         cout << "timer not valid" << endl;
     }
 
+    cout << "waiting for io_service thread" << endl;
     timer_thread->join();
+    cout << "io_service thread complete" << endl;
 
-    boost::function<void(int, int)> f = (cout << boost::phoenix::arg_names::arg1 << endl, cout << boost::phoenix::val("hello") << endl);
-    f(1, 2);
+//    boost::function<void(int, int)> f = (cout << boost::phoenix::arg_names::arg1 << endl, cout << boost::phoenix::val("hello") << endl);
+//    f(1, 2);
 
     cout << "exiting main" << endl;
     return 0;
