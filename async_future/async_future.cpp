@@ -19,6 +19,7 @@
 #include <boost/ref.hpp>
 #include <boost/chrono.hpp>
 #include <boost/thread.hpp>
+#include <boost/filesystem.hpp>
 
 int count = 0;
 
@@ -93,5 +94,16 @@ int main(int argc, char* argv[])
     std::cout << "starting io_service" << std::endl;
     io_service.run();
     std::cout << "io_service complete" << std::endl;
+
+    try
+    {
+        boost::filesystem::path tempPath = boost::filesystem::unique_path();
+        std::cout << "Temporary path: " << tempPath.string() << std::endl;
+    }
+    catch (const boost::filesystem::filesystem_error& fe)
+    {
+        std::cout << "Error generating temporary path: " << fe.what() << std::endl;
+    }
+
     return 0;
 }

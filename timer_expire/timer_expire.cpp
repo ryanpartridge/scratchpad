@@ -21,6 +21,7 @@ using namespace std;
 
 void handler(const boost::system::error_code& ec)
 {
+    cout << "entering handler" << endl;
     if (!ec)
     {
         cout << "timer expired" << endl;
@@ -35,11 +36,11 @@ int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
-    boost::asio::io_service io_service;
-    boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(boost::ref(io_service), boost::chrono::seconds(10));
+    boost::shared_ptr<boost::asio::io_service> io_service = boost::make_shared<boost::asio::io_service>();
+    boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(boost::ref(*io_service), boost::chrono::seconds(10));
     timer->async_wait(&handler);
     cout << "starting io_service thread" << endl;
-    boost::shared_ptr<boost::thread> timer_thread = boost::make_shared<boost::thread>(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+    boost::shared_ptr<boost::thread> timer_thread = boost::make_shared<boost::thread>(boost::bind(&boost::asio::io_service::run, io_service));
 
     boost::this_thread::sleep_for(boost::chrono::seconds(2));
     if (timer->expires_at() > boost::chrono::steady_clock::now())
@@ -48,9 +49,9 @@ int main(int argc, char* argv[])
     }
     //timer->cancel();
 
-    cout << "stopping io_service" << endl;
-    io_service.stop();
-    cout << "io_service stopped" << endl;
+    //cout << "stopping io_service" << endl;
+    //io_service->stop();
+    //cout << "io_service stopped" << endl;
     boost::this_thread::sleep_for(boost::chrono::seconds(4));
     if (timer)
     {
@@ -64,6 +65,9 @@ int main(int argc, char* argv[])
     {
         cout << "timer not valid" << endl;
     }
+
+    cout << "destroying timer" << endl;
+    timer.reset();
 
     cout << "waiting for io_service thread" << endl;
     timer_thread->join();
