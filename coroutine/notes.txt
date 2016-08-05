@@ -1,0 +1,14 @@
+- spawn
+-- takes ioservice and function (useTimer)
+-- instantiates spawn_helper
+-- contains shared_ptr to spawn_data
+--- populated with the function (useTimer) and handler (default empty handler)
+--- no weak_ptr yet
+-- no coroutines created yet
+-- helper passed asio invoke routine (operator()() will be called)
+
+- ioservice invokes helper (operator ()())
+-- instatiates coro_entry_point
+--- contains shared_ptr to spawn_data
+-- 
+
