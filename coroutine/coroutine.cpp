@@ -21,22 +21,15 @@
 
 using namespace std;
 
-void handler(const boost::system::error_code& ec)
+void coHandler()
 {
-    if (!ec)
-    {
-        cout << "timer expired" << endl;
-    }
-    else if (ec == boost::asio::error::operation_aborted)
-    {
-        cout << "timer canceled" << endl;
-    }
+    cout << "invoking handler" << endl;
 }
 
 void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(5));
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(6));
     cout << "staring timer 1" << endl;
     timer.async_wait(yld[ec]);
     if (!ec)
@@ -53,7 +46,7 @@ void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
 void useTimer2(boost::asio::io_service& service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(2));
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(3));
     cout << "starting timer 2" << endl;
     timer.async_wait(yld[ec]);
     if (!ec)
@@ -65,6 +58,23 @@ void useTimer2(boost::asio::io_service& service, boost::asio::yield_context yld)
         cout << "timer 2 expired with error: " << ec.message() << endl;
     }
     cout << "done with timer 2" << endl;
+}
+
+void useTimer3(boost::asio::io_service& service, boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(5));
+    cout << "starting timer 3" << endl;
+    timer.async_wait(yield[ec]);
+    if (!ec)
+    {
+        cout << "timer 3 expired normally" << endl;
+    }
+    else
+    {
+        cout << "timer 3 expired with error: " << ec.message() << endl;
+    }
+    cout << "done with timer 3" << endl;
 }
 
 //typedef boost::function<void(boost::coroutines::asymmetric_coroutine<int>::push_type&)> fibCoFunc;
@@ -91,7 +101,7 @@ void symCoC(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
 {
     int i = yield.get();
     cout << "symCoC input: " << i << endl;
-//    yield();
+    yield();
     cout << "leaving symCoC" << endl;
 }
 
@@ -113,17 +123,49 @@ void symCoA(boost::coroutines::symmetric_coroutine<int>::yield_type& yield)
     cout << "leaving symCoA" << endl;
 }
 
+void coSink(boost::coroutines::asymmetric_coroutine<int>::pull_type& sink)
+{
+    cout << "coSink invokes sink" << endl;
+    sink();
+    cout << "this line should never be executed!!!" << endl;
+}
+
+void coReturn(boost::coroutines::asymmetric_coroutine<int>::pull_type& sink)
+{
+    cout << "coReturn does nothing but return -- it does not invoke sink" << endl;
+    return;
+}
+
+class MyHandler
+{
+public:
+    void coHandler()
+    {
+        cout << "invoking MyHandler::coHandler" << endl;
+    }
+};
+
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
-//    boost::asio::io_service service;
-//    boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
-//    boost::asio::spawn(service, boost::bind(&useTimer2, boost::ref(service), _1));
-//    boost::this_thread::sleep_for(boost::chrono::seconds(2));
-//    cout << "calling run()" << endl;
-//    service.run();
+    typedef boost::function<void()> CoHandlerType;
+    //typedef boost::function<void(boost::asio::yield_context)> CoFunc;
+    CoHandlerType handlerFunc(&coHandler);
 
+    MyHandler myHandler;
+
+    boost::asio::io_service service;
+    boost::asio::io_service::strand strand(service);
+    strand.wrap(&coHandler);
+    strand.wrap(boost::bind(&MyHandler::coHandler, myHandler));
+    boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
+//    boost::asio::spawn(service, boost::bind(&useTimer2, boost::ref(service), _1));
+//    boost::asio::spawn(strand.wrap(&coHandler), boost::bind(&useTimer3, boost::ref(service), _1));
+    cout << "calling run()" << endl;
+    service.run();
+    cout << "run() has finished" << endl;
+/*
     cout << "instantiating pull_type with coFib" << endl;
     boost::coroutines::asymmetric_coroutine<int>::pull_type source(&coFib);
 
@@ -132,11 +174,19 @@ int main(int argc, char* argv[])
     {
         cout << i << " ";
     }
-    cout << endl;
+    cout << "loop is complete" << endl;
 
     boost::coroutines::symmetric_coroutine<int>::call_type func(&symCoA);
     func(1);
 
+    cout << "instantiating push_type with coSink" << endl;
+    boost::coroutines::asymmetric_coroutine<int>::push_type sourceSink(&coSink);
+    sourceSink(1);
+
+    cout << "instantiating push_type with coReturn" << endl;
+    boost::coroutines::asymmetric_coroutine<int>::push_type sourceReturn(&coReturn);
+    sourceReturn(1);
+*/
     cout << "exiting main" << endl;
     return 0;
 }
