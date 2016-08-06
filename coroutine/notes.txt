@@ -1,14 +1,48 @@
 - spawn
 -- takes ioservice and function (useTimer)
 -- instantiates spawn_helper
--- contains shared_ptr to spawn_data
+-- contains shared_ptr to spawn_data (data_)
 --- populated with the function (useTimer) and handler (default empty handler)
 --- no weak_ptr yet
 -- no coroutines created yet
 -- helper passed asio invoke routine (operator()() will be called)
 
+- ioservice.run()
+
+****************** inside ioservice.run() event loop ******************
 - ioservice invokes helper (operator ()())
 -- instatiates coro_entry_point
---- contains shared_ptr to spawn_data
--- 
+--- contains shared_ptr to spawn_data (data_)
+-- creates shared_ptr to push_type coroutine (coro)
+--- coro_ wraps entry_point as the function
+-- sets coro_ as the weak_ptr<push_type> in data_ (coro_)
+-- invokes coro (push_type to entry_point)
+-- execution suspended
 
+****************** first invocation of a coroutine ******************
+- coro_entry_point invoked (operator()(pull_type&))
+-- execution transferred here
+-- takes pull_type& as parameter ca
+-- instantiates basic_yield_context
+--- contains weak_ptr<push_type> (wraps entry_point) (coro_)
+--- contains push_type& ca
+--- contains handler callback (default empty handler)
+-- calls function(yield) (function is useTimer)
+
+- useTimer invoked
+-- takes basic_yield_type as parameter yield
+-- invokes async_wait, passing in yield
+
+- async_wait invoked
+-- invokes async_wait on the service (waitable_timer_service)
+-- instantiates an async_result object (from spawn.hpp)
+--- converts basic_yield_context into coro_handler
+--- holds shared_ptr<push_type> (wraps entry_point)
+--- holds push_type& ca
+--- holds the handler and the specialized by return type
+--- coro_handler *is* the wait_handler callback
+-- invokes async_wait on the service_impl (deadline_timer_service)
+--- parameter is of type coro_handler
+--- wraps the handler in an "operation"
+--- schedules the operation
+--- invokes get() on async_result
