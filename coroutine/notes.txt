@@ -47,6 +47,24 @@
 --- schedules the operation
 --- invokes get() on async_result
 
+- get invoked on async_result
+-- releases shared_ptr<push_type> coro_
+-- invokes push_type& ca
+-- resumes in spawn_helper, which returns
+-- back in io_service.run()
+
+- async operation completes (timer expires)
+-- WaitHandler (coro_handler) invoked
+--- resumes in async_result.get()
+--- checks error_code for throw condition
+--- returns value
+-- returns through async_wait stack frame(s)
+- returns to useTimer
+
+- useTimer returns
+-- returns from the coroutine
+-- all data structures destroyed
+-- resumes in io_service.run()
 
 ---------------------------------------------------------------------
 - async_wait
