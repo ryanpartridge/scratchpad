@@ -1,0 +1,76 @@
+- spawn
+-- takes ioservice and function (useTimer)
+-- instantiates spawn_helper
+-- contains shared_ptr to spawn_data (data_)
+--- populated with the function (useTimer) and handler (default empty handler)
+--- no weak_ptr yet
+-- no coroutines created yet
+-- helper passed asio invoke routine (operator()() will be called)
+
+- ioservice.run()
+
+****************** inside ioservice.run() event loop ******************
+- ioservice invokes helper (operator ()())
+-- instatiates coro_entry_point
+--- contains shared_ptr to spawn_data (data_)
+-- creates shared_ptr to push_type coroutine (coro)
+--- coro_ wraps entry_point as the function
+-- sets coro_ as the weak_ptr<push_type> in data_ (coro_)
+-- invokes coro (push_type to entry_point)
+-- execution suspended
+
+****************** first invocation of a coroutine ******************
+- coro_entry_point invoked (operator()(pull_type&))
+-- execution transferred here
+-- takes pull_type& as parameter ca
+-- instantiates basic_yield_context
+--- contains weak_ptr<push_type> (wraps entry_point) (coro_)
+--- contains push_type& ca
+--- contains handler callback (default empty handler)
+-- calls function(yield) (function is useTimer)
+
+- useTimer invoked
+-- takes basic_yield_type as parameter yield
+-- invokes async_wait, passing in yield
+
+- async_wait invoked
+-- invokes async_wait on the service (waitable_timer_service)
+-- instantiates an async_result object (from spawn.hpp)
+--- handler_type structs converts basic_yield_context into coro_handler
+--- holds shared_ptr<push_type> (wraps entry_point)
+--- holds push_type& ca
+--- holds the handler and the specialized by return type
+--- coro_handler *is* the wait_handler callback
+-- invokes async_wait on the service_impl (deadline_timer_service)
+--- parameter is of type coro_handler
+--- wraps the handler in an "operation"
+--- schedules the operation
+--- invokes get() on async_result
+
+
+---------------------------------------------------------------------
+- async_wait
+-- the io object (basic_waitable_timer) invokes the service
+-- invokes async_wait on the service
+--- basic_waitable_timer.hpp:505
+--- WaitHandler is template type
+--- uses BOOST_* macros on return type, to move, and cast
+
+- timer service
+-- service (waitable_timer_service) invokes the implementation
+-- invokes async_wait on the impl
+--- waitable_timer_service.hpp:142
+--- WaitHandler is template type
+--- uses BOOST_* macros on return type, to move, and cast
+--- uses detail::async_result_init to instantiate the async_result object
+--- async_result_init handles the signature and resolving the correct async_result object
+
+- timer service implementation
+-- impl (deadline_timer_service) scheudules the actual timer
+-- invokes schedule on internal structures
+--- deadline_timer_service.hpp:179
+--- Handler is template type
+--- typedef's wait_handler<Handler> to op
+--- allocates operation to wrap the handler
+--- uses BOOST_ASIO_HANDLER_CREATION macro on op
+--- schedules timer, clears op and returns
