@@ -19,12 +19,14 @@
 #include <boost/coroutine/all.hpp>
 #include <boost/foreach.hpp>
 
+#include <coproto_handle.hpp>
+
 using namespace std;
 
-void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
+void useTimer(boost::asio::io_service& io_service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(6));
+    boost::asio::steady_timer timer(io_service, boost::chrono::seconds(6));
     cout << "staring timer 1" << endl;
     timer.async_wait(yld[ec]);
     if (!ec)
@@ -38,14 +40,39 @@ void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
     cout << "done with timer 1" << endl;
 }
 
+void useDo(boost::asio::io_service& io_service, boost::asio::yield_context yld)
+{
+    boost::system::error_code ec;
+    coproto_handle co_handle(io_service);
+    cout << "starting do operation" << endl;
+    co_handle.async_do(yld[ec]);
+    if (!ec)
+    {
+        cout << "do returned normally" << endl;
+    }
+    else
+    {
+        cout << "do returned with error: " << ec.message() << endl;
+    }
+    cout << "done with do operation" << endl;
+}
+
+void do_handler(const boost::system::error_code& ec)
+{
+    cout << "do_handler called" << endl;
+}
+
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
-    boost::asio::io_service service;
-    boost::asio::spawn(service, boost::bind(&useTimer, boost::ref(service), _1));
+    boost::asio::io_service io_service;
+//    boost::asio::spawn(io_service, boost::bind(&useTimer, boost::ref(io_service), _1));
+    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
+//    coproto_handle co_handle(io_service);
+//    co_handle.async_do(&do_handler);
     cout << "calling run()" << endl;
-    service.run();
+    io_service.run();
     cout << "run() has finished" << endl;
     cout << "exiting main" << endl;
     return 0;
