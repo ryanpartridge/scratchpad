@@ -41,6 +41,11 @@ public:
     {
     }
 
+    virtual ~coproto_service()
+    {
+        std::cout << "destroying coproto service" << std::endl;
+    }
+
     void construct(implementation_type& impl)
     {
         impl.value = 1;

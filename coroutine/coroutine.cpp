@@ -29,7 +29,7 @@ void coHandler()
 void useTimer(boost::asio::io_service& service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(service, boost::chrono::seconds(60));
+    boost::asio::steady_timer timer(service, boost::chrono::seconds(5));
     cout << "staring timer 1" << endl;
     timer.async_wait(yld[ec]);
     if (!ec)
