@@ -2,7 +2,17 @@
  * spawn_demo.cpp
  *
  *  Created on: Aug 29, 2016
- *      Author: rpartridge
+ *  Author: rpartridge
+ *
+ *  This example demonstrates waiting for Boost::ASIO timer
+ *  using a coroutine instead of an asynchronous callback.
+ *
+ *  When the call to async_wait is made passing in the
+ *  boost::asio::yield_context, the call appears to block.
+ *  Instead of actually blocking, the call stack is suspended
+ *  and the IO service resumes, processing the timer. When
+ *  the timer expires, the handler causes the suspended
+ *  context to resume where the async_wait call was made.
  */
 
 #include <iostream>
