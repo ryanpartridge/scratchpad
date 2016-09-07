@@ -16,8 +16,7 @@
 #include <boost/ref.hpp>
 #include <boost/function.hpp>
 #include <boost/asio/spawn.hpp>
-#include <boost/coroutine/all.hpp>
-#include <boost/foreach.hpp>
+#include <boost/cstdint.hpp>
 
 #include <coproto_handle.hpp>
 
@@ -62,13 +61,36 @@ void do_handler(const boost::system::error_code& ec)
     cout << "do_handler called" << endl;
 }
 
+void useSignal(boost::asio::io_service& io_service, boost::asio::yield_context yld)
+{
+    boost::system::error_code ec;
+    boost::asio::signal_set signal(io_service);
+    signal.add(SIGHUP);
+    signal.add(SIGUSR1);
+    signal.add(SIGUSR2);
+    signal.add(SIGQUIT);
+    cout << "starting signal wait" << endl;
+
+    boost::uint32_t sigNumber = signal.async_wait(yld[ec]);
+    if (!ec)
+    {
+        cout << "handling signal: " << sigNumber << " normally" << endl;
+    }
+    else
+    {
+        cout << "signal wait returned with error: " << ec.message() << endl;
+    }
+    cout << "done with signal wait" << endl;
+}
+
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
     boost::asio::io_service io_service;
 //    boost::asio::spawn(io_service, boost::bind(&useTimer, boost::ref(io_service), _1));
-    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
+      boost::asio::spawn(io_service, boost::bind(&useSignal, boost::ref(io_service), _1));
+//    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
 //    coproto_handle co_handle(io_service);
 //    co_handle.async_do(&do_handler);
     cout << "calling run()" << endl;
