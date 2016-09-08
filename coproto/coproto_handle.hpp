@@ -28,13 +28,15 @@ public:
         std::cout << "destroying coproto_handle" << std::endl;
     }
 
-    template <typename do_handler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(do_handler,
+    template <typename DoHandler>
+    BOOST_ASIO_INITFN_RESULT_TYPE(DoHandler,
         void (boost::system::error_code))
-    async_do(BOOST_ASIO_MOVE_ARG(do_handler) handler)
+    async_do(BOOST_ASIO_MOVE_ARG(DoHandler) handler)
     {
+        // HANDLER_CHECK macro needs to be created and called
+
         return this->service.async_do(this->implementation,
-            BOOST_ASIO_MOVE_CAST(do_handler)(handler));
+            BOOST_ASIO_MOVE_CAST(DoHandler)(handler));
     }
 };
 

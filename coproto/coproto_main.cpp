@@ -89,8 +89,8 @@ int main(int argc, char* argv[])
 
     boost::asio::io_service io_service;
 //    boost::asio::spawn(io_service, boost::bind(&useTimer, boost::ref(io_service), _1));
-      boost::asio::spawn(io_service, boost::bind(&useSignal, boost::ref(io_service), _1));
-//    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
+//    boost::asio::spawn(io_service, boost::bind(&useSignal, boost::ref(io_service), _1));
+    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
 //    coproto_handle co_handle(io_service);
 //    co_handle.async_do(&do_handler);
     cout << "calling run()" << endl;
