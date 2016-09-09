@@ -36,56 +36,40 @@ public:
 
     virtual ~coproto_service()
     {
-        std::cout << "destroying coproto service" << std::endl;
+        std::cout << "coproto service destructor" << std::endl;
     }
 
     void construct(implementation_type& impl)
     {
+        service_impl_.construct(impl);
     }
 
     void destroy(implementation_type& impl)
     {
+        std::cout << "calling destroy on coproto_service" << std::endl;
+        service_impl_.destroy(impl);
     }
 
     template <typename DoHandler>
     BOOST_ASIO_INITFN_RESULT_TYPE(DoHandler,
-        void (boost::system::error_code))
+        void (boost::system::error_code, int))
     async_do(implementation_type& impl,
         BOOST_ASIO_MOVE_ARG(DoHandler) handler)
     {
         boost::asio::detail::async_result_init<
-            DoHandler, void (boost::system::error_code)> init(
+            DoHandler, void (boost::system::error_code, int)> init(
                 BOOST_ASIO_MOVE_CAST(DoHandler)(handler));
 
-        // do something cool
-        std::cout << "***async operation here***" << std::endl;
-        timer_ = boost::make_shared<boost::asio::steady_timer>(
-            boost::ref(get_io_service()),
-            boost::chrono::seconds(2));
-        timer_->async_wait(boost::bind(
-            &coproto_service::handleTimer,
-            this,
-            boost::asio::placeholders::error));
-        std::cout << "***async operation queued***" << std::endl;
+        service_impl_.async_do(impl, init.handler);
 
         return init.result.get();
     }
 
 private:
-    void handleTimer(const boost::system::error_code& ec)
-    {
-        std::cout << "***timer callback***" << std::endl;
-        if (ec)
-        {
-            std::cout << "timer expired with error: " << ec.message() << std::endl;
-        }
-    }
-
     void shutdown_service()
     {
-        timer_->cancel();
-        timer_.reset();
-        std::cout << "shutting down coproto service" << std::endl;
+        std::cout << "shutting down coproto_service" << std::endl;
+        service_impl_.shutdown_service();
     }
 
     void fork_service(boost::asio::io_service::fork_event /* event */)
@@ -94,7 +78,6 @@ private:
     }
 
     coproto_service_impl service_impl_;
-    boost::shared_ptr<boost::asio::steady_timer> timer_;
 };
 
 #endif /* COPROTO_SERVICE_HPP_ */

@@ -25,12 +25,12 @@ public:
 
     virtual ~coproto_handle()
     {
-        std::cout << "destroying coproto_handle" << std::endl;
+        std::cout << "coproto_handle destructor" << std::endl;
     }
 
     template <typename DoHandler>
     BOOST_ASIO_INITFN_RESULT_TYPE(DoHandler,
-        void (boost::system::error_code))
+        void (boost::system::error_code, int))
     async_do(BOOST_ASIO_MOVE_ARG(DoHandler) handler)
     {
         // HANDLER_CHECK macro needs to be created and called

@@ -25,7 +25,7 @@ using namespace std;
 void useTimer(boost::asio::io_service& io_service, boost::asio::yield_context yld)
 {
     boost::system::error_code ec;
-    boost::asio::steady_timer timer(io_service, boost::chrono::seconds(6));
+    boost::asio::steady_timer timer(io_service, boost::chrono::seconds(2));
     cout << "staring timer 1" << endl;
     timer.async_wait(yld[ec]);
     if (!ec)
@@ -44,10 +44,10 @@ void useDo(boost::asio::io_service& io_service, boost::asio::yield_context yld)
     boost::system::error_code ec;
     coproto_handle co_handle(io_service);
     cout << "starting do operation" << endl;
-    co_handle.async_do(yld[ec]);
+    int value = co_handle.async_do(yld[ec]);
     if (!ec)
     {
-        cout << "do returned normally" << endl;
+        cout << "do returned normally [value: " << value << "]" << endl;
     }
     else
     {
@@ -56,9 +56,9 @@ void useDo(boost::asio::io_service& io_service, boost::asio::yield_context yld)
     cout << "done with do operation" << endl;
 }
 
-void do_handler(const boost::system::error_code& ec)
+void do_handler(const boost::system::error_code& ec, int value)
 {
-    cout << "do_handler called" << endl;
+    cout << "do_handler called [value: " << value << "]" << endl;
 }
 
 void useSignal(boost::asio::io_service& io_service, boost::asio::yield_context yld)
