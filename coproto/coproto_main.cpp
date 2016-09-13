@@ -83,14 +83,45 @@ void useSignal(boost::asio::io_service& io_service, boost::asio::yield_context y
     cout << "done with signal wait" << endl;
 }
 
+void handle_connection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::io_service& io_service, boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    boost::asio::streambuf buffer;
+    cout << "waiting for a packet" << endl;
+    std::size_t bytes_read = boost::asio::async_read_until(*connection, buffer, "\r\n", yield[ec]);
+    if (!ec)
+    {
+
+    }
+}
+
+void accept_connection(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::io_service& io_service, boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    while(!ec)
+    {
+        boost::shared_ptr<boost::asio::ip::tcp::socket> listen_socket = boost::make_shared<boost::asio::ip::tcp::socket>(boost::ref(io_service));
+        acceptor.async_accept(*listen_socket, yield[ec]);
+        if (!ec)
+        {
+            boost::asio::spawn(io_service, boost::bind(&handle_connection, listen_socket, boost::ref(io_service), _1));
+        }
+    }
+}
+
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
 
+    cout << "setting up the acceptor socket" << endl;
+    boost::system::error_code ec;
     boost::asio::io_service io_service;
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::loopback(), 9876);
+    boost::asio::ip::tcp::acceptor acceptor(io_service, endpoint, true);
+    boost::asio::spawn(io_service, boost::bind(&accept_connection, boost::ref(acceptor), boost::ref(io_service), _1));
 //    boost::asio::spawn(io_service, boost::bind(&useTimer, boost::ref(io_service), _1));
 //    boost::asio::spawn(io_service, boost::bind(&useSignal, boost::ref(io_service), _1));
-    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
+//    boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
 //    coproto_handle co_handle(io_service);
 //    co_handle.async_do(&do_handler);
     cout << "calling run()" << endl;
