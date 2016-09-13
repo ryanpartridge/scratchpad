@@ -17,6 +17,7 @@
 #include <boost/function.hpp>
 #include <boost/asio/spawn.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <coproto_handle.hpp>
 
@@ -83,16 +84,48 @@ void useSignal(boost::asio::io_service& io_service, boost::asio::yield_context y
     cout << "done with signal wait" << endl;
 }
 
+void handle_request(const std::string& request, boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::io_service& io_service, boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    std::ostringstream responseStream;
+    boost::asio::steady_timer timer(io_service, boost::chrono::seconds(10));
+    timer.async_wait(yield[ec]);
+    if (request == "a")
+    {
+        cout << "handling response to 'a'" << endl;
+        responseStream << "resp:" << 1 << "\r\n";
+        std::string response = responseStream.str();
+        boost::asio::async_write(*connection, boost::asio::buffer(response.data(), response.size()), yield[ec]);
+    }
+}
+
 void handle_connection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::io_service& io_service, boost::asio::yield_context yield)
 {
     boost::system::error_code ec;
     boost::asio::streambuf buffer;
     cout << "waiting for a packet" << endl;
-    std::size_t bytes_read = boost::asio::async_read_until(*connection, buffer, "\r\n", yield[ec]);
-    if (!ec)
+    std::size_t bytes_read = 0;
+    while ((bytes_read = boost::asio::async_read_until(*connection, buffer, "\r\n", yield[ec])) > 0 && !ec)
     {
-
+        boost::asio::streambuf::const_buffers_type buffers = buffer.data();
+        std::string data(boost::asio::buffers_begin(buffers), boost::asio::buffers_begin(buffers) + bytes_read);
+        buffer.consume(bytes_read);
+        boost::algorithm::trim(data);
+        cout << "incoming message: " << data << endl;
+        if (boost::algorithm::starts_with(data, "req:"))
+        {
+            data = data.substr(4);
+            boost::algorithm::trim_left(data);
+            boost::asio::spawn(io_service, boost::bind(&handle_request, data, connection, boost::ref(io_service), _1));
+        }
+        else if (boost::algorithm::starts_with(data, "resp:"))
+        {
+            data = data.substr(4);
+            boost::algorithm::trim_left(data);
+            cout << "don't now how to handle responses yet" << endl;
+        }
     }
+    cout << "connection closed" << endl;
 }
 
 void accept_connection(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::io_service& io_service, boost::asio::yield_context yield)
