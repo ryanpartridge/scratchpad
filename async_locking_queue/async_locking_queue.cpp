@@ -2,7 +2,7 @@
  * async_locking_queue.cpp
  *
  *  Created on: Dec 13, 2013
- *      Author: ryan
+ *      Author: rpartridge
  */
 
 #include <string>
@@ -17,7 +17,7 @@
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 
-#include <LockingQueue.hpp>
+#include <LockingQueue_new.hpp>
 
 class Consumer :
     public boost::enable_shared_from_this<Consumer>,

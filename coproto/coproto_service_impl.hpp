@@ -21,6 +21,7 @@
 
 #include <coproto_handler.hpp>
 #include <coproto_op.hpp>
+#include <LockingQueue.hpp>
 
 class coproto_service_impl
 {
@@ -31,6 +32,7 @@ public:
         implementation_type() :
             value_(0)
         {
+            std::cout << "implementation_type constructor" << std::endl;
         };
 
         ~implementation_type()
@@ -41,15 +43,13 @@ public:
     private:
         friend class coproto_service_impl;
 
-        // does the op_queue need to be owned by the impl?
-        // can it just live on the coproto_service_impl instead?
-        boost::asio::detail::op_queue<coproto_op> queue_;
+        LockingQueue<std::string> requestQueue_;
+        LockingQueue<std::string> responseQueue_;
         int value_;
     };
 
     coproto_service_impl(boost::asio::io_service& io_service) :
-        io_service_(boost::asio::use_service<boost::asio::detail::io_service_impl>(io_service)),
-        queue_(0)
+        io_service_(boost::asio::use_service<boost::asio::detail::io_service_impl>(io_service))
     {
         // add_service(this);
         // TODO: decide if this is needed, and if the
@@ -63,14 +63,20 @@ public:
 
     void construct(implementation_type& impl)
     {
+        std::cout << "calling construct on coproto_service_impl" << std::endl;
         impl.value_ = 0;
-        queue_ = &impl.queue_;
     }
 
     void destroy(implementation_type& impl)
     {
         std::cout << "calling destroy on coproto_service_impl" << std::endl;
         boost::system::error_code ignored_ec;
+
+        // do these even need to be cleared?
+        impl.requestQueue_.clear();
+        impl.responseQueue_.clear();
+
+        // empty the queue_ the right way
         // clear(impl, ignored_ec);
         // cancel(impl, ignroed_ec);
     }
@@ -111,7 +117,7 @@ private:
             this,
             boost::asio::placeholders::error));
 
-        impl.queue_.push(op);
+        queue_.push(op);
     }
 
     void handleTimer(const boost::system::error_code& ec)
@@ -122,7 +128,7 @@ private:
             timer_->cancel();
             timer_.reset();
         }
-        coproto_op* op = queue_->front();
+        coproto_op* op = queue_.front();
         if (op)
         {
             if (ec)
@@ -131,15 +137,14 @@ private:
                 op->ec_ = ec;
             }
             op->value_ = 42;
-            queue_->pop();
+            queue_.pop();
             io_service_.post_deferred_completion(op);
         }
     }
 
     boost::asio::detail::io_service_impl& io_service_;
     boost::shared_ptr<boost::asio::steady_timer> timer_;
-    boost::asio::detail::op_queue<coproto_op>* queue_;
+    boost::asio::detail::op_queue<coproto_op> queue_;
 };
-
 
 #endif /* COPROTO_SERVICE_IMPL_HPP_ */
