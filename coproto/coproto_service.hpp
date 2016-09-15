@@ -22,25 +22,28 @@
 
 #include <coproto_service_impl.hpp>
 
+template <typename DataType, template <typename> class QueueOwner>
 class coproto_service :
-    public boost::asio::detail::service_base<coproto_service>
+    public boost::asio::detail::service_base<coproto_service<DataType, QueueOwner> >
 {
 public:
     typedef coproto_service_impl::implementation_type implementation_type;
 
     explicit coproto_service(boost::asio::io_service& io_service) :
-        boost::asio::detail::service_base<coproto_service>(io_service),
+        boost::asio::detail::service_base<coproto_service<DataType, QueueOwner> >(io_service),
         service_impl_(io_service)
     {
+        std::cout << "coproto_service constructor" << std::endl;
     }
 
     virtual ~coproto_service()
     {
-        std::cout << "coproto service destructor" << std::endl;
+        std::cout << "coproto_service destructor" << std::endl;
     }
 
     void construct(implementation_type& impl)
     {
+        std::cout << "calling construct on coproto_service" << std::endl;
         service_impl_.construct(impl);
     }
 

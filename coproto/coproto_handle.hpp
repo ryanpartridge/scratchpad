@@ -12,18 +12,22 @@
 #include <boost/asio/basic_io_object.hpp>
 
 #include <coproto_service.hpp>
+#include <QueueManager.hpp>
 
-class coproto_handle :
-    public boost::asio::basic_io_object<coproto_service>
+template <typename DataType, template <typename> class QueueOwner>
+class basic_coproto_handle :
+    public boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >
 {
 public:
-    explicit coproto_handle(boost::asio::io_service& io_service) :
-        boost::asio::basic_io_object<coproto_service>(io_service)
-    {
+    //typedef typename QueueOwner<DataType>::queue_type queue_type;
 
+    explicit basic_coproto_handle(boost::asio::io_service& io_service) :
+        boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >(io_service)
+    {
+        std::cout << "coproto_handle constructor" << std::endl;
     }
 
-    virtual ~coproto_handle()
+    virtual ~basic_coproto_handle()
     {
         std::cout << "coproto_handle destructor" << std::endl;
     }
@@ -39,5 +43,7 @@ public:
             BOOST_ASIO_MOVE_CAST(DoHandler)(handler));
     }
 };
+
+typedef basic_coproto_handle<std::string, QueueManager > coproto_handle;
 
 #endif /* COPROTO_HANDLE_HPP_ */
