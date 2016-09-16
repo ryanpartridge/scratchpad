@@ -12,10 +12,11 @@
 
 class IDirector
 {
+protected:
     IDirector() {};
     virtual ~IDirector() {};
 
-    virtual std::string getValue(std::string name) = 0;
+    virtual std::string getValue(const std::string& name) = 0;
 };
 
 #endif /* IDIRECTOR_HPP_ */

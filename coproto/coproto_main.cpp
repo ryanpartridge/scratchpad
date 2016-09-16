@@ -19,6 +19,8 @@
 #include <boost/cstdint.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include <DirectorImpl.hpp>
+
 #include <coproto_handle.hpp>
 #include <QueueManager.hpp>
 
@@ -147,6 +149,9 @@ void accept_connection(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::io
 int main(int argc, char* argv[])
 {
     cout << "entering main" << endl;
+    DirectorImpl director;
+    director.start();
+/*
     boost::system::error_code ec;
     boost::asio::io_service io_service;
 
@@ -168,6 +173,7 @@ int main(int argc, char* argv[])
     cout << "calling run()" << endl;
     io_service.run();
     cout << "run() has finished" << endl;
+*/
     cout << "exiting main" << endl;
     return 0;
 }
