@@ -22,6 +22,7 @@
 #include <coproto_handler.hpp>
 #include <coproto_op.hpp>
 
+template <typename DataType, template <typename> class QueueOwner>
 class coproto_service_impl
 {
 public:
@@ -46,7 +47,9 @@ public:
     };
 
     coproto_service_impl(boost::asio::io_service& io_service) :
-        io_service_(boost::asio::use_service<boost::asio::detail::io_service_impl>(io_service))
+        io_service_(boost::asio::use_service<boost::asio::detail::io_service_impl>(io_service)),
+        in_queue_(QueueOwner<DataType>::get_in_queue()),
+        out_queue_(QueueOwner<DataType>::get_out_queue())
     {
         // add_service(this);
         // TODO: decide if this is needed, and if the
@@ -136,9 +139,13 @@ private:
         }
     }
 
+    typedef typename QueueOwner<DataType>::queue_type queue_type;
+
     boost::asio::detail::io_service_impl& io_service_;
     boost::shared_ptr<boost::asio::steady_timer> timer_;
     boost::asio::detail::op_queue<coproto_op> op_queue_;
+    queue_type& in_queue_;
+    queue_type& out_queue_;
 
 };
 

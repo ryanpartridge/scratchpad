@@ -27,7 +27,7 @@ class coproto_service :
     public boost::asio::detail::service_base<coproto_service<DataType, QueueOwner> >
 {
 public:
-    typedef coproto_service_impl::implementation_type implementation_type;
+    typedef typename coproto_service_impl<DataType, QueueOwner>::implementation_type implementation_type;
 
     explicit coproto_service(boost::asio::io_service& io_service) :
         boost::asio::detail::service_base<coproto_service<DataType, QueueOwner> >(io_service),
@@ -80,7 +80,7 @@ private:
         // TODO: need to implement this
     }
 
-    coproto_service_impl service_impl_;
+    coproto_service_impl<DataType, QueueOwner> service_impl_;
 };
 
 #endif /* COPROTO_SERVICE_HPP_ */

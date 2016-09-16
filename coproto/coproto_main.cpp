@@ -150,17 +150,20 @@ int main(int argc, char* argv[])
     boost::system::error_code ec;
     boost::asio::io_service io_service;
 
-/*
+
     cout << "setting up the acceptor socket" << endl;
     boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::loopback(), 9876);
     boost::asio::ip::tcp::acceptor acceptor(io_service, endpoint, true);
-*/
+
 //    boost::asio::spawn(io_service, boost::bind(&accept_connection, boost::ref(acceptor), boost::ref(io_service), _1));
 //    boost::asio::spawn(io_service, boost::bind(&useTimer, boost::ref(io_service), _1));
 //    boost::asio::spawn(io_service, boost::bind(&useSignal, boost::ref(io_service), _1));
     boost::asio::spawn(io_service, boost::bind(&useDo, boost::ref(io_service), _1));
 //    coproto_handle co_handle(io_service);
 //    co_handle.async_do(&do_handler);
+
+    typename QueueManager<std::string>::queue_type& in_queue = QueueManager<std::string>::get_in_queue();
+    typename QueueManager<std::string>::queue_type& out_queue = QueueManager<std::string>::get_out_queue();
 
     cout << "calling run()" << endl;
     io_service.run();

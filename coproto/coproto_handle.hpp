@@ -19,8 +19,6 @@ class basic_coproto_handle :
     public boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >
 {
 public:
-    //typedef typename QueueOwner<DataType>::queue_type queue_type;
-
     explicit basic_coproto_handle(boost::asio::io_service& io_service) :
         boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >(io_service)
     {
