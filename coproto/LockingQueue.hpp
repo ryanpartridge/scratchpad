@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <deque>
+#include <errno.h>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
@@ -74,9 +75,13 @@ public:
         // an asio loop that wants to wake up when a value is enqueued.  We signal the
         // event with the value 1, which will accumulate in the event integer.
         uint64_t value = 1;
+
+        errno = 0;
         if (eventFd_ != -1 &&
             write(eventFd_, &value, sizeof(value)) == -1)
         {
+            char* msg = strerror(errno);
+            std::cout << "error (" << errno << "): " << msg << std::endl;
             throw boost::thread_resource_error(errno,
                 "LockingQueue: cannot signal push event");
         }
