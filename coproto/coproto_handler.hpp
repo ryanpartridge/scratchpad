@@ -39,7 +39,7 @@ public:
         BOOST_ASIO_HANDLER_COMPLETION((h));
 
         // copy the handler
-        boost::asio::detail::binder2<Handler, boost::system::error_code, int>
+        boost::asio::detail::binder2<Handler, boost::system::error_code, std::string>
             handler(h->handler_, h->ec_, h->value_);
         p.h = boost::asio::detail::addressof(handler.handler_);
         p.reset();

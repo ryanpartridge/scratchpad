@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/algorithm/string.hpp>
@@ -121,7 +122,7 @@ void DirectorImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::sock
 {
     std::cout << "got a connection" << std::endl;
     boost::asio::spawn(io_service_, boost::bind(&DirectorImpl::serviceOutQueue, this, connection, _1));
-    boost::asio::spawn(io_service_, boost::bind(&DirectorImpl::startQueueTimer, this, _1));
+//    boost::asio::spawn(io_service_, boost::bind(&DirectorImpl::startQueueTimer, this, _1));
 
     boost::system::error_code ec;
     boost::asio::streambuf buffer;
@@ -133,17 +134,24 @@ void DirectorImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::sock
         buffer.consume(bytes_read);
         boost::algorithm::trim(data);
         std::cout << "incoming message: " << data << std::endl;
-        if (boost::algorithm::starts_with(data, "req:"))
+        if (boost::algorithm::istarts_with(data, "req|"))
         {
-            data = data.substr(4);
-            boost::algorithm::trim_left(data);
-//            boost::asio::spawn(io_service, boost::bind(&handle_request, data, connection, boost::ref(io_service), _1));
+            std::vector<std::string> msgParts;
+            boost::algorithm::split(msgParts, data, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
+            if (msgParts.size() > 2)
+            {
+                std::string reqTag = msgParts[1];
+                if (boost::algorithm::iequals(msgParts[2], "getValue") && msgParts.size() > 3)
+                {
+                    std::ostringstream response;
+                    response << "resp|" << reqTag << "|getValue|" << getValue(msgParts[3]) << "\r\n";
+                    outQueue_.push(response.str());
+                }
+            }
         }
-        else if (boost::algorithm::starts_with(data, "resp:"))
+        else if (boost::algorithm::istarts_with(data, "resp|"))
         {
-            data = data.substr(4);
-            boost::algorithm::trim_left(data);
-            std::cout << "don't now how to handle responses yet" << std::endl;
+            inQueue_.push(data);
         }
     }
     std::cout << "connection closed" << std::endl;
@@ -160,13 +168,7 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
         return;
     }
 
-    std::cout << "waiting before probing outQueue_" << std::endl;
-    boost::asio::steady_timer timer(io_service_, boost::chrono::seconds(10));
-    timer.async_wait(yield[ec]);
-
-    std::cout << "probing outQueue_ (file descriptor " << outFd << ")" << std::endl;
     boost::asio::posix::stream_descriptor descriptor(io_service_, outFd);
-    std::cout << "outQueue_ file descriptor is " << (descriptor.is_open() ? "" : "not ") << "open" << std::endl;
     std::size_t bytes_read = 0;
     ec = boost::system::error_code();
 
@@ -192,6 +194,7 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 std::string DirectorImpl::getValue(const std::string& name)
 {
-    std::string value = "hello";
-    return value;
+    std::ostringstream response;
+    response << "Hello, " << name;
+    return response.str();
 }

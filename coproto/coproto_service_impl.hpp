@@ -9,6 +9,7 @@
 #define COPROTO_SERVICE_IMPL_HPP_
 
 #include <iostream>
+#include <sstream>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/detail/addressof.hpp>
 #include <boost/asio/detail/handler_alloc_helpers.hpp>
@@ -30,7 +31,7 @@ public:
     {
     public:
         implementation_type() :
-            value_(0)
+            requestId_(++requestCount_)
         {
             std::cout << "implementation_type constructor" << std::endl;
         };
@@ -43,7 +44,9 @@ public:
     private:
         friend class coproto_service_impl;
 
-        int value_;
+        std::string request_;
+        std::size_t requestId_;
+        static std::size_t requestCount_;
     };
 
     coproto_service_impl(boost::asio::io_service& io_service) :
@@ -65,7 +68,7 @@ public:
     void construct(implementation_type& impl)
     {
         std::cout << "calling construct on coproto_service_impl" << std::endl;
-        impl.value_ = 0;
+        impl.request_.clear();
     }
 
     void destroy(implementation_type& impl)
@@ -76,6 +79,16 @@ public:
         // empty the queue_ the right way
         // clear(impl, ignored_ec);
         // cancel(impl, ignroed_ec);
+    }
+
+    std::string request(implementation_type& impl) const
+    {
+        return impl.request_;
+    }
+
+    void request(implementation_type& impl, const std::string& req)
+    {
+        impl.request_ = req;
     }
 
     template <typename Handler>
@@ -105,6 +118,10 @@ private:
     {
         io_service_.work_started();
 
+        std::ostringstream request;
+        request << "req|" << impl.requestId_ << "|" << impl.request_ << "\r\n";
+        out_queue_.push(request.str());
+
         // TODO: something here
         timer_ = boost::make_shared<boost::asio::steady_timer>(
             boost::ref(io_service_.get_io_service()),
@@ -133,7 +150,7 @@ private:
                 std::cout << "timer expired with error: " << ec.message() << std::endl;
                 op->ec_ = ec;
             }
-            op->value_ = 42;
+            op->value_ = "Hello ASIO!";
             op_queue_.pop();
             io_service_.post_deferred_completion(op);
         }
@@ -148,5 +165,7 @@ private:
     queue_type& out_queue_;
 
 };
+
+template <typename D, template <typename> class Q> std::size_t coproto_service_impl<D, Q>::implementation_type::requestCount_ = 0;
 
 #endif /* COPROTO_SERVICE_IMPL_HPP_ */

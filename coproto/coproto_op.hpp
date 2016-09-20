@@ -17,12 +17,11 @@ public:
     boost::system::error_code ec_;
 
     // value passed to the completion handler
-    int value_;
+    std::string value_;
 
 protected:
     coproto_op(func_type func) :
-        boost::asio::detail::operation(func),
-        value_(0)
+        boost::asio::detail::operation(func)
     {
     }
 };

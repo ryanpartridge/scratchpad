@@ -49,7 +49,7 @@ void useDo(boost::asio::io_service& io_service, boost::asio::yield_context yld)
     boost::system::error_code ec;
     coproto_handle co_handle(io_service);
     cout << "starting do operation" << endl;
-    int value = co_handle.async_do(yld[ec]);
+    std::string value = co_handle.async_do(yld[ec]);
     if (!ec)
     {
         cout << "do returned normally [value: " << value << "]" << endl;

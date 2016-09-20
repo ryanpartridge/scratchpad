@@ -53,14 +53,24 @@ public:
         service_impl_.destroy(impl);
     }
 
+    std::string request(implementation_type& impl) const
+    {
+        return service_impl_.request(impl);
+    }
+
+    void request(implementation_type& impl, const std::string& req)
+    {
+        service_impl_.request(impl, req);
+    }
+
     template <typename DoHandler>
     BOOST_ASIO_INITFN_RESULT_TYPE(DoHandler,
-        void (boost::system::error_code, int))
+        void (boost::system::error_code, std::string))
     async_do(implementation_type& impl,
         BOOST_ASIO_MOVE_ARG(DoHandler) handler)
     {
         boost::asio::detail::async_result_init<
-            DoHandler, void (boost::system::error_code, int)> init(
+            DoHandler, void (boost::system::error_code, std::string)> init(
                 BOOST_ASIO_MOVE_CAST(DoHandler)(handler));
 
         service_impl_.async_do(impl, init.handler);
