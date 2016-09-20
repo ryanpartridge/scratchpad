@@ -10,15 +10,15 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <map>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/detail/addressof.hpp>
 #include <boost/asio/detail/handler_alloc_helpers.hpp>
 #include <boost/asio/detail/op_queue.hpp>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/asio/steady_timer.hpp>
-#include <boost/chrono.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <coproto_handler.hpp>
 #include <coproto_op.hpp>
@@ -31,7 +31,7 @@ public:
     {
     public:
         implementation_type() :
-            requestId_(++requestCount_)
+            request_id_(++request_count_)
         {
             std::cout << "implementation_type constructor" << std::endl;
         };
@@ -45,14 +45,17 @@ public:
         friend class coproto_service_impl;
 
         std::string request_;
-        std::size_t requestId_;
-        static std::size_t requestCount_;
+        std::size_t request_id_;
+        static std::size_t request_count_;
     };
+
+    typedef std::map<std::size_t, coproto_op*> op_map;
 
     coproto_service_impl(boost::asio::io_service& io_service) :
         io_service_(boost::asio::use_service<boost::asio::detail::io_service_impl>(io_service)),
         in_queue_(QueueOwner<DataType>::get_in_queue()),
-        out_queue_(QueueOwner<DataType>::get_out_queue())
+        out_queue_(QueueOwner<DataType>::get_out_queue()),
+        queue_started_(false)
     {
         // add_service(this);
         // TODO: decide if this is needed, and if the
@@ -110,6 +113,7 @@ public:
     {
         std::cout << "shutting down coproto_service_impl" << std::endl;
         // TODO: figure out shutdown order
+        // stop servicing the queue
         //io_service_.abandon_operations(ops)
     }
 
@@ -119,41 +123,56 @@ private:
         io_service_.work_started();
 
         std::ostringstream request;
-        request << "req|" << impl.requestId_ << "|" << impl.request_ << "\r\n";
+        request << "req|" << impl.request_id_ << "|" << impl.request_ << "\r\n";
         out_queue_.push(request.str());
 
-        // TODO: something here
-        timer_ = boost::make_shared<boost::asio::steady_timer>(
-            boost::ref(io_service_.get_io_service()),
-            boost::chrono::seconds(5));
-        timer_->async_wait(boost::bind(
-            &coproto_service_impl::handleTimer,
-            this,
-            boost::asio::placeholders::error));
+        if (!queue_started_)
+        {
+            // spawn the queue service
+            boost::asio::spawn(io_service_.get_io_service(), boost::bind(&coproto_service_impl::service_in_queue, this, _1));
+        }
 
+        // store the op away until the response comes in
         op_queue_.push(op);
     }
 
-    void handleTimer(const boost::system::error_code& ec)
+    void service_in_queue(boost::asio::yield_context yield)
     {
-        std::cout << "***timer callback***" << std::endl;
-        if (timer_)
+        std::cout << "watching in_queue_ for responses" << std::endl;
+        boost::system::error_code ec;
+        int in_fd = in_queue_.eventFd();
+        if (in_fd == -1)
         {
-            timer_->cancel();
-            timer_.reset();
+            std::cout << "error getting the event file descriptor" << std::endl;
+            return;
         }
-        coproto_op* op = op_queue_.front();
-        if (op)
+
+        queue_started_ = true;
+        boost::asio::posix::stream_descriptor descriptor(io_service_.get_io_service(), in_fd);
+        std::size_t bytes_read = 0;
+        std::size_t event_count;
+        boost::asio::mutable_buffers_1 buffer(&event_count, sizeof(event_count));
+        while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
         {
-            if (ec)
+            std::cout << event_count << " items in the queue" << std::endl;
+            std::string payload;
+            while (in_queue_.front(payload))
             {
-                std::cout << "timer expired with error: " << ec.message() << std::endl;
-                op->ec_ = ec;
+                std::vector<std::string> msgParts;
+                boost::algorithm::split(msgParts, payload, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
+                std::size_t request_id = boost::lexical_cast<boost::uint32_t>(msgParts[1]);
+                op_map::iterator it = op_map_.find(request_id);
+                if (it != op_map_.end())
+                {
+                    coproto_op* op = it->second;
+                    op->value_ = msgParts[3];
+                    io_service_.post_deferred_completion(op);
+                }
+                in_queue_.pop();
             }
-            op->value_ = "Hello ASIO!";
-            op_queue_.pop();
-            io_service_.post_deferred_completion(op);
+            event_count = 0;
         }
+        queue_started_ = false;
     }
 
     typedef typename QueueOwner<DataType>::queue_type queue_type;
@@ -161,11 +180,12 @@ private:
     boost::asio::detail::io_service_impl& io_service_;
     boost::shared_ptr<boost::asio::steady_timer> timer_;
     boost::asio::detail::op_queue<coproto_op> op_queue_;
+    op_map op_map_;
     queue_type& in_queue_;
     queue_type& out_queue_;
-
+    bool queue_started_;
 };
 
-template <typename D, template <typename> class Q> std::size_t coproto_service_impl<D, Q>::implementation_type::requestCount_ = 0;
+template <typename D, template <typename> class Q> std::size_t coproto_service_impl<D, Q>::implementation_type::request_count_ = 0;
 
 #endif /* COPROTO_SERVICE_IMPL_HPP_ */

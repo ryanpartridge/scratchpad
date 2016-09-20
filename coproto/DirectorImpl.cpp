@@ -46,33 +46,6 @@ void DirectorImpl::start()
     }
 }
 
-void DirectorImpl::startQueueTimer(boost::asio::yield_context yield)
-{
-    std::cout << "beginning to fill the queue" << std::endl;
-    for (std::size_t timerCount = 0; timerCount < 10; ++timerCount)
-    {
-        boost::system::error_code ec;
-        boost::asio::steady_timer timer(io_service_, boost::chrono::seconds(2));
-        timer.async_wait(yield[ec]);
-        if (ec)
-        {
-            return;
-        }
-
-        try
-        {
-            std::ostringstream msg;
-            msg << "message #" << (timerCount + 1) << std::endl;
-            outQueue_.push(msg.str());
-            std::cout << "pushed message: " << msg.str();
-        }
-        catch (const boost::system::system_error&)
-        {
-            break;
-        }
-    }
-}
-
 void DirectorImpl::startAcceptor(boost::system::error_code& ec)
 {
     std::cout << "setting up the acceptor socket" << std::endl;
@@ -122,7 +95,6 @@ void DirectorImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::sock
 {
     std::cout << "got a connection" << std::endl;
     boost::asio::spawn(io_service_, boost::bind(&DirectorImpl::serviceOutQueue, this, connection, _1));
-//    boost::asio::spawn(io_service_, boost::bind(&DirectorImpl::startQueueTimer, this, _1));
 
     boost::system::error_code ec;
     boost::asio::streambuf buffer;

@@ -32,7 +32,6 @@ private:
     void acceptConnection(boost::asio::yield_context yield);
     void handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
     void serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
-    void startQueueTimer(boost::asio::yield_context yield);
 
     std::size_t driverId_;
     boost::asio::io_service io_service_;
