@@ -10,6 +10,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <boost/chrono.hpp>
 
 #include <DriverImpl.hpp>
 
@@ -17,14 +19,13 @@ std::size_t DriverImpl::nextDriverId_ = 0;
 
 DriverImpl::DriverImpl() :
     driverId_(++nextDriverId_),
-    endpoint_(boost::asio::ip::address_v4::loopback(), 6789),
-    acceptor_(io_service_),
+    endpoint_(boost::asio::ip::address_v4::loopback(), 9876),
+    socket_(io_service_),
     inQueue_(QueueOwner::get_in_queue()),
     outQueue_(QueueOwner::get_out_queue())
 {
     // force the queue fd to be created
-    int fd = outQueue_.eventFd();
-    std::cout << "outQueue_ file descriptor at startup: " << fd << std::endl;
+    outQueue_.eventFd();
 }
 
 DriverImpl::~DriverImpl()
@@ -35,68 +36,32 @@ void DriverImpl::start()
 {
     std::cout << "starting driver" << std::endl;
     boost::system::error_code ec;
-    startAcceptor(ec);
-
-    if (!ec)
-    {
-        io_service_.run();
-    }
+    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::startConnection, this, _1));
+    io_service_.run();
 }
 
-void DriverImpl::startAcceptor(boost::system::error_code& ec)
+void DriverImpl::startConnection(boost::asio::yield_context yield)
 {
-    std::cout << "setting up the acceptor socket" << std::endl;
-    acceptor_.open(endpoint_.protocol(), ec);
-    if (ec)
-    {
-        return;
-    }
-
-    acceptor_.set_option(boost::asio::socket_base::reuse_address(true), ec);
-    if (ec)
-    {
-        return;
-    }
-
-    acceptor_.bind(endpoint_, ec);
-    if (ec)
-    {
-        return;
-    }
-
-    acceptor_.listen(128, ec);
-    if (ec)
-    {
-        return;
-    }
-
-    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::acceptConnection, this, _1));
-}
-
-void DriverImpl::acceptConnection(boost::asio::yield_context yield)
-{
-    std::cout << "listening for connections" << std::endl;
+    std::cout << "setting up connection with director" << std::endl;
     boost::system::error_code ec;
-    while (!ec)
+    socket_.async_connect(endpoint_, yield[ec]);
+
+    if (ec)
     {
-        boost::shared_ptr<boost::asio::ip::tcp::socket> connection = boost::make_shared<boost::asio::ip::tcp::socket>(boost::ref(io_service_));
-        acceptor_.async_accept(*connection, yield[ec]);
-        if (!ec)
-        {
-            boost::asio::spawn(io_service_, boost::bind(&DriverImpl::handleConnection, this, connection, _1));
-        }
+        std::cout << "error connecting to director" << std::endl;
+        return;
     }
+    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::handleIncoming, this, _1));
+    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::serviceOutQueue, this, _1));
+    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::startRequestTimer, this, _1));
 }
 
-void DriverImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield)
+void DriverImpl::handleIncoming(boost::asio::yield_context yield)
 {
-    std::cout << "got a connection" << std::endl;
-    boost::asio::spawn(io_service_, boost::bind(&DriverImpl::serviceOutQueue, this, connection, _1));
-
     boost::system::error_code ec;
     boost::asio::streambuf buffer;
     std::size_t bytes_read = 0;
-    while ((bytes_read = boost::asio::async_read_until(*connection, buffer, "\r\n", yield[ec])) > 0 && !ec)
+    while ((bytes_read = boost::asio::async_read_until(socket_, buffer, "\r\n", yield[ec])) > 0 && !ec)
     {
         boost::asio::streambuf::const_buffers_type buffers = buffer.data();
         std::string data(boost::asio::buffers_begin(buffers), boost::asio::buffers_begin(buffers) + bytes_read);
@@ -126,7 +91,7 @@ void DriverImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket
     std::cout << "connection closed" << std::endl;
 }
 
-void DriverImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield)
+void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
 {
     std::cout << "watching outQueue_ for connection" << std::endl;
     boost::system::error_code ec;
@@ -137,16 +102,7 @@ void DriverImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket>
         return;
     }
 
-    /*
-    std::cout << "waiting before probing outQueue_" << std::endl;
-    boost::asio::steady_timer timer(io_service_, boost::chrono::seconds(10));
-    timer.async_wait(yield[ec]);
-
-    std::cout << "probing outQueue_ (file descriptor " << outFd << ")" << std::endl;
-*/
-
     boost::asio::posix::stream_descriptor descriptor(io_service_, outFd);
-//    std::cout << "outQueue_ file descriptor is " << (descriptor.is_open() ? "" : "not ") << "open" << std::endl;
     std::size_t bytes_read = 0;
     ec = boost::system::error_code();
 
@@ -159,7 +115,7 @@ void DriverImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket>
         std::string payload;
         while (outQueue_.front(payload))
         {
-            boost::asio::async_write(*connection, boost::asio::buffer(payload.data(), payload.size()), yield[ec]);
+            boost::asio::async_write(socket_, boost::asio::buffer(payload.data(), payload.size()), yield[ec]);
             outQueue_.pop();
         }
         eventCount = 0;
@@ -168,6 +124,17 @@ void DriverImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket>
     std::cout << "releasing outQueue_ file descriptor" << std::endl;
     descriptor.release();
     std::cout << "done servicing outQueue_" << std::endl;
+}
+
+void DriverImpl::startRequestTimer(boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    boost::asio::steady_timer timer(io_service_, boost::chrono::seconds(5));
+    timer.async_wait(yield[ec]);
+    if (ec)
+    {
+        std::cout << "timer error" << std::endl;
+    }
 }
 
 std::size_t DriverImpl::getCount()

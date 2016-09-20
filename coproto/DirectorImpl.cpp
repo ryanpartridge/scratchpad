@@ -25,8 +25,7 @@ DirectorImpl::DirectorImpl() :
     outQueue_(QueueOwner::get_out_queue())
 {
     // force the queue fd to be created
-    int fd = outQueue_.eventFd();
-    std::cout << "outQueue_ file descriptor at startup: " << fd << std::endl;
+    outQueue_.eventFd();
 }
 
 DirectorImpl::~DirectorImpl()

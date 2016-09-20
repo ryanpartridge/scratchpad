@@ -28,15 +28,16 @@ private:
     typedef QueueManager<std::string> QueueOwner;
     typedef QueueOwner::queue_type QueueType;
 
-    void startAcceptor(boost::system::error_code& ec);
-    void acceptConnection(boost::asio::yield_context yield);
+    void startConnection(boost::asio::yield_context yield);
+    void handleIncoming(boost::asio::yield_context yield);
     void handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
-    void serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
+    void serviceOutQueue(boost::asio::yield_context yield);
+    void startRequestTimer(boost::asio::yield_context yield);
 
     std::size_t driverId_;
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::endpoint endpoint_;
-    boost::asio::ip::tcp::acceptor acceptor_;
+    boost::asio::ip::tcp::socket socket_;
     QueueType& inQueue_;
     QueueType& outQueue_;
 
