@@ -17,7 +17,6 @@ protected:
     virtual ~IDriver() {};
 
 public:
-    virtual std::size_t getCount() = 0;
     virtual std::size_t getCount(boost::asio::yield_context yield) = 0;
 };
 

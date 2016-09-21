@@ -22,7 +22,6 @@ public:
     DriverImpl();
     virtual ~DriverImpl();
 
-    virtual std::size_t getCount();
     virtual std::size_t getCount(boost::asio::yield_context yield);
     void start();
 

@@ -19,11 +19,6 @@ DriverStub::~DriverStub()
 {
 }
 
-std::size_t DriverStub::getCount()
-{
-    return 0;
-}
-
 std::size_t DriverStub::getCount(boost::asio::yield_context yield)
 {
     boost::system::error_code ec;

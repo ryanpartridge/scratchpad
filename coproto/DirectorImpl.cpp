@@ -166,13 +166,13 @@ void DirectorImpl::dispatchRequest(const std::string& request, boost::asio::yiel
             response << "resp|" << reqTag << "|getValue|" << getValue(msgParts[3], yield) << "\r\n";
             outQueue_.push(response.str());
         }
+        if (boost::algorithm::iequals(msgParts[2], "isSet") && msgParts.size() > 3)
+        {
+            std::ostringstream response;
+            response << "resp|" << reqTag << "|isSet|" << std::boolalpha << isSet(msgParts[3], yield) << std::noboolalpha << "\r\n";
+            outQueue_.push(response.str());
+        }
     }
-}
-
-std::string DirectorImpl::getValue(const std::string& name)
-{
-    std::string response;
-    return response;
 }
 
 std::string DirectorImpl::getValue(const std::string& name, boost::asio::yield_context yield)
@@ -187,4 +187,9 @@ std::string DirectorImpl::getValue(const std::string& name, boost::asio::yield_c
     std::ostringstream response;
     response << "Hello, " << name << " (lucky number: " << value << ")";
     return response.str();
+}
+
+bool DirectorImpl::isSet(const std::string& name, boost::asio::yield_context yield)
+{
+    return true;
 }

@@ -23,8 +23,8 @@ public:
     DirectorImpl();
     virtual ~DirectorImpl();
 
-    virtual std::string getValue(const std::string& name);
     virtual std::string getValue(const std::string& name, boost::asio::yield_context yield);
+    virtual bool isSet(const std::string& name, boost::asio::yield_context yield);
     void start();
 
 private:

@@ -152,12 +152,15 @@ void DriverImpl::startRequestTimer(boost::asio::yield_context yield)
     std::cout << "answer to Director::getValue: " << value << std::endl;
 }
 
-std::size_t DriverImpl::getCount()
-{
-    return 0;
-}
-
 std::size_t DriverImpl::getCount(boost::asio::yield_context yield)
 {
-    return 42;
+    boost::system::error_code ec;
+    bool value = director_.isSet("DriverA", yield[ec]);
+    if (ec)
+    {
+        std::cout << "error calling isSet" << std::endl;
+    }
+    std::cout << "answer to Director::isSet: " << std::boolalpha << value << std::noboolalpha << std::endl;
+
+    return (value ? 42 : 0);
 }

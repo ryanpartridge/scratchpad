@@ -18,8 +18,8 @@ protected:
     virtual ~IDirector() {};
 
 public:
-    virtual std::string getValue(const std::string& name) = 0;
     virtual std::string getValue(const std::string& name, boost::asio::yield_context yield) = 0;
+    virtual bool isSet(const std::string& name, boost::asio::yield_context yield) = 0;
 };
 
 #endif /* IDIRECTOR_HPP_ */
