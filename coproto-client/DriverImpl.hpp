@@ -14,6 +14,7 @@
 
 #include <IDriver.hpp>
 #include <QueueManager.hpp>
+#include <DirectorStub.hpp>
 
 class DriverImpl : public IDriver
 {
@@ -21,7 +22,8 @@ public:
     DriverImpl();
     virtual ~DriverImpl();
 
-    virtual size_t getCount();
+    virtual std::size_t getCount();
+    virtual std::size_t getCount(boost::asio::yield_context yield);
     void start();
 
 private:
@@ -32,6 +34,7 @@ private:
     void handleIncoming(boost::asio::yield_context yield);
     void handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
     void serviceOutQueue(boost::asio::yield_context yield);
+    void dispatchRequest(const std::string& request, boost::asio::yield_context yield);
     void startRequestTimer(boost::asio::yield_context yield);
 
     std::size_t driverId_;
@@ -40,6 +43,7 @@ private:
     boost::asio::ip::tcp::socket socket_;
     QueueType& inQueue_;
     QueueType& outQueue_;
+    DirectorStub director_;
 
     static std::size_t nextDriverId_;
 };

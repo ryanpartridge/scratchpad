@@ -8,7 +8,7 @@
 #ifndef IDRIVER_HPP_
 #define IDRIVER_HPP_
 
-#include <string>
+#include <boost/asio/spawn.hpp>
 
 class IDriver
 {
@@ -16,7 +16,9 @@ protected:
     IDriver() {};
     virtual ~IDriver() {};
 
+public:
     virtual std::size_t getCount() = 0;
+    virtual std::size_t getCount(boost::asio::yield_context yield) = 0;
 };
 
 #endif /* IDRIVER_HPP_ */

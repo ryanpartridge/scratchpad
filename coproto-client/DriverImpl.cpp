@@ -22,7 +22,8 @@ DriverImpl::DriverImpl() :
     endpoint_(boost::asio::ip::address_v4::loopback(), 9876),
     socket_(io_service_),
     inQueue_(QueueOwner::get_in_queue()),
-    outQueue_(QueueOwner::get_out_queue())
+    outQueue_(QueueOwner::get_out_queue()),
+    director_(io_service_)
 {
     // force the queue fd to be created
     outQueue_.eventFd();
@@ -70,18 +71,7 @@ void DriverImpl::handleIncoming(boost::asio::yield_context yield)
         std::cout << "incoming message: " << data << std::endl;
         if (boost::algorithm::istarts_with(data, "req|"))
         {
-            std::vector<std::string> msgParts;
-            boost::algorithm::split(msgParts, data, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
-            if (msgParts.size() > 2)
-            {
-                std::string reqTag = msgParts[1];
-                if (boost::algorithm::iequals(msgParts[2], "getCount"))
-                {
-                    std::ostringstream response;
-                    response << "resp|" << reqTag << "|getCount|" << getCount() << "\r\n";
-                    outQueue_.push(response.str());
-                }
-            }
+            boost::asio::spawn(yield, boost::bind(&DriverImpl::dispatchRequest, this, data, _1));
         }
         else if (boost::algorithm::istarts_with(data, "resp|"))
         {
@@ -111,7 +101,7 @@ void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
     boost::asio::mutable_buffers_1 buffer(&eventCount, sizeof(eventCount));
     while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
     {
-        std::cout << eventCount << " items in the queue" << std::endl;
+        std::cout << eventCount << " items in the out queue" << std::endl;
         std::string payload;
         while (outQueue_.front(payload))
         {
@@ -126,6 +116,22 @@ void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
     std::cout << "done servicing outQueue_" << std::endl;
 }
 
+void DriverImpl::dispatchRequest(const std::string& request, boost::asio::yield_context yield)
+{
+    std::vector<std::string> msgParts;
+    boost::algorithm::split(msgParts, request, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
+    if (msgParts.size() > 2)
+    {
+        std::string reqTag = msgParts[1];
+        if (boost::algorithm::iequals(msgParts[2], "getCount"))
+        {
+            std::ostringstream response;
+            response << "resp|" << reqTag << "|getCount|" << getCount(yield) << "\r\n";
+            outQueue_.push(response.str());
+        }
+    }
+}
+
 void DriverImpl::startRequestTimer(boost::asio::yield_context yield)
 {
     boost::system::error_code ec;
@@ -135,9 +141,23 @@ void DriverImpl::startRequestTimer(boost::asio::yield_context yield)
     {
         std::cout << "timer error" << std::endl;
     }
+
+    ec = boost::system::error_code();
+    std::string value = director_.getValue("Ryan", yield[ec]);
+    if (ec)
+    {
+        std::cout << "error calling getValue" << std::endl;
+        return;
+    }
+    std::cout << "answer to Director::getValue: " << value << std::endl;
 }
 
 std::size_t DriverImpl::getCount()
+{
+    return 0;
+}
+
+std::size_t DriverImpl::getCount(boost::asio::yield_context yield)
 {
     return 42;
 }

@@ -15,6 +15,7 @@
 
 #include <IDirector.hpp>
 #include <QueueManager.hpp>
+#include <DriverStub.hpp>
 
 class DirectorImpl : public IDirector
 {
@@ -23,6 +24,7 @@ public:
     virtual ~DirectorImpl();
 
     virtual std::string getValue(const std::string& name);
+    virtual std::string getValue(const std::string& name, boost::asio::yield_context yield);
     void start();
 
 private:
@@ -33,12 +35,14 @@ private:
     void acceptConnection(boost::asio::yield_context yield);
     void handleConnection(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
     void serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield);
+    void dispatchRequest(const std::string& request, boost::asio::yield_context yield);
 
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::endpoint endpoint_;
     boost::asio::ip::tcp::acceptor acceptor_;
     QueueType& inQueue_;
     QueueType& outQueue_;
+    DriverStub driver_;
 };
 
 #endif /* DIRECTORIMPL_HPP_ */

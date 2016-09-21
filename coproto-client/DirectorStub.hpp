@@ -13,8 +13,7 @@
 
 #include <IDirector.hpp>
 
-class DirectorStub :
-    public IDirector
+class DirectorStub : public IDirector
 {
 public:
     explicit DirectorStub(boost::asio::io_service& io_service);

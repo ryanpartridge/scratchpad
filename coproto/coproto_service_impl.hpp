@@ -133,7 +133,7 @@ private:
         }
 
         // store the op away until the response comes in
-        op_queue_.push(op);
+        op_map_.insert(std::make_pair(impl.request_id_, op));
     }
 
     void service_in_queue(boost::asio::yield_context yield)
@@ -154,7 +154,7 @@ private:
         boost::asio::mutable_buffers_1 buffer(&event_count, sizeof(event_count));
         while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
         {
-            std::cout << event_count << " items in the queue" << std::endl;
+            std::cout << event_count << " items in the in queue" << std::endl;
             std::string payload;
             while (in_queue_.front(payload))
             {
@@ -165,6 +165,7 @@ private:
                 if (it != op_map_.end())
                 {
                     coproto_op* op = it->second;
+                    op_map_.erase(it);
                     op->value_ = msgParts[3];
                     io_service_.post_deferred_completion(op);
                 }
@@ -179,7 +180,6 @@ private:
 
     boost::asio::detail::io_service_impl& io_service_;
     boost::shared_ptr<boost::asio::steady_timer> timer_;
-    boost::asio::detail::op_queue<coproto_op> op_queue_;
     op_map op_map_;
     queue_type& in_queue_;
     queue_type& out_queue_;

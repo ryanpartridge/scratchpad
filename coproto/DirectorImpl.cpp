@@ -22,7 +22,8 @@ DirectorImpl::DirectorImpl() :
     endpoint_(boost::asio::ip::address_v4::loopback(), 9876),
     acceptor_(io_service_),
     inQueue_(QueueOwner::get_in_queue()),
-    outQueue_(QueueOwner::get_out_queue())
+    outQueue_(QueueOwner::get_out_queue()),
+    driver_(io_service_)
 {
     // force the queue fd to be created
     outQueue_.eventFd();
@@ -107,18 +108,7 @@ void DirectorImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::sock
         std::cout << "incoming message: " << data << std::endl;
         if (boost::algorithm::istarts_with(data, "req|"))
         {
-            std::vector<std::string> msgParts;
-            boost::algorithm::split(msgParts, data, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
-            if (msgParts.size() > 2)
-            {
-                std::string reqTag = msgParts[1];
-                if (boost::algorithm::iequals(msgParts[2], "getValue") && msgParts.size() > 3)
-                {
-                    std::ostringstream response;
-                    response << "resp|" << reqTag << "|getValue|" << getValue(msgParts[3]) << "\r\n";
-                    outQueue_.push(response.str());
-                }
-            }
+            boost::asio::spawn(yield, boost::bind(&DirectorImpl::dispatchRequest, this, data, _1));
         }
         else if (boost::algorithm::istarts_with(data, "resp|"))
         {
@@ -148,7 +138,7 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
     boost::asio::mutable_buffers_1 buffer(&eventCount, sizeof(eventCount));
     while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
     {
-        std::cout << eventCount << " items in the queue" << std::endl;
+        std::cout << eventCount << " items in the out queue" << std::endl;
         std::string payload;
         while (outQueue_.front(payload))
         {
@@ -163,9 +153,38 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
     std::cout << "done servicing outQueue_" << std::endl;
 }
 
+void DirectorImpl::dispatchRequest(const std::string& request, boost::asio::yield_context yield)
+{
+    std::vector<std::string> msgParts;
+    boost::algorithm::split(msgParts, request, boost::algorithm::is_any_of(std::string("|")), boost::algorithm::token_compress_on);
+    if (msgParts.size() > 2)
+    {
+        std::string reqTag = msgParts[1];
+        if (boost::algorithm::iequals(msgParts[2], "getValue") && msgParts.size() > 3)
+        {
+            std::ostringstream response;
+            response << "resp|" << reqTag << "|getValue|" << getValue(msgParts[3], yield) << "\r\n";
+            outQueue_.push(response.str());
+        }
+    }
+}
+
 std::string DirectorImpl::getValue(const std::string& name)
 {
+    std::string response;
+    return response;
+}
+
+std::string DirectorImpl::getValue(const std::string& name, boost::asio::yield_context yield)
+{
+    boost::system::error_code ec;
+    std::size_t value = driver_.getCount(yield[ec]);
+    if (ec)
+    {
+        std::cout << "error calling getCount" << std::endl;
+    }
+    std::cout << "answer to Driver::getCount: " << value << std::endl;
     std::ostringstream response;
-    response << "Hello, " << name;
+    response << "Hello, " << name << " (lucky number: " << value << ")";
     return response.str();
 }
