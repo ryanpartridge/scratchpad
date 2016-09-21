@@ -33,23 +33,23 @@ public:
         boost::asio::detail::service_base<coproto_service<DataType, QueueOwner> >(io_service),
         service_impl_(io_service)
     {
-        std::cout << "coproto_service constructor" << std::endl;
+        //std::cout << "coproto_service constructor" << std::endl;
     }
 
     virtual ~coproto_service()
     {
-        std::cout << "coproto_service destructor" << std::endl;
+        //std::cout << "coproto_service destructor" << std::endl;
     }
 
     void construct(implementation_type& impl)
     {
-        std::cout << "calling construct on coproto_service" << std::endl;
+        //std::cout << "calling construct on coproto_service" << std::endl;
         service_impl_.construct(impl);
     }
 
     void destroy(implementation_type& impl)
     {
-        std::cout << "calling destroy on coproto_service" << std::endl;
+        //std::cout << "calling destroy on coproto_service" << std::endl;
         service_impl_.destroy(impl);
     }
 
@@ -81,7 +81,7 @@ public:
 private:
     void shutdown_service()
     {
-        std::cout << "shutting down coproto_service" << std::endl;
+        //std::cout << "shutting down coproto_service" << std::endl;
         service_impl_.shutdown_service();
     }
 

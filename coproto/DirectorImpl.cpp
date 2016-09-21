@@ -48,7 +48,7 @@ void DirectorImpl::start()
 
 void DirectorImpl::startAcceptor(boost::system::error_code& ec)
 {
-    std::cout << "setting up the acceptor socket" << std::endl;
+    //std::cout << "setting up the acceptor socket" << std::endl;
     acceptor_.open(endpoint_.protocol(), ec);
     if (ec)
     {
@@ -120,7 +120,7 @@ void DirectorImpl::handleConnection(boost::shared_ptr<boost::asio::ip::tcp::sock
 
 void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socket> connection, boost::asio::yield_context yield)
 {
-    std::cout << "watching outQueue_ for connection" << std::endl;
+    //std::cout << "watching outQueue_ for connection" << std::endl;
     boost::system::error_code ec;
     int outFd = outQueue_.eventFd();
     if (outFd == -1)
@@ -133,12 +133,12 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
     std::size_t bytes_read = 0;
     ec = boost::system::error_code();
 
-    std::cout << "attempting to read the outQueue_ file descriptor" << std::endl;
+    //std::cout << "attempting to read the outQueue_ file descriptor" << std::endl;
     std::size_t eventCount;
     boost::asio::mutable_buffers_1 buffer(&eventCount, sizeof(eventCount));
     while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
     {
-        std::cout << eventCount << " items in the out queue" << std::endl;
+        //std::cout << eventCount << " items in the out queue" << std::endl;
         std::string payload;
         while (outQueue_.front(payload))
         {
@@ -148,9 +148,9 @@ void DirectorImpl::serviceOutQueue(boost::shared_ptr<boost::asio::ip::tcp::socke
         eventCount = 0;
     }
 
-    std::cout << "releasing outQueue_ file descriptor" << std::endl;
+    //std::cout << "releasing outQueue_ file descriptor" << std::endl;
     descriptor.release();
-    std::cout << "done servicing outQueue_" << std::endl;
+    //std::cout << "done servicing outQueue_" << std::endl;
 }
 
 void DirectorImpl::dispatchRequest(const std::string& request, boost::asio::yield_context yield)

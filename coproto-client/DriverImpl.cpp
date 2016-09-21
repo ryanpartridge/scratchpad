@@ -83,7 +83,7 @@ void DriverImpl::handleIncoming(boost::asio::yield_context yield)
 
 void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
 {
-    std::cout << "watching outQueue_ for connection" << std::endl;
+    //std::cout << "watching outQueue_ for connection" << std::endl;
     boost::system::error_code ec;
     int outFd = outQueue_.eventFd();
     if (outFd == -1)
@@ -96,12 +96,12 @@ void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
     std::size_t bytes_read = 0;
     ec = boost::system::error_code();
 
-    std::cout << "attempting to read the outQueue_ file descriptor" << std::endl;
+    //std::cout << "attempting to read the outQueue_ file descriptor" << std::endl;
     std::size_t eventCount;
     boost::asio::mutable_buffers_1 buffer(&eventCount, sizeof(eventCount));
     while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
     {
-        std::cout << eventCount << " items in the out queue" << std::endl;
+        //std::cout << eventCount << " items in the out queue" << std::endl;
         std::string payload;
         while (outQueue_.front(payload))
         {
@@ -111,9 +111,9 @@ void DriverImpl::serviceOutQueue(boost::asio::yield_context yield)
         eventCount = 0;
     }
 
-    std::cout << "releasing outQueue_ file descriptor" << std::endl;
+    //std::cout << "releasing outQueue_ file descriptor" << std::endl;
     descriptor.release();
-    std::cout << "done servicing outQueue_" << std::endl;
+    //std::cout << "done servicing outQueue_" << std::endl;
 }
 
 void DriverImpl::dispatchRequest(const std::string& request, boost::asio::yield_context yield)

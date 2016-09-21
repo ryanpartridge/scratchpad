@@ -33,12 +33,12 @@ public:
         implementation_type() :
             request_id_(++request_count_)
         {
-            std::cout << "implementation_type constructor" << std::endl;
+            //std::cout << "implementation_type constructor" << std::endl;
         };
 
         ~implementation_type()
         {
-            std::cout << "implementation_type destructor" << std::endl;
+            //std::cout << "implementation_type destructor" << std::endl;
         }
 
     private:
@@ -60,23 +60,23 @@ public:
         // add_service(this);
         // TODO: decide if this is needed, and if the
         // pipes in the reactor are also needed
-        std::cout << "coproto_service_impl constructor" << std::endl;
+        //std::cout << "coproto_service_impl constructor" << std::endl;
     }
 
     virtual ~coproto_service_impl()
     {
-        std::cout << "coproto_service_impl destructor" << std::endl;
+        //std::cout << "coproto_service_impl destructor" << std::endl;
     }
 
     void construct(implementation_type& impl)
     {
-        std::cout << "calling construct on coproto_service_impl" << std::endl;
+        //std::cout << "calling construct on coproto_service_impl" << std::endl;
         impl.request_.clear();
     }
 
     void destroy(implementation_type& impl)
     {
-        std::cout << "calling destroy on coproto_service_impl" << std::endl;
+        //std::cout << "calling destroy on coproto_service_impl" << std::endl;
         boost::system::error_code ignored_ec;
 
         // empty the queue_ the right way
@@ -111,7 +111,7 @@ public:
 
     void shutdown_service()
     {
-        std::cout << "shutting down coproto_service_impl" << std::endl;
+        //std::cout << "shutting down coproto_service_impl" << std::endl;
         // TODO: figure out shutdown order
         // stop servicing the queue
         //io_service_.abandon_operations(ops)
@@ -138,7 +138,7 @@ private:
 
     void service_in_queue(boost::asio::yield_context yield)
     {
-        std::cout << "watching in_queue_ for responses" << std::endl;
+        //std::cout << "watching in_queue_ for responses" << std::endl;
         boost::system::error_code ec;
         int in_fd = in_queue_.eventFd();
         if (in_fd == -1)
@@ -154,7 +154,7 @@ private:
         boost::asio::mutable_buffers_1 buffer(&event_count, sizeof(event_count));
         while ((bytes_read = boost::asio::async_read(descriptor, buffer, yield[ec])) > 0 && !ec)
         {
-            std::cout << event_count << " items in the in queue" << std::endl;
+            //std::cout << event_count << " items in the in queue" << std::endl;
             std::string payload;
             while (in_queue_.front(payload))
             {
