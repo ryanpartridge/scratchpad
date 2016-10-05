@@ -22,19 +22,19 @@ public:
     explicit basic_coproto_handle(boost::asio::io_service& io_service) :
         boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >(io_service)
     {
-        //std::cout << "coproto_handle constructor" << std::endl;
+        std::cout << "coproto_handle constructor" << std::endl;
     }
 
     basic_coproto_handle(boost::asio::io_service& io_service, const std::string& request) :
         boost::asio::basic_io_object<coproto_service<DataType, QueueOwner> >(io_service)
     {
-        //std::cout << "coproto_handle constructor" << std::endl;
+        std::cout << "coproto_handle constructor" << std::endl;
         this->service.request(this->implementation, request);
     }
 
     virtual ~basic_coproto_handle()
     {
-        //std::cout << "coproto_handle destructor" << std::endl;
+        std::cout << "coproto_handle destructor" << std::endl;
     }
 
     std::string request() const

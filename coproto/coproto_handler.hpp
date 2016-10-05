@@ -8,6 +8,8 @@
 #ifndef COPROTO_HANDLER_HPP_
 #define COPROTO_HANDLER_HPP_
 
+#include <iostream>
+
 #include <boost/asio/detail/addressof.hpp>
 #include <boost/asio/detail/fenced_block.hpp>
 #include <boost/asio/detail/handler_alloc_helpers.hpp>
@@ -25,6 +27,12 @@ public:
         : coproto_op(&coproto_handler::do_complete),
           handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
     {
+        std::cout << "coproto_handler constructor" << std::endl;
+    }
+
+    ~coproto_handler()
+    {
+        std::cout << "coproto_handler destructor" << std::endl;
     }
 
     static void do_complete(boost::asio::detail::io_service_impl* owner,

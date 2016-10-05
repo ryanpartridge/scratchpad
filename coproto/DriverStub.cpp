@@ -24,6 +24,9 @@ std::size_t DriverStub::getCount(boost::asio::yield_context yield)
     boost::system::error_code ec;
     std::ostringstream req;
     req << "getCount";
+    {
+        coproto_handle handle_fake(io_service_, req.str());
+    }
     coproto_handle handle(io_service_, req.str());
     std::size_t response = boost::lexical_cast<std::size_t>(handle.async_do(yield[ec]));
     return response;
