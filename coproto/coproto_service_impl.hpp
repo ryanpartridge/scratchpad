@@ -33,12 +33,12 @@ public:
         implementation_type() :
             request_id_(++request_count_)
         {
-            std::cout << "implementation_type constructor" << std::endl;
+            //std::cout << "implementation_type constructor" << std::endl;
         };
 
         ~implementation_type()
         {
-            std::cout << "implementation_type destructor" << std::endl;
+            //std::cout << "implementation_type destructor" << std::endl;
         }
 
     private:
@@ -60,23 +60,23 @@ public:
         // add_service(this);
         // TODO: decide if this is needed, and if the
         // pipes in the reactor are also needed
-        std::cout << "coproto_service_impl constructor" << std::endl;
+        //std::cout << "coproto_service_impl constructor" << std::endl;
     }
 
     virtual ~coproto_service_impl()
     {
-        std::cout << "coproto_service_impl destructor" << std::endl;
+        //std::cout << "coproto_service_impl destructor" << std::endl;
     }
 
     void construct(implementation_type& impl)
     {
-        std::cout << "coproto_service_impl constructing implementation_type" << std::endl;
+        //std::cout << "coproto_service_impl constructing implementation_type" << std::endl;
         impl.request_.clear();
     }
 
     void destroy(implementation_type& impl)
     {
-        std::cout << "coproto_service_impl destroying implementation_type" << std::endl;
+        //std::cout << "coproto_service_impl destroying implementation_type" << std::endl;
         boost::system::error_code ignored_ec;
 
         // empty the queue_ the right way

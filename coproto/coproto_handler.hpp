@@ -27,12 +27,12 @@ public:
         : coproto_op(&coproto_handler::do_complete),
           handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
     {
-        std::cout << "coproto_handler constructor" << std::endl;
+        //std::cout << "coproto_handler constructor" << std::endl;
     }
 
     ~coproto_handler()
     {
-        std::cout << "coproto_handler destructor" << std::endl;
+        //std::cout << "coproto_handler destructor" << std::endl;
     }
 
     static void do_complete(boost::asio::detail::io_service_impl* owner,
