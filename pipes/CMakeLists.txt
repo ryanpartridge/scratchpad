@@ -30,5 +30,6 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE ${Boost_SYSTEM_LIBRARY}
+    PRIVATE ${Boost_THREAD_LIBRARY}
     PRIVATE pthread
 )
