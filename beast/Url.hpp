@@ -31,16 +31,16 @@ public:
     Url& operator=(Url&&) = default;
 
     void scheme(const std::string& scheme) { scheme_ = scheme; };
-    constexpr const std::string& scheme() const { return scheme_; };
+    const std::string& scheme() const { return scheme_; };
 
     void userInfo(const std::string& userInfo);
-    constexpr const std::string& userInfo() const { return userInfo_; };
+    const std::string& userInfo() const { return userInfo_; };
 
     void domain(const std::string& domain);
-    constexpr const std::string& domain() const { return domain_; };
+    const std::string& domain() const { return domain_; };
 
     void port(std::uint16_t port) { port_ = port; };
-    constexpr std::uint16_t port() const noexcept { return port_; };
+    std::uint16_t port() const noexcept { return port_; };
 
     void path(const std::string& path) { path_ = path; };
     const std::string& path() const { return path_; };
@@ -50,14 +50,14 @@ public:
     const std::string queryString() const;
 
     void fragment(const std::string& fragment) { fragment_ = fragment; };
-    constexpr const std::string& fragment() const { return fragment_; };
+    const std::string& fragment() const { return fragment_; };
 
     std::string toString() const;
 
     bool isHttp() const;
     bool isHttps() const;
 
-    constexpr bool isValid() const { return isValid_; };
+    bool isValid() const { return isValid_; };
 
 private:
     std::string scheme_;

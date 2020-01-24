@@ -23,23 +23,23 @@ public:
 
     virtual ~HttpRequest() noexcept;
 
-    constexpr HttpMethod method() const noexcept { return method_; };
+    HttpMethod method() const noexcept { return method_; };
     void method(HttpMethod method);
 
-    constexpr const Url& url() const { return url_; };
+    const Url& url() const { return url_; };
     void url(const Url& url);
     boost::system::error_code url(const std::string& urlString);
 
-    constexpr std::uint16_t redirects() const noexcept { return redirects_; };
+    std::uint16_t redirects() const noexcept { return redirects_; };
     void redirects(std::uint16_t redirects);
 
-    constexpr std::uint16_t timeout() const noexcept { return timeout_; };
+    std::uint16_t timeout() const noexcept { return timeout_; };
     void timeout(std::uint16_t timeout);
 
-    constexpr const std::string& destination() const { return destination_; };
+    const std::string& destination() const { return destination_; };
     void destination(const std::string& destination);
 
-    constexpr const HttpFields& fields() const { return fields_; };
+    const HttpFields& fields() const { return fields_; };
     void fields(const HttpFields& fields);
 
     // these are convenience wrappers around getField and setField
