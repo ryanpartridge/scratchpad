@@ -1,4 +1,5 @@
 #include <atomic>
+#include <iostream>
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
@@ -108,12 +109,21 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
         invokeHandleResponse(HttpResponse(), ec);
     }
 
-    boost::beast::http::request<boost::beast::http::empty_body> req;
-    req.version((boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11));
-    req.method(request_.method());
-    req.target(request_.url().path());
-    req.set(boost::beast::http::field::host, request_.url().domain());
-    req.set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+    std::shared_ptr<boost::beast::http::request<boost::beast::http::empty_body>> req = std::make_shared<boost::beast::http::request<boost::beast::http::empty_body>>();
+    req->version((boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11));
+    req->method(request_.method());
+    req->target(request_.url().path());
+    req->set(boost::beast::http::field::host, request_.url().domain());
+    req->set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+
+    auto instance = shared_from_this();
+    boost::beast::http::async_write(socket_,
+        *req,
+        [instance, req](const boost::system::error_code& ec, std::size_t)
+            {
+                instance->handleWrite(ec);
+            }
+    );
 
 /*
     boost::beast::http::async_write(socket_,
