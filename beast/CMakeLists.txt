@@ -19,6 +19,7 @@ set(SOURCE_FILES
     beast.cpp
     HttpClient.cpp
     HttpRequest.cpp
+    HttpResponse.cpp
     Url.cpp
 )
 

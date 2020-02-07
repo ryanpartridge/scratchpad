@@ -3,11 +3,11 @@
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include <HttpClient.hpp>
+#include <types.hpp>
 #include <HttpRequest.hpp>
 #include <HttpResponse.hpp>
 
@@ -93,6 +93,7 @@ void HttpClient::handleResolve(boost::system::error_code const& ec, boost::asio:
     if (ec)
     {
         invokeHandleResponse(HttpResponse(), ec);
+        return;
     }
 
     boost::asio::async_connect(socket_,
@@ -107,12 +108,26 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
     if (ec)
     {
         invokeHandleResponse(HttpResponse(), ec);
+        return;
     }
 
-    std::shared_ptr<boost::beast::http::request<boost::beast::http::empty_body>> req = std::make_shared<boost::beast::http::request<boost::beast::http::empty_body>>();
-    req->version((boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11));
-    req->method(request_.method());
-    req->target(request_.url().path());
+    // TODO: decide which kind of body to use based on the
+    // method and presence of a request payload
+    //writeRequest<boost::beast::http::empty_body>();
+    writeRequest<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
+}
+
+template<class Body, class BodyArg>
+void HttpClient::writeRequest(BodyArg&& bodyArg)
+{
+    std::shared_ptr<boost::beast::http::request<Body>> req =
+        std::make_shared<boost::beast::http::request<Body>>(
+                request_.method(),
+                request_.url().path(),
+                (boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11),
+                bodyArg,
+                request_.fields());
+
     req->set(boost::beast::http::field::host, request_.url().domain());
     req->set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
@@ -124,14 +139,6 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
                 instance->handleWrite(ec);
             }
     );
-
-/*
-    boost::beast::http::async_write(socket_,
-            req,
-            boost::bind(&HttpClient::handleWrite,
-                shared_from_this(),
-                boost::asio::placeholders::error));
-*/
 }
 
 void HttpClient::handleWrite(const boost::system::error_code& ec)
@@ -139,8 +146,32 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
     if (ec)
     {
         invokeHandleResponse(HttpResponse(), ec);
+        return;
     }
 
+    buffer_.consume(buffer_.size());
+
+    std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res =
+        std::make_shared<boost::beast::http::response<boost::beast::http::string_body>>();
+
+    auto instance = shared_from_this();
+    boost::beast::http::async_read(socket_,
+        buffer_,
+        *res,
+        [instance, res](const boost::system::error_code& err, std::size_t bytes_transferred)
+            {
+                instance->readResponse(res, err);
+            }
+    );
+}
+
+void HttpClient::readResponse(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code & ec)
+{
+    std::cout << "Response code: " << res->result() << std::endl;
+    if (res->result() == c4::net::http::toStatus(200))
+    {
+        std::cout << "Response text: " << res->body() << std::endl;
+    }
     invokeHandleResponse(HttpResponse(), ec);
 }
 
