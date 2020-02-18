@@ -167,12 +167,21 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
 
 void HttpClient::readResponse(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code & ec)
 {
+    if (ec)
+    {
+        invokeHandleResponse(HttpResponse(), ec);
+        return;
+    }
+
+    HttpResponse response(res->result());
+    response.payload(res->body());
+
     std::cout << "Response code: " << res->result() << std::endl;
     if (res->result() == c4::net::http::toStatus(200))
     {
         std::cout << "Response text: " << res->body() << std::endl;
     }
-    invokeHandleResponse(HttpResponse(), ec);
+    invokeHandleResponse(response, ec);
 }
 
 void HttpClient::invokeHandleResponse(const HttpResponse& response, const boost::system::error_code& ec)
