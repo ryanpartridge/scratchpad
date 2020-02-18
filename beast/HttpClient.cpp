@@ -113,12 +113,12 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
 
     // TODO: decide which kind of body to use based on the
     // method and presence of a request payload
-    //writeRequest<boost::beast::http::empty_body>();
-    writeRequest<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
+    writeRequest<boost::beast::http::empty_body>(boost::beast::http::empty_body::value_type());
+    //writeRequest<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
 }
 
-template<class Body, class BodyArg>
-void HttpClient::writeRequest(BodyArg&& bodyArg)
+template<class Body>
+void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
 {
     std::shared_ptr<boost::beast::http::request<Body>> req =
         std::make_shared<boost::beast::http::request<Body>>(
@@ -158,14 +158,14 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
     boost::beast::http::async_read(socket_,
         buffer_,
         *res,
-        [instance, res](const boost::system::error_code& err, std::size_t bytes_transferred)
+        [instance, res](const boost::system::error_code& err, std::size_t)
             {
-                instance->readResponse(res, err);
+                instance->handleRead(res, err);
             }
     );
 }
 
-void HttpClient::readResponse(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code & ec)
+void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code & ec)
 {
     if (ec)
     {
@@ -176,11 +176,6 @@ void HttpClient::readResponse(std::shared_ptr<boost::beast::http::response<boost
     HttpResponse response(res->result());
     response.payload(res->body());
 
-    std::cout << "Response code: " << res->result() << std::endl;
-    if (res->result() == c4::net::http::toStatus(200))
-    {
-        std::cout << "Response text: " << res->body() << std::endl;
-    }
     invokeHandleResponse(response, ec);
 }
 

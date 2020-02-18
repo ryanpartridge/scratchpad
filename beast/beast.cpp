@@ -23,7 +23,20 @@ void printFoo(const bool& foo)
 
 void handleResponse(const c4::net::http::HttpResponse& response, const boost::system::error_code& ec)
 {
-    std::cout << "Handling the response: " << ec.message() << std::endl;
+    if (ec)
+    {
+        std::cout << "Error processing the request: " << ec.message() << std::endl;
+    }
+
+    if (response.status() != c4::net::http::HttpStatus::ok)
+    {
+        std::cout << "HTTP status: " << response.status() << std::endl;
+    }
+    else
+    {
+        std::cout << "Response body: " << std::endl;
+        std::cout << response.payload() << std::endl;
+    }
 }
 
 int main(int argc, char* argv[])

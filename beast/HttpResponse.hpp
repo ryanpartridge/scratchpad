@@ -20,11 +20,14 @@ public:
     HttpStatus status() const noexcept { return status_; };
     void status(HttpStatus status);
 
-    const std::string& destination() const { return destination_; };
-    void destination(const std::string& destination);
+    const HttpFields& fields() const { return fields_; };
+    void fields(const HttpFields& fields);
 
     const std::string& payload() const { return payload_; };
     void payload(const std::string& payload);
+
+    const std::string& destination() const { return destination_; };
+    void destination(const std::string& destination);
 
 private:
     HttpStatus status_;

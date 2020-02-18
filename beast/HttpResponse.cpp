@@ -23,14 +23,19 @@ void HttpResponse::status(HttpStatus status)
     status_ = status;
 }
 
-void HttpResponse::destination(const std::string& destination)
+void HttpResponse::fields(const HttpFields& fields)
 {
-    destination_ = destination;
+    fields_ = fields;
 }
 
 void HttpResponse::payload(const std::string& payload)
 {
     payload_ = payload;
+}
+
+void HttpResponse::destination(const std::string& destination)
+{
+    destination_ = destination;
 }
 
 }

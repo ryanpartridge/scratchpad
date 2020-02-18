@@ -40,10 +40,10 @@ private:
     void invokeHandleResponse(const HttpResponse& response, const boost::system::error_code& ec);
     void handleResolve(const boost::system::error_code& ec, const boost::asio::ip::tcp::resolver::results_type& endpoints);
     void handleConnect(const boost::system::error_code& ec);
-    template<class Body, class BodyArg> void writeRequest(BodyArg&& bodyArg);
+    template<class Body> void writeRequest(typename Body::value_type&& bodyArg);
     void handleWrite(const boost::system::error_code& ec);
-    //template<class Body> void readResponse(std::shared_ptr<boost::beast::http::response<Body> res);
-    void readResponse(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code& ec);
+    //template<class Body> void handleRead(std::shared_ptr<boost::beast::http::response<Body> res);
+    void handleRead(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code& ec);
 
     boost::asio::io_context& io_context_;
     std::shared_ptr<handle_response_func_type> handleResponseFunc_;
