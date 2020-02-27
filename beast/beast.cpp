@@ -9,18 +9,6 @@
 #include <HttpResponse.hpp>
 #include <HttpClient.hpp>
 
-template<class Foo>
-void printFoo(const Foo& foo)
-{
-    std::cout << "Foo: " << foo << std::endl;
-}
-
-template<>
-void printFoo(const bool& foo)
-{
-    std::cout << "Foo: " << std::boolalpha << foo << std::endl;
-}
-
 void handleResponse(const c4::net::http::HttpResponse& response, const boost::system::error_code& ec)
 {
     if (ec)

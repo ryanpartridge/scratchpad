@@ -9,7 +9,7 @@ set(BOOST_COMPONENTS
     thread
 )
 
-set(BOOST_ROOT "/home/rpartridge/boost/1.67.0")
+set(BOOST_ROOT "/home/rpartridge/boost/1.72.0")
 set(Boost_USE_STATIC_LIBS "OFF")
 set(Boost_NO_SYSTEM_PATHS "ON")
 
