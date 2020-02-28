@@ -49,7 +49,7 @@ void HttpClient::close()
 boost::system::error_code HttpClient::asyncRequest(HttpRequest const& request)
 {
     boost::system::error_code ec;
-    const Url& url = request.url();
+    const auto& url = request.url();
     if (!url.isValid())
     {
         return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
@@ -69,7 +69,7 @@ boost::system::error_code HttpClient::asyncRequest(HttpRequest const& request)
 
 HttpClient::handle_response_func_type HttpClient::handleResponseFunc() const
 {
-    std::shared_ptr<handle_response_func_type> func = std::atomic_load_explicit(&handleResponseFunc_, std::memory_order_acquire);
+    auto func = std::atomic_load_explicit(&handleResponseFunc_, std::memory_order_acquire);
     if (func)
         return *func;
     else
@@ -120,13 +120,12 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
 template<class Body>
 void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
 {
-    std::shared_ptr<boost::beast::http::request<Body>> req =
-        std::make_shared<boost::beast::http::request<Body>>(
-                request_.method(),
-                request_.url().path(),
-                (boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11),
-                bodyArg,
-                request_.fields());
+    auto req = std::make_shared<boost::beast::http::request<Body>>(
+            request_.method(),
+            request_.url().path(),
+            (boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11),
+            bodyArg,
+            request_.fields());
 
     req->set(boost::beast::http::field::host, request_.url().domain());
     req->set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);
@@ -151,8 +150,7 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
 
     buffer_.consume(buffer_.size());
 
-    std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res =
-        std::make_shared<boost::beast::http::response<boost::beast::http::string_body>>();
+    auto res = std::make_shared<boost::beast::http::response<boost::beast::http::string_body>>();
 
     auto instance = shared_from_this();
     boost::beast::http::async_read(socket_,
@@ -165,7 +163,8 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
     );
 }
 
-void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<boost::beast::http::string_body>> res, const boost::system::error_code & ec)
+template<class Body>
+void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<Body>> res, const boost::system::error_code & ec)
 {
     if (ec)
     {
@@ -182,7 +181,7 @@ void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<boost::
 void HttpClient::invokeHandleResponse(const HttpResponse& response, const boost::system::error_code& ec)
 {
     request_ = HttpRequest();
-    std::shared_ptr<handle_response_func_type> func = std::atomic_load_explicit(&handleResponseFunc_, std::memory_order_acquire);
+    auto func = std::atomic_load_explicit(&handleResponseFunc_, std::memory_order_acquire);
     if (func)
     {
         try
