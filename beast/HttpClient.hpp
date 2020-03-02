@@ -44,6 +44,10 @@ private:
     void handleWrite(const boost::system::error_code& ec);
     template<class Body> void handleRead(std::shared_ptr<boost::beast::http::response<Body>> res, const boost::system::error_code& ec);
 
+    bool isFileValid(const std::string& path, bool writeable = false);
+    bool isPayloadValid(const std::string& payload);
+    bool isDestinationValid(const std::string& destination);
+
     boost::asio::io_context& io_context_;
     std::shared_ptr<handle_response_func_type> handleResponseFunc_;
 

@@ -4,6 +4,7 @@ project(beast)
 set(CMAKE_CXX_STANDARD 11)
 
 set(BOOST_COMPONENTS
+    filesystem
     regex
     system
     thread
@@ -27,6 +28,7 @@ set(HEADER_FILES
     HttpClient.hpp
     HttpRequest.hpp
     HttpResponse.hpp
+    memory.hpp
     types.hpp
     Url.hpp
 )
@@ -43,6 +45,7 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     ${Boost_ATOMIC_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_REGEX_LIBRARY}
     ${Boost_THREAD_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

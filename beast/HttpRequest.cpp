@@ -7,7 +7,8 @@ namespace http {
 HttpRequest::HttpRequest() :
     method_(HttpMethod::get),
     redirects_(5),
-    timeout_(120)
+    timeout_(120),
+    payloadIsFile_(false)
 {
 }
 
@@ -15,14 +16,16 @@ HttpRequest::HttpRequest(const Url& url) :
     method_(HttpMethod::get),
     url_(url),
     redirects_(5),
-    timeout_(120)
+    timeout_(120),
+    payloadIsFile_(false)
 {
 }
 
 HttpRequest::HttpRequest(HttpMethod method) :
     method_(method),
     redirects_(5),
-    timeout_(120)
+    timeout_(120),
+    payloadIsFile_(false)
 {
 }
 
@@ -30,7 +33,8 @@ HttpRequest::HttpRequest(HttpMethod method, const Url& url) :
     method_(method),
     url_(url),
     redirects_(5),
-    timeout_(120)
+    timeout_(120),
+    payloadIsFile_(false)
 {
 }
 
@@ -68,6 +72,16 @@ void HttpRequest::timeout(std::uint16_t timeout)
 void HttpRequest::destination(const std::string& destination)
 {
     destination_ = destination;
+}
+
+void HttpRequest::payload(const std::string& payload)
+{
+    payload_ = payload;
+}
+
+void HttpRequest::payloadIsFile(bool payloadIsFile)
+{
+    payloadIsFile_ = payloadIsFile;
 }
 
 std::string HttpRequest::httpVersion() const

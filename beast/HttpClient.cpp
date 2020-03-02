@@ -1,11 +1,13 @@
 #include <atomic>
-#include <iostream>
+#include <fstream>
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/beast/version.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 
+#include <memory.hpp>
 #include <HttpClient.hpp>
 #include <types.hpp>
 #include <HttpRequest.hpp>
@@ -193,6 +195,60 @@ void HttpClient::invokeHandleResponse(const HttpResponse& response, const boost:
             clearHandleResponseFunc();
         }
     }
+}
+
+bool HttpClient::isFileValid(const std::string& path, bool writeable /* = false */)
+{
+    boost::system::error_code ec;
+    boost::filesystem::path filePath(path);
+
+    if (boost::filesystem::exists(filePath, ec))
+    {
+        ec = boost::system::error_code();
+        if (boost::filesystem::is_directory(filePath, ec))
+        {
+            return false;
+        }
+
+        ec = boost::system::error_code();
+        boost::filesystem::remove(path, ec);
+        if (ec)
+        {
+            return false;
+        }
+    }
+
+    std::unique_ptr<std::fstream> stream;
+    auto flags = std::fstream::in;
+    if (writeable)
+    {
+        flags |= std::fstream::out;
+    }
+    stream = std::make_unique<std::fstream>(filePath.string().c_str(), flags);
+    if (!stream->good())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool HttpClient::isPayloadValid(const std::string& payload)
+{
+    // this should only be called if the request's payloadIsFile is true
+    return true;
+}
+
+// is this even needed?
+bool HttpClient::isDestinationValid(const std::string& destination)
+{
+    // an 
+    if (destination.empty())
+    {
+        return true;
+    }
+
+    return isFileValid(destination, true);
 }
 
 }

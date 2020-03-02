@@ -39,13 +39,18 @@ public:
     const std::string& destination() const { return destination_; };
     void destination(const std::string& destination);
 
+    const std::string& payload() const { return payload_; };
+    void payload(const std::string& payload);
+
+    bool payloadIsFile() const { return payloadIsFile_; };
+    void payloadIsFile(bool payloadIsFile);
+
     const HttpFields& fields() const { return fields_; };
     void fields(const HttpFields& fields);
 
     // these are convenience wrappers around getField and setField
     std::string httpVersion() const;
     void httpVersion(const std::string& version);
-    // payload -- not sure how to handle this yet
     std::string host() const;
     void host(const std::string& host);
     std::string accept() const;
@@ -86,6 +91,8 @@ private:
     std::uint16_t redirects_;
     std::uint16_t timeout_;
     std::string destination_;
+    std::string payload_;
+    bool payloadIsFile_;
     HttpFields fields_;
 };
 
