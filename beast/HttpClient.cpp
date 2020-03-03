@@ -1,5 +1,7 @@
 #include <atomic>
+#include <utility>
 #include <fstream>
+#include <tuple>
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
@@ -57,7 +59,7 @@ boost::system::error_code HttpClient::asyncRequest(HttpRequest const& request)
         return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
     }
 
-    if (!request.destination().empty() && !isFileValid(request.destination()))
+    if (!request.destination().empty() && !isFileValid(request.destination(), true))
     {
         return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
     }
@@ -123,7 +125,7 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
         return;
     }
 
-    // TODO: decide which kind of body to use based on the
+    // decide which kind of body to use based on the
     // method and presence of a request payload
     if (request_.payload().empty())
     {
@@ -132,15 +134,16 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
     else if (request_.payloadIsFile())
     {
         boost::beast::http::file_body::value_type body;
-        boost::system::error_code ec;
-        body.open(request_.payload().c_str(), boost::beast::file_mode::scan, ec);
+        boost::system::error_code bodyError;
+        body.open(request_.payload().c_str(), boost::beast::file_mode::scan, bodyError);
 
-        if (ec)
+        if (bodyError)
         {
+            invokeHandleResponse(HttpResponse(), bodyError);
         }
         else
         {
-            writeRequest<boost::beast::http::file_body>(body);
+            writeRequest<boost::beast::http::file_body>(std::move(body));
         }
     }
     else
@@ -148,9 +151,6 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
         writeRequest<boost::beast::http::string_body>(
             boost::beast::http::string_body::value_type(request_.payload()));
     }
-
-    //writeRequest<boost::beast::http::empty_body>(boost::beast::http::empty_body::value_type());
-    //writeRequest<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
 }
 
 template<class Body>
@@ -160,11 +160,12 @@ void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
             request_.method(),
             request_.url().path(),
             (boost::iequals(request_.httpVersion(), "1.0") ? 10 : 11),
-            bodyArg,
+            std::forward<typename Body::value_type>(bodyArg),
             request_.fields());
 
     req->set(boost::beast::http::field::host, request_.url().domain());
     req->set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+    req->prepare_payload();
 
     auto instance = shared_from_this();
     boost::beast::http::async_write(socket_,
@@ -178,15 +179,41 @@ void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
 
 void HttpClient::handleWrite(const boost::system::error_code& ec)
 {
+    buffer_.consume(buffer_.size());
+
     if (ec)
     {
         invokeHandleResponse(HttpResponse(), ec);
         return;
     }
 
-    buffer_.consume(buffer_.size());
+    if (request_.destination().empty())
+    {
+        readResponse<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
+    }
+    else
+    {
+        boost::beast::http::file_body::value_type body;
+        boost::system::error_code bodyError;
+        body.open(request_.destination().c_str(), boost::beast::file_mode::write, bodyError);
 
-    auto res = std::make_shared<boost::beast::http::response<boost::beast::http::string_body>>();
+        if (bodyError)
+        {
+            invokeHandleResponse(HttpResponse(), bodyError);
+        }
+        else
+        {
+            readResponse<boost::beast::http::file_body>(std::move(body));
+        }
+    }
+}
+
+template<class Body>
+void HttpClient::readResponse(typename Body::value_type&& bodyArg)
+{
+    auto res = std::make_shared<boost::beast::http::response<Body>>(
+            std::piecewise_construct,
+            std::make_tuple(std::move(bodyArg)));
 
     auto instance = shared_from_this();
     boost::beast::http::async_read(socket_,
@@ -202,6 +229,8 @@ void HttpClient::handleWrite(const boost::system::error_code& ec)
 template<class Body>
 void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<Body>> res, const boost::system::error_code & ec)
 {
+    buffer_.consume(buffer_.size());
+
     if (ec)
     {
         invokeHandleResponse(HttpResponse(), ec);
@@ -209,7 +238,8 @@ void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<Body>> 
     }
 
     HttpResponse response(res->result());
-    response.payload(res->body());
+    const auto& body = res->body();
+    //response.payload(res->body());
 
     invokeHandleResponse(response, ec);
 }
@@ -244,11 +274,14 @@ bool HttpClient::isFileValid(const std::string& path, bool writeable /* = false 
             return false;
         }
 
-        ec = boost::system::error_code();
-        boost::filesystem::remove(path, ec);
-        if (ec)
+        if (writeable)
         {
-            return false;
+            ec = boost::system::error_code();
+            boost::filesystem::remove(path, ec);
+            if (ec)
+            {
+                return false;
+            }
         }
     }
 
@@ -256,9 +289,9 @@ bool HttpClient::isFileValid(const std::string& path, bool writeable /* = false 
     auto flags = std::fstream::in;
     if (writeable)
     {
-        flags |= std::fstream::out;
+        flags = std::fstream::out;
     }
-    stream = std::make_unique<std::fstream>(filePath.string().c_str(), flags);
+    stream = std::make_unique<std::fstream>(filePath.string(), flags);
     if (!stream->good())
     {
         return false;

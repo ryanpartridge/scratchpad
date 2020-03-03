@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     //std::string urlString = "https://www.google.com:8443/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "https://user:password@www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "https://www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
-    std::string urlString = "http://www.google.com";
+    std::string urlString = "http://localhost";
     std::cout << "Input URL: " << urlString << std::endl;
     std::cout << std::endl;
     boost::system::error_code ec;
@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
     std::cout << "Output URL: " << url.toString() << std::endl;
 
     c4::net::http::HttpRequest req(c4::net::http::HttpMethod::get, url);
+    req.destination("/tmp/beast-index.html");
 
     boost::asio::io_context io_context;
     auto client = std::make_shared<c4::net::http::HttpClient>(io_context, &handleResponse);

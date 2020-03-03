@@ -52,7 +52,6 @@ namespace http {
     {
         return boost::beast::http::to_string(field).to_string();
     }
-
 }
 }
 }

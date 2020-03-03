@@ -42,6 +42,7 @@ private:
     void handleConnect(const boost::system::error_code& ec);
     template<class Body> void writeRequest(typename Body::value_type&& bodyArg);
     void handleWrite(const boost::system::error_code& ec);
+    template<class Body> void readResponse(typename Body::value_type&& bodyArg);
     template<class Body> void handleRead(std::shared_ptr<boost::beast::http::response<Body>> res, const boost::system::error_code& ec);
 
     bool isFileValid(const std::string& path, bool writeable = false);
