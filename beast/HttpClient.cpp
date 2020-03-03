@@ -57,6 +57,16 @@ boost::system::error_code HttpClient::asyncRequest(HttpRequest const& request)
         return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
     }
 
+    if (!request.destination().empty() && !isFileValid(request.destination()))
+    {
+        return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
+    }
+
+    if (request.payloadIsFile() && (request.payload().empty() || !isFileValid(request.payload())))
+    {
+        return boost::system::errc::make_error_code(boost::system::errc::invalid_argument);
+    }
+
     request_ = request;
 
     // first step is to resolve the domain
@@ -115,7 +125,31 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
 
     // TODO: decide which kind of body to use based on the
     // method and presence of a request payload
-    writeRequest<boost::beast::http::empty_body>(boost::beast::http::empty_body::value_type());
+    if (request_.payload().empty())
+    {
+        writeRequest<boost::beast::http::empty_body>(boost::beast::http::empty_body::value_type());
+    }
+    else if (request_.payloadIsFile())
+    {
+        boost::beast::http::file_body::value_type body;
+        boost::system::error_code ec;
+        body.open(request_.payload().c_str(), boost::beast::file_mode::scan, ec);
+
+        if (ec)
+        {
+        }
+        else
+        {
+            writeRequest<boost::beast::http::file_body>(body);
+        }
+    }
+    else
+    {
+        writeRequest<boost::beast::http::string_body>(
+            boost::beast::http::string_body::value_type(request_.payload()));
+    }
+
+    //writeRequest<boost::beast::http::empty_body>(boost::beast::http::empty_body::value_type());
     //writeRequest<boost::beast::http::string_body>(boost::beast::http::string_body::value_type());
 }
 
