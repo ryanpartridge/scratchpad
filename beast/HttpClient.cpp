@@ -6,6 +6,7 @@
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/beast/version.hpp>
+#include <boost/beast/http/file_body.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
@@ -238,10 +239,28 @@ void HttpClient::handleRead(std::shared_ptr<boost::beast::http::response<Body>> 
     }
 
     HttpResponse response(res->result());
-    const auto& body = res->body();
-    //response.payload(res->body());
+    response.fields(*res);
+    handleBody<Body>(res->body(), response);
 
     invokeHandleResponse(response, ec);
+}
+
+template<class Body>
+void HttpClient::handleBody(const typename Body::value_type& /* body */, HttpResponse& /* response */)
+{
+    // don't do anything on an empty or unknown body type
+}
+
+template<>
+void HttpClient::handleBody<boost::beast::http::string_body>(const boost::beast::http::string_body::value_type& body, HttpResponse& response)
+{
+    response.payload(body);
+}
+
+template<>
+void HttpClient::handleBody<boost::beast::http::file_body>(const boost::beast::http::file_body::value_type& body, HttpResponse& response)
+{
+    response.destination(request_.destination());
 }
 
 void HttpClient::invokeHandleResponse(const HttpResponse& response, const boost::system::error_code& ec)
@@ -298,24 +317,6 @@ bool HttpClient::isFileValid(const std::string& path, bool writeable /* = false 
     }
 
     return true;
-}
-
-bool HttpClient::isPayloadValid(const std::string& payload)
-{
-    // this should only be called if the request's payloadIsFile is true
-    return true;
-}
-
-// is this even needed?
-bool HttpClient::isDestinationValid(const std::string& destination)
-{
-    // an 
-    if (destination.empty())
-    {
-        return true;
-    }
-
-    return isFileValid(destination, true);
 }
 
 }
