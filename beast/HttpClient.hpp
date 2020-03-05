@@ -7,6 +7,8 @@
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
+#include <boost/beast/core/basic_stream.hpp>
+#include <boost/beast/ssl/ssl_stream.hpp>
 
 #include <HttpRequest.hpp>
 
@@ -52,7 +54,10 @@ private:
     std::shared_ptr<handle_response_func_type> handleResponseFunc_;
 
     boost::asio::ip::tcp::resolver resolver_;
-    boost::asio::ip::tcp::socket socket_;
+    boost::beast::basic_stream<boost::beast::net::ip::tcp, boost::beast::net::executor, boost::beast::simple_rate_policy> socket_;
+    boost::beast::net::ssl::context sslContext_;
+    boost::beast::ssl_stream<boost::beast::basic_stream<boost::beast::net::ip::tcp, boost::beast::net::executor, boost::beast::simple_rate_policy>> sslSocket_;
+    //boost::asio::ip::tcp::socket socket_;
     HttpRequest request_;
     boost::beast::flat_buffer buffer_;
 };

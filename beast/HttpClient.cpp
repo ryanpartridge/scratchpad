@@ -24,7 +24,9 @@ namespace http {
 HttpClient::HttpClient(boost::asio::io_context& io_context) :
     io_context_(io_context),
     resolver_(io_context),
-    socket_(io_context)
+    socket_(io_context),
+    sslContext_(boost::beast::net::ssl::context::tlsv13),
+    sslSocket_(io_context, sslContext_)
 {
 }
 
@@ -32,7 +34,9 @@ HttpClient::HttpClient(boost::asio::io_context& io_context, handle_response_func
     io_context_(io_context),
     handleResponseFunc_(std::make_shared<handle_response_func_type>(handleResponseFunc)),
     resolver_(io_context),
-    socket_(io_context)
+    socket_(io_context),
+    sslContext_(boost::beast::net::ssl::context::tlsv13),
+    sslSocket_(io_context, sslContext_)
 {
 }
 
@@ -111,7 +115,8 @@ void HttpClient::handleResolve(boost::system::error_code const& ec, boost::asio:
         return;
     }
 
-    boost::asio::async_connect(socket_,
+//    boost::asio::async_connect(socket_,
+    socket_.async_connect(
             endpoints,
             boost::bind(&HttpClient::handleConnect,
                 shared_from_this(),

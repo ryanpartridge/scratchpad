@@ -15,6 +15,7 @@ set(Boost_USE_STATIC_LIBS "OFF")
 set(Boost_NO_SYSTEM_PATHS "ON")
 
 find_package(Boost "1.67" REQUIRED COMPONENTS ${BOOST_COMPONENTS})
+find_package(OpenSSL "1.1.1" REQUIRED)
 
 set(SOURCE_FILES
     beast.cpp
@@ -41,6 +42,7 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${Boost_INCLUDE_DIRS}
+    PRIVATE ${OPENSSL_INCLUDE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -49,5 +51,6 @@ target_link_libraries(${PROJECT_NAME}
     ${Boost_REGEX_LIBRARY}
     ${Boost_THREAD_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
+    ${OPENSSL_LIBRARIES}
     pthread
 )
