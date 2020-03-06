@@ -15,7 +15,7 @@ set(Boost_USE_STATIC_LIBS "OFF")
 set(Boost_NO_SYSTEM_PATHS "ON")
 
 find_package(Boost "1.67" REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-find_package(OpenSSL "1.1.1" REQUIRED)
+find_package(OpenSSL "1.0.2" REQUIRED)
 
 set(SOURCE_FILES
     beast.cpp

@@ -22,6 +22,10 @@ class HttpClient :
     public std::enable_shared_from_this<HttpClient>,
     boost::noncopyable
 {
+    using stream_type = boost::beast::basic_stream<boost::beast::net::ip::tcp, boost::beast::net::executor, boost::beast::simple_rate_policy>;
+    using ssl_stream_type = boost::beast::ssl_stream<stream_type>;
+    using ssl_context_type = boost::beast::net::ssl::context;
+
 public:
     using handle_response_func_type = boost::function<void(const HttpResponse&, const boost::system::error_code&)>;
 
@@ -54,10 +58,9 @@ private:
     std::shared_ptr<handle_response_func_type> handleResponseFunc_;
 
     boost::asio::ip::tcp::resolver resolver_;
-    boost::beast::basic_stream<boost::beast::net::ip::tcp, boost::beast::net::executor, boost::beast::simple_rate_policy> socket_;
-    boost::beast::net::ssl::context sslContext_;
-    boost::beast::ssl_stream<boost::beast::basic_stream<boost::beast::net::ip::tcp, boost::beast::net::executor, boost::beast::simple_rate_policy>> sslSocket_;
-    //boost::asio::ip::tcp::socket socket_;
+    std::unique_ptr<stream_type> socket_;
+    std::unique_ptr<ssl_context_type> sslContext_;
+    std::unique_ptr<ssl_stream_type> sslSocket_;
     HttpRequest request_;
     boost::beast::flat_buffer buffer_;
 };

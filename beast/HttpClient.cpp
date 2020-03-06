@@ -23,20 +23,14 @@ namespace http {
 
 HttpClient::HttpClient(boost::asio::io_context& io_context) :
     io_context_(io_context),
-    resolver_(io_context),
-    socket_(io_context),
-    sslContext_(boost::beast::net::ssl::context::tlsv13),
-    sslSocket_(io_context, sslContext_)
+    resolver_(io_context)
 {
 }
 
 HttpClient::HttpClient(boost::asio::io_context& io_context, handle_response_func_type handleResponseFunc) :
     io_context_(io_context),
     handleResponseFunc_(std::make_shared<handle_response_func_type>(handleResponseFunc)),
-    resolver_(io_context),
-    socket_(io_context),
-    sslContext_(boost::beast::net::ssl::context::tlsv13),
-    sslSocket_(io_context, sslContext_)
+    resolver_(io_context)
 {
 }
 
@@ -47,12 +41,24 @@ HttpClient::~HttpClient() noexcept
 
 void HttpClient::cancel()
 {
-    // TODO: implement
+    clearHandleResponseFunc();
+    close();
 }
 
 void HttpClient::close()
 {
-    // TODO: implement
+    if (socket_)
+    {
+        socket_->close();
+        socket_.reset();
+    }
+
+    if (sslSocket_)
+    {
+        sslSocket_->shutdown();
+        sslSocket_.reset();
+        sslContext_.reset();
+    }
 }
 
 boost::system::error_code HttpClient::asyncRequest(HttpRequest const& request)
@@ -115,12 +121,20 @@ void HttpClient::handleResolve(boost::system::error_code const& ec, boost::asio:
         return;
     }
 
-//    boost::asio::async_connect(socket_,
-    socket_.async_connect(
-            endpoints,
-            boost::bind(&HttpClient::handleConnect,
-                shared_from_this(),
-                boost::asio::placeholders::error));
+    if (request_.url().isHttps())
+    {
+        sslContext_ = std::make_unique<ssl_context_type>(boost::beast::net::ssl::context::tlsv13);
+        sslSocket_ = std::make_unique<ssl_stream_type>(io_context_, *sslContext_);
+    }
+    else
+    {
+        socket_ = std::make_unique<stream_type>(io_context_);
+        socket_->async_connect(
+                endpoints,
+                boost::bind(&HttpClient::handleConnect,
+                    shared_from_this(),
+                    boost::asio::placeholders::error));
+    }
 }
 
 void HttpClient::handleConnect(const boost::system::error_code& ec)
@@ -174,7 +188,7 @@ void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
     req->prepare_payload();
 
     auto instance = shared_from_this();
-    boost::beast::http::async_write(socket_,
+    boost::beast::http::async_write(*socket_,
         *req,
         [instance, req](const boost::system::error_code& ec, std::size_t)
             {
@@ -222,7 +236,7 @@ void HttpClient::readResponse(typename Body::value_type&& bodyArg)
             std::make_tuple(std::move(bodyArg)));
 
     auto instance = shared_from_this();
-    boost::beast::http::async_read(socket_,
+    boost::beast::http::async_read(*socket_,
         buffer_,
         *res,
         [instance, res](const boost::system::error_code& err, std::size_t)
