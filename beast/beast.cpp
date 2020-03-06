@@ -44,7 +44,8 @@ int main(int argc, char* argv[])
     //std::string urlString = "https://www.google.com:8443/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "https://user:password@www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "https://www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
-    std::string urlString = "http://localhost";
+    //std::string urlString = "http://localhost";
+    std::string urlString = "https://www.google.com";
     std::cout << "Input URL: " << urlString << std::endl;
     std::cout << std::endl;
     boost::system::error_code ec;

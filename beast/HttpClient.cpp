@@ -49,13 +49,21 @@ void HttpClient::close()
 {
     if (socket_)
     {
+        boost::system::error_code ec;
+#if BOOST_VERSION >= 107000
+        socket_->socket().shutdown(stream_type::socket_type::shutdown_both, ec);
+#else
+        socket_->shutdown(stream_type::shutdown_both, ec);
+#endif
         socket_->close();
         socket_.reset();
     }
 
     if (sslSocket_)
     {
-        sslSocket_->shutdown();
+        // TODO: explore if we should use async_shutdown here instead
+        boost::system::error_code ec;
+        sslSocket_->shutdown(ec);
         sslSocket_.reset();
         sslContext_.reset();
     }
@@ -123,13 +131,33 @@ void HttpClient::handleResolve(boost::system::error_code const& ec, boost::asio:
 
     if (request_.url().isHttps())
     {
-        sslContext_ = std::make_unique<ssl_context_type>(boost::beast::net::ssl::context::tlsv13);
+#if BOOST_VERSION >= 107000
+        sslContext_ = std::make_unique<ssl_context_type>(boost::beast::net::ssl::context::tlsv12);
+#else
+        sslContext_ = std::make_unique<ssl_context_type>(boost::asio::ssl::context::tlsv12);
+#endif
         sslSocket_ = std::make_unique<ssl_stream_type>(io_context_, *sslContext_);
+#if BOOST_VERSION >= 107000
+        boost::beast::get_lowest_layer(*sslSocket_).async_connect(
+#else
+        boost::asio::async_connect(
+                sslSocket_->next_layer(),
+#endif
+                endpoints,
+                boost::bind(&HttpClient::handleSSLConnect,
+                    shared_from_this(),
+                    boost::asio::placeholders::error));
+
     }
     else
     {
         socket_ = std::make_unique<stream_type>(io_context_);
+#if BOOST_VERSION >= 107000
         socket_->async_connect(
+#else
+        boost::asio::async_connect(
+                *socket_,
+#endif
                 endpoints,
                 boost::bind(&HttpClient::handleConnect,
                     shared_from_this(),
@@ -145,6 +173,41 @@ void HttpClient::handleConnect(const boost::system::error_code& ec)
         return;
     }
 
+    writeRequest();
+}
+
+void HttpClient::handleSSLConnect(const boost::system::error_code& ec)
+{
+    if (ec)
+    {
+        invokeHandleResponse(HttpResponse(), ec);
+        return;
+    }
+
+    sslSocket_->async_handshake(
+#if BOOST_VERSION >= 107000
+            boost::beast::net::ssl::stream_base::client,
+#else
+            boost::asio::ssl::stream_base::client,
+#endif
+            boost::bind(&HttpClient::handleHandshake,
+                shared_from_this(),
+                boost::asio::placeholders::error));
+}
+
+void HttpClient::handleHandshake(const boost::system::error_code& ec)
+{
+    if (ec)
+    {
+        invokeHandleResponse(HttpResponse(), ec);
+        return;
+    }
+
+    writeRequest();
+}
+
+void HttpClient::writeRequest()
+{
     // decide which kind of body to use based on the
     // method and presence of a request payload
     if (request_.payload().empty())
@@ -188,13 +251,30 @@ void HttpClient::writeRequest(typename Body::value_type&& bodyArg)
     req->prepare_payload();
 
     auto instance = shared_from_this();
-    boost::beast::http::async_write(*socket_,
-        *req,
-        [instance, req](const boost::system::error_code& ec, std::size_t)
-            {
-                instance->handleWrite(ec);
-            }
-    );
+    if (socket_)
+    {
+        boost::beast::http::async_write(*socket_,
+            *req,
+            [instance, req](const boost::system::error_code& ec, std::size_t)
+                {
+                    instance->handleWrite(ec);
+                }
+        );
+    }
+    else if (sslSocket_)
+    {
+        boost::beast::http::async_write(*sslSocket_,
+            *req,
+            [instance, req](const boost::system::error_code& ec, std::size_t)
+                {
+                    instance->handleWrite(ec);
+                }
+        );
+    }
+    else
+    {
+        //TODO: invoke handle with error
+    }
 }
 
 void HttpClient::handleWrite(const boost::system::error_code& ec)
@@ -236,14 +316,32 @@ void HttpClient::readResponse(typename Body::value_type&& bodyArg)
             std::make_tuple(std::move(bodyArg)));
 
     auto instance = shared_from_this();
-    boost::beast::http::async_read(*socket_,
-        buffer_,
-        *res,
-        [instance, res](const boost::system::error_code& err, std::size_t)
-            {
-                instance->handleRead(res, err);
-            }
-    );
+    if (socket_)
+    {
+        boost::beast::http::async_read(*socket_,
+            buffer_,
+            *res,
+            [instance, res](const boost::system::error_code& err, std::size_t)
+                {
+                    instance->handleRead(res, err);
+                }
+        );
+    }
+    else if (sslSocket_)
+    {
+        boost::beast::http::async_read(*sslSocket_,
+            buffer_,
+            *res,
+            [instance, res](const boost::system::error_code& err, std::size_t)
+                {
+                    instance->handleRead(res, err);
+                }
+        );
+    }
+    else
+    {
+        //TODO: invoke handle with error
+    }
 }
 
 template<class Body>
