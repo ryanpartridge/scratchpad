@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <cstdint>
 #include <unordered_map>
 
 #include <boost/system/error_code.hpp>
@@ -39,8 +38,8 @@ public:
     void domain(const std::string& domain);
     const std::string& domain() const { return domain_; };
 
-    void port(std::uint16_t port) { port_ = port; };
-    std::uint16_t port() const noexcept { return port_; };
+    void port(uint16_t port) { port_ = port; };
+    uint16_t port() const noexcept { return port_; };
 
     void path(const std::string& path) { path_ = path; };
     const std::string& path() const { return path_; };
@@ -63,7 +62,7 @@ private:
     std::string scheme_;
     std::string userInfo_;
     std::string domain_;
-    std::uint16_t port_;
+    uint16_t port_;
     std::string path_;
     Queries queries_;
     std::string fragment_;

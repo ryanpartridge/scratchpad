@@ -19,6 +19,7 @@ find_package(OpenSSL "1.0.2" REQUIRED)
 
 set(SOURCE_FILES
     beast.cpp
+    Download.cpp
     HttpClient.cpp
     HttpRequest.cpp
     HttpResponse.cpp
@@ -26,6 +27,7 @@ set(SOURCE_FILES
 )
 
 set(HEADER_FILES
+    Download.hpp
     HttpClient.hpp
     HttpRequest.hpp
     HttpResponse.hpp

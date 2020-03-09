@@ -32,7 +32,7 @@ void Url::domain(const std::string& domain)
         domain_ = domain.substr(userInfoIndex, index - userInfoIndex);
         try
         {
-            port_ = boost::lexical_cast<std::uint16_t>(domain.substr(index + 1));
+            port_ = boost::lexical_cast<uint16_t>(domain.substr(index + 1));
         }
         catch(const boost::bad_lexical_cast&)
         {
