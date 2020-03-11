@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <types.hpp>
 #include <Url.hpp>
 
@@ -30,11 +29,11 @@ public:
     void url(const Url& url);
     boost::system::error_code url(const std::string& urlString);
 
-    std::uint16_t redirects() const noexcept { return redirects_; };
-    void redirects(std::uint16_t redirects);
+    uint16_t redirects() const noexcept { return redirects_; };
+    void redirects(uint16_t redirects);
 
-    std::uint16_t timeout() const noexcept { return timeout_; };
-    void timeout(std::uint16_t timeout);
+    uint16_t timeout() const noexcept { return timeout_; };
+    void timeout(uint16_t timeout);
 
     const std::string& destination() const { return destination_; };
     void destination(const std::string& destination);
@@ -88,8 +87,8 @@ public:
 private:
     HttpMethod method_;
     Url url_;
-    std::uint16_t redirects_;
-    std::uint16_t timeout_;
+    uint16_t redirects_;
+    uint16_t timeout_;
     std::string destination_;
     std::string payload_;
     bool payloadIsFile_;
