@@ -48,6 +48,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
+    /home/rpartridge/github/scratchpad/asiolib/build/libasio.so
     ${Boost_ATOMIC_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_REGEX_LIBRARY}
@@ -56,3 +57,8 @@ target_link_libraries(${PROJECT_NAME}
     ${OPENSSL_LIBRARIES}
     pthread
 )
+
+#target_compile_definitions(${PROJECT_NAME}
+#    PRIVATE BOOST_ASIO_SEPARATE_COMPILATION
+#    PRIVATE BOOST_ASIO_DYN_LINK
+#)

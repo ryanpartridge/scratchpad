@@ -1,7 +1,13 @@
 #include <iostream>
 #include <string>
 
+#define BOOST_ASIO_STATIC_LINK
+
+//#include <boost/asio/impl/src.hpp>
+//#include <boost/asio/ssl/impl/src.hpp>
 #include <boost/asio.hpp>
+
+#include <boost/filesystem.hpp>
 
 #include <types.hpp>
 #include <Url.hpp>
@@ -45,6 +51,8 @@ int main(int argc, char* argv[])
     //std::string urlString = "https://user:password@www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "https://www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "http://localhost";
+
+/*
     std::string urlString = "https://www.google.com";
     std::cout << "Input URL: " << urlString << std::endl;
     std::cout << std::endl;
@@ -70,6 +78,14 @@ int main(int argc, char* argv[])
     }
 
     io_context.run();
+*/
+
+    boost::filesystem::path path("/tmp/somedir/anotherdir/file.txt");
+    std::cout << "path: " << path.string() << std::endl;
+    std::cout << "is absolute: " << std::boolalpha << path.is_absolute() << std::endl;
+    std::cout << "root name: " << path.root_name().string() << std::endl;
+    std::cout << "root directory: " << path.root_directory().string() << std::endl;
+    std::cout << "root path: " << path.root_path().string() << std::endl;
 
     return 0;
 }
