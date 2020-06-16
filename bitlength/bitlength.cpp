@@ -30,9 +30,13 @@ int main(int argc, char* argv[])
     std::cout << "unsigned long long length:\t" << (sizeof(unsigned long long) * 8) << std::endl;
     std::cout << "unsigned long long int length:\t" << (sizeof(unsigned long long int) * 8) << std::endl;
 
-    std::string input("4294967296");
+    std::string input("4294967295");
     auto val = boost::convert<int64_t>(input, boost::cnv::strtol()).value_or(0);
     std::cout << "Input value: " << input << "\t\tOutput value: " << val << std::endl;
+
+    unsigned int posValue = 1;
+    posValue = boost::convert<int64_t>(input, boost::cnv::strtol()).value_or(0);
+    std::cout << "Input value: " << input << "\t\tOutput value: " << posValue << std::endl;
 
     myFunc(static_cast<uint64_t>(42));
 
