@@ -1,11 +1,11 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <fcntl.h>
+#include <cstdint>
+#include <future>
 
-#include <boost/cstdint.hpp>
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/ref.hpp>
 #include <boost/process.hpp>
 #include <boost/process/async_pipe.hpp>
@@ -13,161 +13,125 @@
 #include <boost/process/io.hpp>
 #include <boost/algorithm/string/trim.hpp>
 
-class AsyncHandler : public boost::process::extend::async_handler
+class ProcessReader :
+    public std::enable_shared_from_this<ProcessReader>
 {
 public:
-    AsyncHandler(std::shared_ptr<boost::process::async_pipe> pipe, boost::int32_t sourceFd, boost::int32_t sinkFd) :
-        pipe_(pipe),
-        sourceFd_(sourceFd),
-        sinkFd_(sinkFd)
+    using ProcessExitCallback = std::function<void(int32_t, const std::error_code&)>;
+
+    explicit ProcessReader(boost::asio::io_context& io_context) :
+        io_context_(io_context)
     {}
 
-/*
-    template<typename Executor>
-    void on_setup(Executor& exec)
+    void runProcess()
     {
-        std::cout << "Calling on_setup" << std::endl;
-    }
+        statusPipe_ = std::unique_ptr<boost::process::async_pipe>(new boost::process::async_pipe(io_context_));
+        const auto sinkFd = statusPipe_->native_sink();
+        auto commandStream = std::ostringstream();
+        commandStream << "/home/rpartridge/github/scratchpad/fd_writer/build/fd_writer " << sinkFd << " 100";
 
-    template<typename Executor>
-    void on_exec_setup(Executor& exec)
-    {
-        std::cout << "Calling on_exec_setup" << std::endl;
-        if (fcntl(sourceFd_, F_SETFD, 0) != 0)
-        {
-            std::cout << "Error clearing FD_CLOEXEC bit on source" << std::endl;
-        }
-        if (fcntl(sinkFd_, F_SETFD, 0) != 0)
-        {
-            std::cout << "Error clearing FD_CLOEXEC bit on sink" << std::endl;
-        }
-    }
-*/
+        auto callback = boost::bind(&ProcessReader::handleProcessComplete, shared_from_this(), boost::placeholders::_1, boost::placeholders::_2);
+        asyncHandler_ = std::unique_ptr<AsyncProcessHandler>(new AsyncProcessHandler(callback));
+        childProcess_ = std::unique_ptr<boost::process::child>(new boost::process::child(commandStream.str(), *asyncHandler_, boost::process::std_out > output_, boost::process::std_err > errorOutput_, io_context_));
 
-    template<typename Executor>
-    std::function<void(int, const std::error_code&)> on_exit_handler(Executor& exec)
-    {
-        return [&](int exit_code, const std::error_code& ec)
-        {
-            std::cout << "Exit code: " << exit_code << std::endl;
-            auto pipe = this->pipe_.lock();
-            if (pipe)
-            {
-                pipe->close();
-            }
-        };
+        boost::asio::async_read_until(*statusPipe_, statusBuffer_, "\n", boost::bind(&ProcessReader::handleStatusMessage, shared_from_this(), boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
     }
 
 private:
-    std::weak_ptr<boost::process::async_pipe> pipe_;
-    boost::int32_t sourceFd_;
-    boost::int32_t sinkFd_;
-};
-
-/*
-class Handler : public boost::process::extend::handler
-{
-public:
-    template<typename Executor>
-    void on_setup(Executor& exec)
+    class AsyncProcessHandler :
+        public boost::process::extend::async_handler
     {
-        std::cout << "Calling on_setup" << std::endl;
-    }
-};
-*/
+    public:
+        explicit AsyncProcessHandler(ProcessExitCallback callback) :
+            callback_(callback)
+        {}
 
-void onData(const boost::system::error_code& ec, size_t bytesTransferred, boost::asio::streambuf& buffer, boost::process::async_pipe& pipe, std::ostringstream& output)
-{
-    if (!ec)
+    template <typename Exec>
+    std::function<void(int32_t, const std::error_code&)> on_exit_handler(Exec& /* exec */)
     {
-        if (bytesTransferred > 0)
+        auto callback = this->callback_;
+        return [callback](int32_t exitCode, const std::error_code& ec)
         {
-            boost::asio::streambuf::const_buffers_type buffers = buffer.data();
-            std::string data(static_cast<const char*>(buffers.data()), bytesTransferred);
-            buffer.consume(bytesTransferred);
-            boost::algorithm::trim(data);
-            output << data << std::endl;
+            callback(exitCode, ec);
+        };
+    }
+
+    private:
+        ProcessExitCallback callback_;
+    };
+
+    void handleStatusMessage(const boost::system::error_code& ec, size_t bytesTransferred)
+    {
+        if (!ec)
+        {
+            if (bytesTransferred > 0)
+            {
+                auto buffers = statusBuffer_.data();
+                auto data = std::string(static_cast<const char*>(buffers.data()), bytesTransferred);
+                statusBuffer_.consume(bytesTransferred);
+                boost::algorithm::trim(data);
+                std::cout << "status message: " << data << std::endl;
+            }
+            boost::asio::async_read_until(*statusPipe_, statusBuffer_, "\n", boost::bind(&ProcessReader::handleStatusMessage, shared_from_this(), boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
         }
-
-        boost::asio::async_read_until(pipe, buffer, "\n", boost::bind(&onData, boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred, boost::ref(buffer), boost::ref(pipe), boost::ref(output)));
+        else if (ec != boost::asio::error::eof &&
+                    ec != boost::system::errc::operation_canceled &&
+                    ec != boost::asio::error::operation_aborted)
+        {
+            std::cerr << "error reading status: " << ec.message() << std::endl;
+        }
     }
-    else if (ec == boost::asio::error::eof)
+
+    void handleProcessComplete(int32_t exitCode, const std::error_code& ec)
     {
-        // output all the gathered data
-        std::cout << "Gathered output:" << std::endl;
-        std::cout << output.str() << std::endl;
+        std::cout << "Process completed with exit code: " << exitCode << std::endl;
+        if (statusPipe_)
+        {
+            statusPipe_->close();
+            statusPipe_.reset();
+        }
+        if (output_.valid())
+        {
+            auto outputMessage = output_.get();
+            boost::algorithm::trim(outputMessage);
+            if (outputMessage.size() > 0)
+            {
+                std::cout << "output message: " << outputMessage << std::endl;
+            }
+        }
+        if (errorOutput_.valid())
+        {
+            auto errMessage = errorOutput_.get();
+            boost::algorithm::trim(errMessage);
+            if (errMessage.size() > 0)
+            {
+                std::cout << "error message: " << errMessage << std::endl;
+            }
+        }
+        else
+        {
+            std::cerr << "error getting the error output -- future not valid" << std::endl;
+        }
     }
-    else if (ec != boost::system::errc::operation_canceled &&
-            ec != boost::asio::error::operation_aborted)
-    {
-        std::cout << "Got an error: " << ec.message() << std::endl;
-    }
-}
 
-void onExit(const boost::system::error_code& ec, int exitCode, boost::process::async_pipe& pipe)
-{
-    std::cout << "Exit code: " << exitCode << std::endl;
-    if (ec)
-    {
-        std::cout << "Error message: " << ec.message() << std::endl;
-    }
-    pipe.cancel();
-}
-
-void myfunc(boost::asio::io_context& io_context, boost::asio::streambuf& buffer, boost::process::async_pipe& pipe, std::ostringstream& output)
-{
-    std::cout << "Running myfunc" << std::endl;
-
-    std::ostringstream cmdStream;
-    cmdStream << "sudo /usr/bin/apt-get -y -o APT::Status-Fd=" << pipe.native_source() << " install apt-doc";
-    //cmdStream << "sudo /usr/bin/apt-get -y -o APT::Status-Fd=2 install apt-doc";
-    std::cout << cmdStream.str() << std::endl;
-
-    // fork the process
-    boost::process::async_system(io_context, boost::bind(&onExit, boost::asio::placeholders::error, _2, boost::ref(pipe)), cmdStream.str(),
-        boost::process::std_err > pipe, boost::process::std_out > boost::process::null);
-
-    // read the pipe
-    boost::asio::async_read_until(pipe, buffer, "\n", boost::bind(&onData, boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred, boost::ref(buffer), boost::ref(pipe), boost::ref(output)));
-}
+    boost::asio::io_context& io_context_;
+    std::unique_ptr<boost::process::child> childProcess_;
+    std::unique_ptr<boost::process::async_pipe> statusPipe_;
+    boost::asio::streambuf statusBuffer_;
+    std::unique_ptr<AsyncProcessHandler> asyncHandler_;
+    std::future<std::string> output_;
+    std::future<std::string> errorOutput_;
+};
 
 int main(int argc, char* argv[])
 {
     std::cout << "Hello world!" << std::endl;
+    auto pid = getpid();
+    std::cout << "PID: " << pid << std::endl;
+
     boost::asio::io_context io_context;
-    boost::asio::streambuf buffer;
-    auto pipe = std::make_shared<boost::process::async_pipe>(io_context);
-    //boost::process::async_pipe pipe(io_context);
-    std::ostringstream cmd, output;
-
-    auto sourceFd = pipe->native_source();
-    auto sinkFd = pipe->native_sink();
-    //cmd << "sudo /usr/bin/apt-get -y -o APT::Status-Fd=" << sourceFd << " install apt-doc";
-    cmd << "sudo /usr/bin/apt-get -y -o APT::Status-Fd=2 install apt-doc";
-    std::cout << cmd.str() << std::endl;
-    //io_context.post(boost::bind(&myfunc, boost::ref(io_context), boost::ref(buffer), boost::ref(pipe), boost::ref(output)));
-
-    /*
-    if (fcntl(sourceFd, F_SETFD, 0) != 0)
-    {
-        std::cout << "Error clearing FD_CLOEXEC bit on pipe" << std::endl;
-    }
-
-    if (fcntl(sinkFd, F_SETFD, FD_CLOEXEC) != 0)
-    {
-        std::cout << "Error setting FD_CLOEXEC bit on pipe" << std::endl;
-    }
-    */
-
-    AsyncHandler handler(pipe, sourceFd, sinkFd);
-    //boost::process::child child(cmd.str(), handler, io_context);
-    boost::process::child child(cmd.str(), handler, boost::process::std_err > (*pipe), boost::process::std_out > boost::process::null, io_context);
-
-    // read the pipe
-    boost::asio::async_read_until(*pipe, buffer, "\n", boost::bind(&onData, boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred, boost::ref(buffer), boost::ref(*pipe), boost::ref(output)));
+    auto pr = std::make_shared<ProcessReader>(io_context);
+    pr->runProcess();
 
     io_context.run();
 
