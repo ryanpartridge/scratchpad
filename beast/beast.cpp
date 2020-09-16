@@ -52,8 +52,7 @@ int main(int argc, char* argv[])
     //std::string urlString = "https://www.google.com/some/path/here?key1=value1&keynovalue=&key2=value2#small_fragment";
     //std::string urlString = "http://localhost";
 
-/*
-    std::string urlString = "https://www.google.com";
+    std::string urlString = "https://apiz.control4.com/v1/location";
     std::cout << "Input URL: " << urlString << std::endl;
     std::cout << std::endl;
     boost::system::error_code ec;
@@ -67,7 +66,7 @@ int main(int argc, char* argv[])
     std::cout << "Output URL: " << url.toString() << std::endl;
 
     c4::net::http::HttpRequest req(c4::net::http::HttpMethod::get, url);
-    req.destination("/tmp/beast-index.html");
+    //req.destination("/tmp/beast-index.html");
 
     boost::asio::io_context io_context;
     auto client = std::make_shared<c4::net::http::HttpClient>(io_context, &handleResponse);
@@ -78,14 +77,6 @@ int main(int argc, char* argv[])
     }
 
     io_context.run();
-*/
-
-    boost::filesystem::path path("/tmp/somedir/anotherdir/file.txt");
-    std::cout << "path: " << path.string() << std::endl;
-    std::cout << "is absolute: " << std::boolalpha << path.is_absolute() << std::endl;
-    std::cout << "root name: " << path.root_name().string() << std::endl;
-    std::cout << "root directory: " << path.root_directory().string() << std::endl;
-    std::cout << "root path: " << path.root_path().string() << std::endl;
 
     return 0;
 }
