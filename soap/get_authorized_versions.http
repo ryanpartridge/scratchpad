@@ -1,0 +1,14 @@
+POST http://services.control4.com/Updates2x/v2_0/Updates.asmx HTTP/1.1
+Content-Type: text/xml
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://services.control4.com/updates/v2_0/">
+    <soap:Header/>
+    <soap:Body>
+        <v2:GetAuthorizedVersions>
+            <v2:certificateCommonName>control4_ca10_000FFF0C38DA</v2:certificateCommonName>
+            <v2:currentVersion>3.2.1.123456-res</v2:currentVersion>
+            <v2:includeEarlierVersions>false</v2:includeEarlierVersions>
+            <v2:userAgent>Control4/3.2.1 (CA10; Control4 OS 3.2.1.123456-res) UpdateManager/3.2.1.123456-res</v2:userAgent>
+        </v2:GetAuthorizedVersions>
+    </soap:Body>
+</soap:Envelope>

@@ -1,0 +1,11 @@
+POST http://services.control4.com/Updates2x/v2_0/Updates.asmx HTTP/1.1
+Content-Type: text/xml
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://services.control4.com/updates/v2_0/">
+    <soap:Header/>
+    <soap:Body>
+        <v2:GetPackagesByVersion>
+            <v2:version>3.2.1.589103-res</v2:version>
+        </v2:GetPackagesByVersion>
+    </soap:Body>
+</soap:Envelope>

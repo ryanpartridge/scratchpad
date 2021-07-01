@@ -1,0 +1,12 @@
+POST http://services.control4.com/Updates2x/v2_0/Updates.asmx HTTP/1.1
+Content-Type: text/xml
+SOAPAction: "http://services.control4.com/updates/v2_0/GetVersions"
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://services.control4.com/updates/v2_0/">
+    <soap:Header/>
+    <soap:Body>
+        <v2:GetVersions>
+            <v2:currentVersion>3.2.1.123456-res</v2:currentVersion>
+        </v2:GetVersions>
+    </soap:Body>
+</soap:Envelope>

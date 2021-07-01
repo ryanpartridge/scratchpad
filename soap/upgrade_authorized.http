@@ -1,0 +1,13 @@
+POST https://services.control4.com/security/v1_0/Licensing.asmx HTTP/1.1
+Content-Type: application/soap+xml;action="https://services.control4.com/security/v1_0/UpgradeAuthorized"
+
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:v1="https://services.control4.com/security/v1_0">
+    <soap:Header/>
+    <soap:Body>
+        <v1:UpgradeAuthorized>
+            <v1:certificateCommonName>control4_ca10_000FFF0C38DA</v1:certificateCommonName>
+            <v1:oldVersion>3.2.1.589103-res</v1:oldVersion>
+            <v1:newVersion>3.2.2.598005-res</v1:newVersion>
+        </v1:UpgradeAuthorized>
+    </soap:Body>
+</soap:Envelope>
