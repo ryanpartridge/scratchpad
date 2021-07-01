@@ -4,44 +4,14 @@
  *  Created on: Aug 7, 2013
  *      Author: rpartridge
  */
-#include <iostream>
+#include <memory>
 
-#include <TemplateFuncClass.hpp>
+#include <Concrete.hpp>
 
 using namespace std;
 
-class FuncClass
-{
-public:
-    void operator()()
-    {
-        cout << "operator()()" << endl;
-    }
-
-    void operator()(int i)
-    {
-        cout << "operator()(int)" << endl;
-    }
-
-    void operator()(char* s)
-    {
-        cout << "operator()(char* s)" << endl;
-    }
-
-    void operator()(string s)
-    {
-        cout << "operator()(string)" << endl;
-    }
-};
-
-void foo()
-{
-
-}
-
 int main(int argc, char* argv[])
 {
-    TemplateFuncClass c;
-    c.execFunc(FuncClass());
+    auto concrete = std::make_shared<Concrete>();
     return 0;
 }
