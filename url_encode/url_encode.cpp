@@ -1,10 +1,37 @@
 #include <iostream>
+#include <sstream>
 #include <cstdint>
 #include <string>
 
-std::string encode(std::string const& input)
+std::string encode(std::string const& input, std::string const& encodeChars)
 {
-    return std::string(input);
+    auto index = size_t{0};
+    auto lastIndex = index;
+    auto length = input.size();
+    std::ostringstream encoded;
+
+    while (index < length)
+    {
+        index = input.find_first_of(encodeChars, lastIndex);
+        if (index != std::string::npos)
+        {
+            encoded.write(input.c_str() + lastIndex, index - lastIndex);
+            auto c = input.at(index);
+            encoded.put('%');
+            if (c < 10)
+            {
+                encoded.put('0');
+            }
+            encoded << std::uppercase << std::hex << static_cast<int>(c);
+            lastIndex = index + 1;
+        }
+        else
+        {
+            encoded << (input.c_str() + lastIndex);
+        }
+    }
+
+    return encoded.str();
 }
 
 std::string decode(std::string const& input)
@@ -12,14 +39,14 @@ std::string decode(std::string const& input)
     auto index = size_t(0);
     auto lastIndex = index;
     auto length = input.size();
-    std::string decoded;
+    std::ostringstream decoded;
 
     while (index < length)
     {
         index = input.find('%', lastIndex);
         if (index != std::string::npos)
         {
-            decoded.append(input, lastIndex, index - lastIndex);
+            decoded.write(input.c_str() + lastIndex, index - lastIndex);
             ++index;
             if ((index + 2) < length)
             {
@@ -30,31 +57,31 @@ std::string decode(std::string const& input)
                     int code = std::stoi(value, &badIndex, 16);
                     if (badIndex == value.size())
                     {
-                        decoded.append(1, code);
+                        decoded.put(static_cast<signed char>(code));
                     }
                     else
                     {
-                        return decoded;
+                        return decoded.str();
                     }
                 }
                 catch(std::exception const& ex)
                 {
-                    return decoded;
+                    return decoded.str();
                 }
                 lastIndex = index + 2;
             }
             else
             {
-                return decoded;
+                return decoded.str();
             }
         }
         else
         {
-            decoded.append(input, lastIndex);
+            decoded << (input.c_str() + lastIndex);
         }
     }
 
-    return decoded;
+    return decoded.str();
 }
 
 int main(int argc, char* argv[])
@@ -66,15 +93,15 @@ int main(int argc, char* argv[])
     std::cout << "decoded: " << decode(encoded) << std::endl;
     std::cout << std::endl;
 
-    std::string unencoded{"url encoded*string"};
+    std::string unencoded{"url?encoded@string"};
     std::cout << "unencoded: " << unencoded << std::endl;
-    std::cout << "encoded: " << encode(unencoded) << std::endl;
+    std::cout << "encoded: " << encode(unencoded, std::string{":/?#[]@"}) << std::endl;
 
 /*
     uint32_t c{' '};
-    std::cout << "character: " << static_cast<char>(++c) << " (" << std::hex << c << ")" << std::endl;
-    std::cout << "character: " << static_cast<char>(++c) << " (" << std::hex << c << ")" << std::endl;
-    std::cout << "character: " << static_cast<char>(++c) << " (" << std::hex << c << ")" << std::endl;
+    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
+    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
+    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
 */
 
     return 0;
