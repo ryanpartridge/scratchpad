@@ -10,7 +10,7 @@ std::string encode(std::string const& input, std::string const& encodeChars)
     auto length = input.size();
     std::ostringstream encoded;
 
-    while (index < length)
+    while (lastIndex < length)
     {
         index = input.find_first_of(encodeChars, lastIndex);
         if (index != std::string::npos)
@@ -28,6 +28,7 @@ std::string encode(std::string const& input, std::string const& encodeChars)
         else
         {
             encoded << (input.c_str() + lastIndex);
+            lastIndex = index;
         }
     }
 
@@ -41,14 +42,14 @@ std::string decode(std::string const& input)
     auto length = input.size();
     std::ostringstream decoded;
 
-    while (index < length)
+    while (lastIndex < length)
     {
         index = input.find('%', lastIndex);
         if (index != std::string::npos)
         {
             decoded.write(input.c_str() + lastIndex, index - lastIndex);
             ++index;
-            if ((index + 2) < length)
+            if ((index + 1) < length)
             {
                 auto value = input.substr(index, 2);
                 try
@@ -78,6 +79,7 @@ std::string decode(std::string const& input)
         else
         {
             decoded << (input.c_str() + lastIndex);
+            lastIndex = index;
         }
     }
 
@@ -88,21 +90,9 @@ int main(int argc, char* argv[])
 {
     std::cout << "url_encode program" << std::endl;
 
-    std::string encoded{"url%20encoded%22string"};
+    std::string encoded{"%20"};
     std::cout << "encoded: " << encoded << std::endl;
     std::cout << "decoded: " << decode(encoded) << std::endl;
     std::cout << std::endl;
-
-    std::string unencoded{"url?encoded@string"};
-    std::cout << "unencoded: " << unencoded << std::endl;
-    std::cout << "encoded: " << encode(unencoded, std::string{":/?#[]@"}) << std::endl;
-
-/*
-    uint32_t c{' '};
-    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
-    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
-    std::cout << "character: " << static_cast<signed char>(++c) << " (" << std::hex << c << ")" << std::endl;
-*/
-
     return 0;
 }
