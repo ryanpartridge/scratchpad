@@ -10,6 +10,7 @@ set(BOOST_ROOT $ENV{HOME}/boost/${BOOST_VERSION_MAJOR}.${BOOST_VERSION_MINOR}.${
 set(Boost_NO_SYSTEM_PATHS "ON")
 #set(Boost_ADDITIONAL_VERSIONS ${BOOST_VERSION_MAJOR}.${BOOST_VERSION_MINOR}.${BOOST_VERSION_SUBMINOR})
 set(BOOST_COMPONENTS
+    context
     system
     thread
 )
@@ -31,7 +32,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE ${Boost_SYSTEM_LIBRARY}
+    PRIVATE ${Boost_CONTEXT_LIBRARY}
     PRIVATE ${Boost_THREAD_LIBRARY}
+    PRIVATE ${Boost_SYSTEM_LIBRARY}
     PRIVATE pthread
 )
