@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 3.16)
+project(function_pointer)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(BOOST_VERSION_MAJOR 1)
+set(BOOST_VERSION_MINOR 72)
+set(BOOST_VERSION_SUBMINOR 0)
+set(BOOST_ROOT $ENV{HOME}/boost/${BOOST_VERSION_MAJOR}.${BOOST_VERSION_MINOR}.${BOOST_VERSION_SUBMINOR})
+set(Boost_USE_STATIC_LIBS "OFF")
+set(Boost_NO_SYSTEM_PATHS "ON")
+set(BOOST_COMPONENTS
+    system
+)
+
+find_package(Boost ${BOOST_VERSION_MAJOR}.${BOOST_VERSION_MINOR}.${BOOST_VERSION_SUBMINOR} EXACT REQUIRED
+    COMPONENTS
+    ${BOOST_COMPONENTS}
+)
+
+set(SOURCE_FILES
+    function_pointer.cpp
+)
+
+add_executable(${PROJECT_NAME}
+    ${SOURCE_FILES}
+)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE ${Boost_INCLUDE_DIRS}
+)
+
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE ${Boost_SYSTEM_LIBRARY}
+)
