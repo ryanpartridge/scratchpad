@@ -6,7 +6,14 @@
 #include <chrono>
 
 #include <boost/asio.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+#endif
 #include <boost/process.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 #include <boost/process/extend.hpp>
 #include <boost/process/async_pipe.hpp>
 
@@ -66,7 +73,8 @@ public:
         std::cout << "running command: \"" << cmd << "\"" << std::endl;
         ProcessExitCallback callback = std::bind(&ProcessRunner::exitCallback, shared_from_this(), std::placeholders::_1, std::placeholders::_2);
         asyncHandler_ = std::make_unique<AptAsyncHandler>(callback);
-        childProcess_ = std::make_unique<boost::process::child>(cmd, *asyncHandler_, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
+        childProcess_ = std::make_unique<boost::process::child>("/usr/bin/sleep", "5", *asyncHandler_, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
+        //childProcess_ = std::make_unique<boost::process::child>(cmd, *asyncHandler_, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
         timestamp_ = std::chrono::steady_clock::now();
 
         auto instance = shared_from_this();

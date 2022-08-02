@@ -1,13 +1,13 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.22)
 project(child_process)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(BOOST_ROOT "/home/rpartridge/boost/1.72.0")
+set(BOOST_ROOT "/home/rpartridge/boost/1.75.0")
 set(Boost_USE_STATIC_LIBS "OFF")
 set(Boost_NO_SYSTEM_PATHS "ON")
 
-find_package(Boost "1.72.0" REQUIRED)
+find_package(Boost "1.75.0" REQUIRED)
 
 set(SOURCE_FILES
     child_process.cpp
