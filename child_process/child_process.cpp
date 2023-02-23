@@ -54,21 +54,16 @@ public:
     ProcessRunner() = default;
     ProcessRunner(ProcessRunner const&) = delete;
 
-    ~ProcessRunner()
+    virtual ~ProcessRunner()
     {
-        if (processTimer_)
-        {
-            processTimer_->cancel();
-            processTimer_.reset();
-        }
     }
 
-    void start()
+    auto start() -> void
     {
         io_context_.run();
     }
 
-    void asyncRunProcess()
+    auto asyncRunProcess() -> void
     {
         std::cout << "running command: \"" << cmd << "\"" << std::endl;
         ProcessExitCallback callback = std::bind(&ProcessRunner::exitCallback, shared_from_this(), std::placeholders::_1, std::placeholders::_2);
@@ -113,12 +108,11 @@ public:
         );
     }
 
-    void exitCallback(int32_t exitCode, std::error_code const& ec)
+    auto exitCallback(int32_t exitCode, std::error_code const& ec) -> void
     {
         if (processTimer_)
         {
             processTimer_->cancel();
-            processTimer_.reset();
         }
         childProcess_.reset();
         std::cout << "process exit code: " << exitCode << std::endl;
