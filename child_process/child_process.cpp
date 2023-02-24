@@ -71,9 +71,12 @@ public:
     {
         std::cout << "running command: \"" << cmd << "\"" << std::endl;
         auto processTimer = std::make_shared<boost::asio::steady_timer>(io_context_, std::chrono::seconds(13));
-        ProcessExitCallback callback = std::bind(&ProcessRunner::processComplete, shared_from_this(), std::placeholders::_1, std::placeholders::_2, processTimer);
-        AsyncProcessHandler asyncHandler{callback};
-        auto childProcess = std::make_shared<boost::process::child>(cmd, asyncHandler, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
+        auto callback = ProcessExitCallback{[self = shared_from_this(), processTimer](int32_t exitCode, std::error_code const& ec)
+            {
+                self->processComplete(exitCode, ec, processTimer);
+            }
+        };
+        auto childProcess = std::make_shared<boost::process::child>(cmd, AsyncProcessHandler{callback}, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
 
         std::cout << "starting timer" << std::endl;
         auto timestamp = std::chrono::steady_clock::now();
