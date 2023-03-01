@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <system_error>
 #include <chrono>
+#include <exception>
 
 #include <boost/asio.hpp>
 #ifdef __GNUC__
@@ -47,6 +48,30 @@ public:
         std::cout << "AsyncProcessHandler destructor" << std::endl;
     }
 
+    template<typename Exec>
+    void on_setup(Exec& /*exec*/)
+    {
+        std::cout << "setup successful" << std::endl;
+    }
+
+    template<typename Sequence>
+    void on_setup(boost::process::extend::posix_executor<Sequence>& exec)
+    {
+        std::cout << "posix-exe: " << exec.exe << std::endl;
+    }
+
+    template<typename Sequence>
+    void on_error(boost::process::extend::posix_executor<Sequence>& /*exec*/, std::error_code const& ec)
+    {
+        std::cout << "process error: " << ec.message() << std::endl;
+    }
+
+    template<typename Exec>
+    void on_exec_error(Exec& /*exec*/, std::error_code const& ec)
+    {
+        std::cout << "error on exec: " << ec.message() << std::endl;
+    }
+
 private:
     ProcessExitCallback callback_;
 };
@@ -76,16 +101,28 @@ public:
                 self->processComplete(exitCode, ec, processTimer);
             }
         };
-        auto childProcess = std::make_shared<boost::process::child>(cmd, AsyncProcessHandler{callback}, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
 
-        std::cout << "starting timer" << std::endl;
-        auto timestamp = std::chrono::steady_clock::now();
-        processTimer->async_wait(
-            [self = shared_from_this(), timestamp, childProcess, callback](boost::system::error_code const& timer_ec)
-            {
-                self->processTimerComplete(timer_ec, timestamp, childProcess, callback);
-            }
-        );
+        try
+        {
+            auto childProcess = std::make_shared<boost::process::child>(cmd, AsyncProcessHandler{callback}, boost::process::std_out > boost::process::null, boost::process::std_err > boost::process::null, io_context_);
+
+            std::cout << "starting timer" << std::endl;
+            auto timestamp = std::chrono::steady_clock::now();
+            processTimer->async_wait(
+                [self = shared_from_this(), timestamp, childProcess, callback](boost::system::error_code const& timer_ec)
+                {
+                    self->processTimerComplete(timer_ec, timestamp, childProcess, callback);
+                }
+            );
+        }
+        catch (std::error_code const& ec)
+        {
+            std::cout << "error occurred: " << ec.message() << std::endl;
+        }
+        catch (std::exception const& ex)
+        {
+            std::cout << "caught exception (pid: " << ::getpid() << "): " << ex.what() << std::endl;
+        }
     }
 
     auto processComplete(int32_t exitCode, std::error_code const& ec, std::shared_ptr<boost::asio::steady_timer> processTimer) -> void
@@ -147,13 +184,13 @@ public:
     }
 
 private:
-    const std::string cmd{"/usr/bin/sleep 5"};
+    const std::string cmd{"/usr/bin/foo 5"};
     boost::asio::io_context& io_context_;
 };
 
 int main(int argc, char* argv[])
 {
-    std::cout << "child_process program" << std::endl;
+    std::cout << "child_process program (pid: " << getpid() << ")" << std::endl;
     boost::asio::io_context io_context;
     auto runner = std::make_shared<ProcessRunner>(io_context);
     boost::asio::post(io_context, [runner]() { runner->asyncRunProcess(); });
