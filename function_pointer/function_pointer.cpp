@@ -6,88 +6,110 @@
  */
 
 #include <iostream>
+#include <functional>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
-using namespace std;
-
-typedef boost::function<void(void)> voidVoidFunc;
-typedef boost::function<void(int)> voidIntFunc;
+using voidVoidFunc = boost::function<void(void)>;
+using voidIntFunc = boost::function<void(int)>;
 
 void func1(int anInt)
 {
-    cout << "func1: " << anInt << endl;
+    std::cout << "func1: " << anInt << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
-    cout << "entering main" << endl;
+    std::cout << "entering main" << std::endl;
     voidIntFunc bound1;
-    cout << "trying bound1 before initializing" << endl;
+    std::cout << "trying bound1 before initializing" << std::endl;
     if (bound1)
     {
         bound1(1);
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
     bound1 = voidIntFunc(func1);
-    cout << "trying bound1 after initializing" << endl;
+    std::cout << "trying bound1 after initializing" << std::endl;
     if (bound1)
     {
         bound1(1);
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
     bound1.clear();
-    cout << "trying bound1 after clearing" << endl;
+    std::cout << "trying bound1 after clearing" << std::endl;
     if (bound1)
     {
         bound1(1);
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
-    bound1 = boost::bind(&func1, _1);
-    cout << "trying bound1 after binding without value" << endl;
+    bound1 = boost::bind(&func1, boost::placeholders::_1);
+    std::cout << "trying bound1 after binding without value" << std::endl;
     if (bound1)
     {
         bound1(1);
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
     bound1 = boost::bind(&func1, 7);
-    cout << "trying bound1 after binding with value" << endl;
+    std::cout << "trying bound1 after binding with value" << std::endl;
     if (bound1)
     {
         bound1(1);
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
     voidVoidFunc bound2(boost::bind(&func1, 1));
-    cout << "trying bound2 after binding with value" << endl;
+    std::cout << "trying bound2 after binding with value" << std::endl;
     if (bound2)
     {
         bound2();
     }
     else
     {
-        cout << "did not execute" << endl;
+        std::cout << "did not execute" << std::endl;
     }
 
-    cout << "exiting main" << endl;
+    std::function<void(void)> standardFunc = bound2;
+    std::cout << "trying standardFunc after converting from boost::function" << std::endl;
+    if (standardFunc)
+    {
+        standardFunc();
+    }
+    else
+    {
+        std::cout << "did not execute" << std::endl;
+    }
+
+    voidVoidFunc backToBoost = standardFunc;
+    std::cout << "trying backToBoost after converting from std::function" << std::endl;
+    if (backToBoost)
+    {
+        backToBoost();
+    }
+    else
+    {
+        std::cout << "did not execute" << std::endl;
+    }
+
+    std::cout << "exiting main" << std::endl;
+
     return 0;
 }
