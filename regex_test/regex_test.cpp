@@ -30,5 +30,27 @@ int main(int argc, char* argv[])
         std::cout << "did not match the suffix" << std::endl;
     }
 
+    std::cout << std::endl;
+
+    boost::regex depRegex("^(.+)[[:space:]]+\\([[:space:]]*([>=<])+[[:space:]]+([^[:space:]]+)[[:space:]]*\\).*$");
+    std::string dependency = "part-a (    = 3.5.1   )";
+    if (boost::regex_match(dependency, matches, depRegex))
+    {
+        std::cout << "matched the suffix" << std::endl;
+        std::cout << "found " << matches.size() << " matches" << std::endl;
+        for (const auto& match : matches)
+        {
+            const auto& value = match.str();
+            if (!value.empty())
+            {
+                std::cout << "match value: ***" << match.str() << "***" << std::endl;
+            }
+        }
+    }
+    else
+    {
+        std::cout << "did not match the dependency" << std::endl;
+    }
+
     return 0;
 }
