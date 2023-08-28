@@ -1,0 +1,1 @@
+GET https://jenkins-core.control4.com:8443/view/3.4.0-Pipeline/job/3.4.0-platform-pipeline/lastSuccessfulBuild/api/xml?tree=artifacts[relativePath]&xpath=//*[self::relativePath][contains(text(),"shlibs-dev-armv7af_3.4.0")]/text()
