@@ -1,41 +1,24 @@
-/*
- * std_chrono.cpp
- *
- *  Created on: Aug 2, 2018
- *      Author: rpartridge
- */
-
 #include <iostream>
-
-//#define BOOST_ASIO_DISABLE_STD_CHRONO
-#include <boost/asio.hpp>
-
-#ifdef BOOST_ASIO_DISABLE_STD_CHRONO
-#include <boost/chrono.hpp>
-#else
 #include <chrono>
-#endif
-
-void timer_callback(const boost::system::error_code& /*ec*/)
-{
-    std::cout << "timer callback invoked" << std::endl;
-}
+#include <ctime>
 
 int main(int argc, char* argv[])
 {
     std::cout << "entering main" << std::endl;
-    boost::asio::io_context io_context;
-    boost::asio::steady_timer timer(io_context);
-#ifdef BOOST_ASIO_DISABLE_STD_CHRONO
-    std::cout << "std::chrono is disabled" << std::endl;
-    timer.expires_after(boost::chrono::seconds(2));
-#else
-    std::cout << "std::chrono is enabled" << std::endl;
-    timer.expires_after(std::chrono::seconds(2));
-#endif
-    std::cout << "starting timer" << std::endl;
-    timer.async_wait(&timer_callback);
-    io_context.run();
+
+    auto sourceTimePoint = std::chrono::system_clock::now() + std::chrono::minutes(5);
+    auto sourceDuration = std::chrono::duration_cast<std::chrono::seconds>(sourceTimePoint.time_since_epoch());
+    auto sourceTimeT = std::chrono::system_clock::to_time_t(sourceTimePoint);
+
+    std::cout << "Source time (string): " << std::ctime(&sourceTimeT);
+    std::cout << "Normalized source time: " << sourceDuration.count() << std::endl;
+
+    auto targetDuration = std::chrono::seconds(1693516746);
+    auto targetTimePoint = std::chrono::system_clock::time_point(targetDuration);
+    auto targetTimeT = std::chrono::system_clock::to_time_t(targetTimePoint);
+    std::cout << "Target time (string): " << std::ctime(&targetTimeT);
+    std::cout << "Target time has " << (targetTimePoint < std::chrono::system_clock::now() ? "" : "NOT ") << "expired" << std::endl;
+
     std::cout << "exiting main" << std::endl;
     return 0;
 }
