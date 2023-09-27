@@ -135,6 +135,10 @@ int main(int argc, char* argv[])
     {
         cout << "primary is not set" << endl;
     }
+
+    cout << "Attempting to dereference \"none\" value" << endl;
+    cout << "primary value: " << (*primary ? "true" : "false") << endl;
+
     cout << "all done" << endl;
 
     return 0;
