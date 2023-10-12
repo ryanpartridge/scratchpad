@@ -10,6 +10,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/optional.hpp>
+#include <boost/logic/tribool.hpp>
+#include <boost/logic/tribool_io.hpp>
 
 using namespace std;
 
@@ -136,8 +138,27 @@ int main(int argc, char* argv[])
         cout << "primary is not set" << endl;
     }
 
-    cout << "Attempting to dereference \"none\" value" << endl;
-    cout << "primary value: " << (*primary ? "true" : "false") << endl;
+    //cout << "Attempting to dereference \"none\" value" << endl;
+    //cout << "primary value: " << (*primary ? "true" : "false") << endl;
+
+    boost::logic::tribool triValue;
+    cout << "uninitialized tribool: " << boolalpha << triValue << endl;
+
+    triValue = boost::logic::indeterminate;
+    cout << "indeterminate tribool: " << boolalpha << triValue << endl;
+
+    if (triValue)
+    {
+        cout << "triValue is true" << endl;
+    }
+    else if (!triValue)
+    {
+        cout << "triValue is false" << endl;
+    }
+    else
+    {
+        cout << "triValue is indeterminate" << endl;
+    }
 
     cout << "all done" << endl;
 
