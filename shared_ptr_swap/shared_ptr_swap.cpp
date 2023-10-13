@@ -159,6 +159,11 @@ int main(int argc, char* argv[])
     {
         cout << "triValue is indeterminate" << endl;
     }
+    cout << "checking free function indeterminate() -- triValue is indeterminate: " << boolalpha << boost::logic::indeterminate(triValue) << endl;
+    triValue = true;
+    cout << "checking free function indeterminate() with value set to true -- triValue is indeterminate: " << boolalpha << boost::logic::indeterminate(triValue) << endl;
+    triValue = false;
+    cout << "checking free function indeterminate() with value set to false -- triValue is indeterminate: " << boolalpha << boost::logic::indeterminate(triValue) << endl;
 
     cout << "all done" << endl;
 
