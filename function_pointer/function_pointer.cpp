@@ -18,6 +18,11 @@ void func1(int anInt)
     std::cout << "func1: " << anInt << std::endl;
 }
 
+void func2(int anInt, bool aBool)
+{
+    std::cout << "func2: " << anInt << ", " << std::boolalpha << aBool << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
     std::cout << "entering main" << std::endl;
@@ -110,6 +115,17 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "exiting main" << std::endl;
+
+    std::function<void(int)> boundParameter = std::bind(&func2, std::placeholders::_1, true);
+    std::cout << "trying boundParameter passing first parameter and bound second parameter" << std::endl;
+    if (boundParameter)
+    {
+        boundParameter(42);
+    }
+    else
+    {
+        std::cout << "did not execute" << std::endl;
+    }
 
     return 0;
 }
