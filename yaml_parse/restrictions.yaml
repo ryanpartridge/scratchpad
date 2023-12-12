@@ -1,3 +1,9 @@
-system:
-  target-version: 2.10.0
-  minimum-version: 2.6.0
+tests:
+  - type: system-version
+    target-version: 2.10.0
+    conditions:
+      minimum-version: 2.6.0
+  - type: system-version
+    target-version: 3.4.1
+    conditions:
+      minimum-version: 3.3.1
