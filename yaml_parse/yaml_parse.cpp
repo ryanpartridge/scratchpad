@@ -5,6 +5,11 @@
 #include <ryml.hpp>
 #include <ryml_std.hpp>
 
+void onError(const char* msg, size_t msg_len, ryml::Location location, void* /* user_data */)
+{
+    throw std::runtime_error("parse error");
+}
+
 void walkNode(ryml::ConstNodeRef node)
 {
     if (node.has_key())
@@ -39,8 +44,29 @@ int main(int argc, char* argv[])
     const auto restrictionsPayload = payloadStream.str();
     restrictionsFile.close();
 
-    auto tree = ryml::parse_in_arena(ryml::to_csubstr(restrictionsPayload));
-    walkNode(tree.crootref());
+    auto myErrorFunc = [](const char* /* msg */, size_t /* msg_len */, ryml::Location /* location */, void* /* user_data */)
+        {
+            throw std::runtime_error("parse error");
+        };
+    ryml::Tree tree{{nullptr, nullptr, nullptr, myErrorFunc}};
+    try
+    {
+        ryml::parse_in_arena(ryml::to_csubstr(restrictionsPayload), &tree);
+    }
+    catch(std::runtime_error const& re)
+    {
+        std::cerr << re.what() << '\n';
+    }
+    
+    auto rootNode = tree.crootref();
+    if (rootNode.has_children())
+    {
+        walkNode(rootNode);
+    }
+    else
+    {
+        std::cout << "root node has no children -- cannot process" << std::endl;
+    }
     std::cout << "exiting yaml_parse" << std::endl;
     return 0;
 }
