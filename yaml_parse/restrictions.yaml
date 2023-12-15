@@ -1,9 +1,27 @@
 tests:
   - type: system-version
-    target-version: 2.10.0
-    conditions:
-      minimum-version: 2.6.0
+    target-version: 3.1.0
+    title: Minimum Version Required
+    message: The system must be on at least version 2.9.0 in order to update to the requested version.
+    parameters:
+      minimum-version: 2.9.0
   - type: system-version
-    target-version: 3.4.1
-    conditions:
+    target-version: 3.4.0
+    title: Minimum Version Required
+    message: The system must be on at least version 3.3.1 in order to update to the requested version.
+    parameters:
       minimum-version: 3.3.1
+  - type: driver
+    target-version: 3.0.0
+    title: End of Support
+    message: The Control4 SpeakerPoint cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation.
+    parameters:
+      identifier: control4_speakerpoint.c4i
+      status: eos
+  - type: driver
+    target-version: 3.3.1
+    title: End of Support
+    message: The Home Controller HC800 cannot be included in systems running OS 3.3.1 or later.
+    parameters:
+      identifier: control4_hc800.c4i
+      status: eos

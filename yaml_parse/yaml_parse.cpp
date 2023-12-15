@@ -2,8 +2,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <functional>
 #include <ryml.hpp>
 #include <ryml_std.hpp>
+#include <c4/format.hpp>
 
 void onError(const char* msg, size_t msg_len, ryml::Location location, void* /* user_data */)
 {
@@ -44,11 +46,11 @@ int main(int argc, char* argv[])
     const auto restrictionsPayload = payloadStream.str();
     restrictionsFile.close();
 
-    auto myErrorFunc = [](const char* /* msg */, size_t /* msg_len */, ryml::Location /* location */, void* /* user_data */)
+    auto myErrorFunc = [](const char* msg, size_t msg_len, ryml::Location /* location */, void* /* user_data */)
         {
-            throw std::runtime_error("parse error");
+            throw std::runtime_error(ryml::formatrs<std::string>("parse error: {}", ryml::csubstr(msg, msg_len)));
         };
-    ryml::Tree tree{{nullptr, nullptr, nullptr, myErrorFunc}};
+    ryml::Tree tree{ryml::Callbacks{nullptr, nullptr, nullptr, myErrorFunc}};
     try
     {
         ryml::parse_in_arena(ryml::to_csubstr(restrictionsPayload), &tree);
@@ -57,11 +59,11 @@ int main(int argc, char* argv[])
     {
         std::cerr << re.what() << '\n';
     }
-    
+
     auto rootNode = tree.crootref();
     if (rootNode.has_children())
     {
-        walkNode(rootNode);
+        walkNode(tree.crootref());
     }
     else
     {
