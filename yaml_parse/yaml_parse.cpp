@@ -32,6 +32,13 @@ int main(int argc, char* argv[])
 {
     std::cout << "staring yaml_parse" << std::endl;
 
+    // set the global error callback
+    auto globalErrorFunc = [](const char* msg, size_t msg_len, ryml::Location /* location */, void* /* user_data */)
+        {
+            throw std::runtime_error(ryml::formatrs<std::string>("general error: {}", ryml::csubstr(msg, msg_len)));
+        };
+    ryml::set_callbacks(ryml::Callbacks{nullptr, nullptr, nullptr, globalErrorFunc});
+
     // get the contents of the restrictions file
     const std::string restrictionsFilename{"../restrictions.yaml"};
     std::cout << "parsing file: " << restrictionsFilename << std::endl;
@@ -54,21 +61,35 @@ int main(int argc, char* argv[])
     try
     {
         ryml::parse_in_arena(ryml::to_csubstr(restrictionsPayload), &tree);
+        auto rootNode = tree.crootref();
+        if (rootNode.has_children())
+        {
+            walkNode(tree.crootref());
+        }
+        else
+        {
+            std::cout << "root node has no children -- cannot process" << std::endl;
+        }
     }
     catch(std::runtime_error const& re)
     {
         std::cerr << re.what() << '\n';
     }
 
-    auto rootNode = tree.crootref();
-    if (rootNode.has_children())
-    {
-        walkNode(tree.crootref());
-    }
-    else
-    {
-        std::cout << "root node has no children -- cannot process" << std::endl;
-    }
     std::cout << "exiting yaml_parse" << std::endl;
+
+    #if defined(NDEBUG)
+    std::cout << "NDEBUG is defined" << std::endl;
+    #endif
+
+    try
+    {
+        c4::yml::error("problem");
+    }
+    catch(std::runtime_error const& re)
+    {
+        std::cerr << re.what() << '\n';
+    }
+
     return 0;
 }
