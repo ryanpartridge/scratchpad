@@ -14,6 +14,7 @@ void onError(const char* msg, size_t msg_len, ryml::Location location, void* /* 
 
 void walkNode(ryml::ConstNodeRef node)
 {
+    std::cout << "--- new node ---" << std::endl;
     if (node.has_key())
     {
         std::cout << "node: " << node.key() << " (" << (node.has_val() ? node.val() : "[no value]") << ")" << std::endl;
@@ -64,7 +65,7 @@ int main(int argc, char* argv[])
         auto rootNode = tree.crootref();
         if (rootNode.has_children())
         {
-            walkNode(tree.crootref());
+            walkNode(rootNode);
         }
         else
         {
