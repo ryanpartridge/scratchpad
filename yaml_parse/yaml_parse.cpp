@@ -7,9 +7,14 @@
 #include <ryml_std.hpp>
 #include <c4/format.hpp>
 
+void globalOnError(const char* msg, size_t msg_len, ryml::Location /* location */, void* /* user_data */)
+{
+    throw std::runtime_error(ryml::formatrs<std::string>("general error: {}", ryml::csubstr(msg, msg_len)));
+}
+
 void onError(const char* msg, size_t msg_len, ryml::Location location, void* /* user_data */)
 {
-    throw std::runtime_error("parse error");
+    throw std::runtime_error(ryml::formatrs<std::string>("parse error: {}", ryml::csubstr(msg, msg_len)));
 }
 
 void walkNode(ryml::ConstNodeRef node)
@@ -34,11 +39,7 @@ int main(int argc, char* argv[])
     std::cout << "staring yaml_parse" << std::endl;
 
     // set the global error callback
-    auto globalErrorFunc = [](const char* msg, size_t msg_len, ryml::Location /* location */, void* /* user_data */)
-        {
-            throw std::runtime_error(ryml::formatrs<std::string>("general error: {}", ryml::csubstr(msg, msg_len)));
-        };
-    ryml::set_callbacks(ryml::Callbacks{nullptr, nullptr, nullptr, globalErrorFunc});
+    ryml::set_callbacks(ryml::Callbacks{nullptr, nullptr, nullptr, globalOnError});
 
     // get the contents of the restrictions file
     const std::string restrictionsFilename{"../restrictions.yaml"};
@@ -54,11 +55,7 @@ int main(int argc, char* argv[])
     const auto restrictionsPayload = payloadStream.str();
     restrictionsFile.close();
 
-    auto myErrorFunc = [](const char* msg, size_t msg_len, ryml::Location /* location */, void* /* user_data */)
-        {
-            throw std::runtime_error(ryml::formatrs<std::string>("parse error: {}", ryml::csubstr(msg, msg_len)));
-        };
-    ryml::Tree tree{ryml::Callbacks{nullptr, nullptr, nullptr, myErrorFunc}};
+    ryml::Tree tree{ryml::Callbacks{nullptr, nullptr, nullptr, onError}};
     try
     {
         ryml::parse_in_arena(ryml::to_csubstr(restrictionsPayload), &tree);
@@ -71,10 +68,49 @@ int main(int argc, char* argv[])
         {
             std::cout << "root node has no children -- cannot process" << std::endl;
         }
+
+        std::cout << std::endl;
+        std::cout << "querying the tree" << std::endl;
+        auto testsNode = rootNode["tests"];
+        if (!testsNode.valid() || !testsNode.is_seq())
+        {
+            std::cout << "invalid tests node, or not a sequence" << std::endl;
+        }
+        else
+        {
+            if (testsNode.has_key())
+            {
+                std::cout << "tests node key: " << testsNode.key() << std::endl;
+            }
+        }
+
+        std::string nodeName{"tests"};
+        testsNode = rootNode.find_child(ryml::to_csubstr(nodeName));
+        if (!testsNode.valid())
+        {
+            std::cout << "missing tests node" << std::endl;
+        }
+        else
+        {
+            if (testsNode.has_key())
+            {
+                std::cout << "tests node key: " << testsNode.key() << std::endl;
+            }
+        }
+
+        auto fooNode = rootNode.find_child("foo");
+        if (!fooNode.valid())
+        {
+            std::cout << "missing or invalid foo node" << std::endl;
+        }
     }
-    catch(std::runtime_error const& re)
+    catch (std::runtime_error const& re)
     {
         std::cerr << re.what() << '\n';
+    }
+    catch (...)
+    {
+        std::cerr << "caught an unknown error" << std::endl;
     }
 
     std::cout << "exiting yaml_parse" << std::endl;
