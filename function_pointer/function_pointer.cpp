@@ -9,6 +9,7 @@
 #include <functional>
 #include <boost/function.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/ref.hpp>
 
 using voidVoidFunc = boost::function<void(void)>;
 using voidIntFunc = boost::function<void(int)>;
@@ -22,6 +23,50 @@ void func2(int anInt, bool aBool)
 {
     std::cout << "func2: " << anInt << ", " << std::boolalpha << aBool << std::endl;
 }
+
+void wrapAndExecute(voidIntFunc& intFunc, int value)
+{
+    voidIntFunc executeFunc = boost::bind(intFunc, boost::placeholders::_1);
+    executeFunc(value);
+}
+
+using StdVoidIntFunc = std::function<void(int)>;
+
+class FunctionTester
+{
+public:
+    FunctionTester() = default;
+    virtual ~FunctionTester() {}
+
+    void integerFunction(int value)
+    {
+        std::cout << "integerFunction value: " << value << std::endl;
+    }
+
+    void doIntegerWork(int value)
+    {
+        StdVoidIntFunc func = std::bind(&FunctionTester::integerFunction, this, std::placeholders::_1);
+        doTypeWork(func, value);
+        doTemplateWork(&FunctionTester::integerFunction, value);
+    }
+
+private:
+    void doTypeWork(StdVoidIntFunc intFunc, int value)
+    {
+        std::cout << "typed function parameter" << std::endl;
+        auto worker = std::bind(intFunc, std::placeholders::_1);
+        worker(value);
+    }
+
+    template <class F>
+    void doTemplateWork(F intFunc, int value)
+    {
+        std::cout << "templated function parameter" << std::endl;
+        auto worker = std::bind(intFunc, this, std::placeholders::_1);
+        worker(value);
+    }
+};
+
 
 int main(int argc, char* argv[])
 {
@@ -126,6 +171,9 @@ int main(int argc, char* argv[])
     {
         std::cout << "did not execute" << std::endl;
     }
+
+    FunctionTester ft;
+    ft.doIntegerWork(88);
 
     return 0;
 }
