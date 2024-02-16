@@ -1,0 +1,2848 @@
+{
+  "system": {
+    "update_version": "3.5.0",
+    "minimum_version": "3.3.1"
+  },
+  "drivers": [
+    {
+      "identifier": "globalcache_gc100",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Global Cache driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches the version of the operating system and remove the End of Support Device."
+    },
+    {
+      "identifier": "control4_hc250.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Home Controller HC250 cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_touchscreen_bcm7.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen V2 panels in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_touchscreen_bcm7p.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen V2 panels in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_touchscreen.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen panel in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_touchscreen_v2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen V2 panels in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_touchscreen_c5.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen panel in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_touchscreen_c7.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Incompatible Driver",
+      "message": "The Touch Screen panel in your project are incompatible with OS 3. Please either remove or replace these panels with Touch Screen V3 panels before running the migration wizard."
+    },
+    {
+      "identifier": "control4_agent_intercom",
+      "type": "agent",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 Intercom Agent cannot be included in systems running OS 2.10.0 or later. You will need to connect with a ComposerPro version that matches the version of the operating system and remove the End of Support Agent."
+    },
+    {
+      "identifier": "uidevice_bcm7.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The In-Wall 7\" TS V2 (Communication Agent) cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "uidevice_bcm7p.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Portable 7\" TS V2 (Communication Agent) cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "uidevice_c5.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The InfinityEdge 5\" TS (Communication Agent) cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "uidevice_c7.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The InfinityEdge 7\" TS (Communication Agent) cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_doorstation.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 Door Station (Communication Agent) cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "doorstation_bcm.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 Doorstation cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_IPhone.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support driver",
+      "message": "The Control4 driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_IPad.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support driver",
+      "message": "The Control4 IPad driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_android.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support driver",
+      "message": "The Control4 Android driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_myhomepc.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support driver",
+      "message": "The Control4 My Home PC driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_speakerpoint.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 SpeakerPoint cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_hcGeneric.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 HC Generic driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "control4_eadev.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 EA Development driver cannot be included in systems running OS 3 or later. You will need to connect with a ComposerPro version that matches your currently running version of the operating system and remove the device(s) in order to continue with the installation."
+    },
+    {
+      "identifier": "ipod.c4i",
+      "type": "driver",
+      "condition": "readme",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "allow",
+      "title": "Information",
+      "message": "The device indicated contains an iPod proxy control for using with Control4 Navigator. In Control4 OS 3 and above, the iPod proxy Navigator GUI no longer functions. The List Navigator for the iPod proxy will still continue to function. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ExtraVeg_iTunes.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Information",
+      "message": "The driver indicated is no longer supported in Control4 OS 3 and above. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "itunes.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "Information",
+      "message": "The driver indicated is no longer supported in Control4 OS 3 and above. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "control4_agent_wakeup",
+      "type": "agent",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 Wakeup Agent cannot be included in systems running OS 3 or later. You will need to remove the Wakeup Agent and replace it with the Wakeup/Goodnight Agent."
+    },
+    {
+      "identifier": "control4_agent_4store",
+      "type": "agent",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Control4 4Store Agent cannot be included in systems running OS 3 or later. You will need to remove the 4Store Agent."
+    },
+    {
+      "identifier": "control4_agent_lightingscenes",
+      "type": "agent",
+      "condition": "eos",
+      "version": "3.1.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support Agent",
+      "message": "The legacy Lighting Scenes agent is no longer supported.\r\rFor pre-OS 3 projects, connect to the project with the matching versioned Composer Pro and migrate the Light Scenes and then remove the agent.\r\rFor OS 3 and above projects, select the Agents tab in Composer Pro, select the Lighting Scenes agent and remove."
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista128.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista128bp.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista250",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Ademco Vista250 driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista250.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista250bp.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ADT",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The ADT driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_ADT.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_maxsys",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The DSC MaxSys driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_dsc_maxsys.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_power832",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The DSC Power 832 driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_dsc_power832.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerXandPC.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerit100",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerit100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerandPCit100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_elk_M1",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Elk M1 driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_elk_M1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geadvent",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The GE Advent driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_geadvent.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geconcord.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_genetworx",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The GE Networx driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_genetworx.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnipro2",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The HAI OmniPro2 driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "securitysystem_232_hai_omni.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omni2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnilt.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnipro.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnipro2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_honeywell_apex_6100",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Honeywell Apex 6100 driver contains a V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes."
+    },
+    {
+      "identifier": "camera_ip_http",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The camera driver indicated contains an V1 Camera control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver which uses a V2 Camera proxy for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_honeywell_apex_6100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_honeywell_apex_6100_splitarm.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier_IP.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_NAPCO_CLASSIC.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_NAPCO_Stay_Away.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista_panel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587E.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_sonarguard.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_ip_sequel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "blindV2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an Blind V2 proxy. In Control4 OS 3 and above, the Blind V2 proxy has been deprecated and no longer functions. The Device indicated will need to be removed before upgrading to Control4 OS 3. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "amplifier_232_bk",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The amplifier driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_autopatch",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_bk",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_extronMAV",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_extronSW",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_keydigital",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_keydigital_flash4",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_keydigital_isync",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "avswitch_232_knox",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Audio/Video driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "bbelectronics_esp902",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "receiver_232_denon_avr",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Receiver driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "receiver_ip_denon_avr",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Receiver driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "thermostat",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Thermostat driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "thermostat_232_aprilaire",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Thermostat driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "tuner_232_parasound",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Tuner driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "tv_232_fujitsu",
+      "type": "control",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Television driver indicated contains an control which is no longer supported. In Control4 OS 3 and above, you will need to remove this driver or apply an updated driver for this device. For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "1honeywell_vista_bpt_control.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Ademco 2015.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ALSYS_Ness_D8_D16_Serial_IP.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ALSYS_Ness_D8_D16_Serial_IPrev5.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "BGS_232_template_security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "bolid_c2kpp_security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Chinese_Web_Relay.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Crow_Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "dmp_security_area.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "driver-control-4-en-000.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWork..Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWorks_232_Fake_Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWorks_232_Garage_Keypad.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWorks_232_template_security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWorks_Generic_Security_System.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "DriverWorks_Generic_Security_System.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "driverworks_security_GE_Networx_NX8-587E.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "driverworks_security_Honeywell_-_Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Driveworks_232_security_comfort.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Generic_Security_System.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Honeywell Panel Generic.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "honeywell_vam_keypad.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "honeywell_vista_bpt_control - Copy.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "honeywell_vista_bpt_control 2017.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "honeywell_vista_bpt_control.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Houselogix_HSIM.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ICHA_232_security_comfort.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "KNX Security Dual Mode GooseBumpz.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Ksenia driver-control-4-en-000.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Ksenia_lares_IP_v1.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Ksenia_lares_IP_v1.1.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Ksenia_lares_IP_v1.3.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ksenia-lares-ip-v1-it-000.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "morne Paradox EVO (RS232) - 8.0.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "MS_GAS_SENSOR.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "MWiz_SatelIntegra (1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "MWiz_SatelIntegra.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232) - 8.0.0 (1).c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232) - 8.0.0 (2).c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232) - 8.0.0 (3).c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232) - 8.0.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232) - 8.0.0-3.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO (RS232)New - 8.0.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox EVO full version(RS232) - 8.0.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "paradox sp.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox_DigiPlex_Security new.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox_EVO_(RS232)_-_8.0.0.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Paradox307USBÃ¯Â¼?SPMGÃ¯Â¼?.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "ParadoxPRT3.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "planet_server.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "probuck_lock.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "pseudo_security_panel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "pseudo_security_panel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "secupitysystem_232_dsc_powerandPCit100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Security RFID 2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_232_control4home_0003.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Ademco Vista  Panel_Honeywell Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Ademco Vista Panel_Honeywell Security(1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Ademco Vista Panel_Honeywell Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Ademco Vista Panels_Honeywell Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Ademco Vista_Tiff_Panel_Honeywell Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Arrowhead Alarm Products Ltd_Elite S.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Comfort_Ultra 2 johan.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Comfort_Ultra 2 teichman.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Comfort_Ultra 2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Concord4_232_GE Networx.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Control4 Australia_Fake Security System.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_DriverWorks 232 SonarGuard Security_SonarGuard.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier[1].c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier_IP (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier_IP (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ExtraVeg_Texecom_Premier_IP.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_galaxy.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_GE Networx_NX-8 587E zones.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_GE Networx_NX-8 587E.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_HAI_Omni-Lumina - Build 1062.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_HAI_Omni-Lumina (2).c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_HAI_Omni-Lumina.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_HAI_Omni-Lumina.c4z",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_NAPCO_CLASSIC.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_NAPCO_Stay_Away.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt 28-10-2013.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt 28-10-2013.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt Bas Jansen.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt Starline.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt Tijssen.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1 Encrypt.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1_verhoeven-4-blocks.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-120140701aangepast - verheijden.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1te Raaij.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra ETHM-1v1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra_Reef.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ip_satel_integra_Reijnders.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(10).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(11).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(12).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(3).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(4).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(4)NEW DRIVER.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(5).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(6).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(7).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(8).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(9) (1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx(9).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx-be.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE Networx-brente.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_NX-8 587E_GE_JAW.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_5.0.5_kocsedos_new.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security (1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security (4).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security 2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security(2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security(3).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security_2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security-1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_Security2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_Paradox_DigiPlex_tested.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_serial_DSC_PowerSeries.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_serial_pima_Hunter-Pro 832[IP]test_cs.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "security_ST8_EIM_Sequel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securityproxy_serial_template.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysy..m_232_ge.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysy..NX8_587E.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista_panel (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista_panel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista_panel_C4_Driver.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista_panel-encrypted.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista128.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista128bp.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista250.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ademco_vista250bp.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_maxsys.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_power832.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerandPCit100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerit100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_dsc_powerXandPC.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_elk_M1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_elk_M1_sturges.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geadvent.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geconcord.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geconcord_securestay.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_geconcordsavemod.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_genetworx.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omni.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omni2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnilt.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnipro.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_hai_omnipro2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_honeywell_apex_6100.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_honeywell_apex_6100_splitarm.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HHIM.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HHIM-1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HHIM2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HHIM-2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM (1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM (3).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM (4).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM(1).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM(2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM-2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM253.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM3.4.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM-3.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix_HSIM33.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_houselogix2_HSIM-2.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ness_M1.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_ness_M1_.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587E (2).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587E NEW.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587E.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587E-Chris-Zenbook.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587En.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_NX8_587Erevised.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_Paradox.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_paradox_spmg.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_paradox_spmg-series(Code).c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_232_paradox_spmg-series.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_ip_napco_gemp9600.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_ip_Satel_Integra.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem_ip_sequel.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem-Ademco-Honeywell-Vista128BPE.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "securitysystem-Ademco-Honeywell-Vista128BPE-V2-P1ONLY.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Snowyi_Doson_Sensor_SEN-24A.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Vista128.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "Zorlu_Security.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The device indicated contains an V1 Security control for use with security panels. In Control4 OS 3 and above, the V1 Security control has been replaced by the V2 Security proxy. To continue, you will need to remove this driver or apply an updated driver which uses a V2 Security proxy for this device For more details, refer to the Control4 OS 3 Release Notes. "
+    },
+    {
+      "identifier": "camera_ip_http_speco_VIP_NonPTZ.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": ""
+    },
+    {
+      "identifier": "camera_ip_http_speco_ONSIP_NonPTZ.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.0.0",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": ""
+    },
+    {
+      "identifier": "control4_hc800.c4i",
+      "type": "driver",
+      "condition": "eos",
+      "version": "3.3.1",
+      "action": "none",
+      "result": "block",
+      "title": "End of Support",
+      "message": "The Home Controller HC800 cannot be included in systems running OS 3.3.1 or later."
+    }
+  ]
+}
