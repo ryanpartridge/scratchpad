@@ -24,6 +24,15 @@ boost::future<typename std::function<F>::result_type> postTask(boost::asio::io_c
     return future;
 }
 
+template <class R>
+boost::future<R> postTaskAlso(boost::asio::io_context& io_context, std::function<R()> func)
+{
+    auto task = boost::packaged_task<R>(func);
+    auto future = task.get_future();
+    boost::asio::post(io_context, std::move(task));
+    return future;
+}
+
 int meaninglessTask()
 {
     std::cout << "this is a meaningless task" << std::endl;
@@ -91,10 +100,12 @@ int main(int argc, char* argv[])
     boost::asio::post(io_context, std::bind(&eventLoop, std::ref(io_context)));
     auto future = postTask(io_context, std::function<int()>(&meaninglessTask));
     auto future2 = postTask(io_context, std::function<int()>([]() -> int { std::cout << "lambda task" << std::endl; return 44;}));
+    auto future3 = postTaskAlso(io_context, std::function<int()>([]() -> int { std::cout << "another lambda task" << std::endl; return 45;}));
     work.reset();
     io_context.run();
     std::cout << "post task return value: " << future.get() << std::endl;
     std::cout << "post task lambda return value: " << future2.get() << std::endl;
+    std::cout << "post task also lambda return value: " << future3.get() << std::endl;
 
     std::cout << "exiting future_work" << std::endl;
 }
