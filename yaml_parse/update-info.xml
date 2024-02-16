@@ -1,0 +1,32 @@
+<update_info>
+  <update>
+    <version>3.6.0.987654-res</version>
+    <devicetype>
+      <device>ea1</device>
+      <package_info>
+        <name>system-version</name>
+        <size>810</size>
+        <location>system-version_3.6.0.987654-res_all.deb</location>
+        <checksum>fe6063a0d018db03f338be1c50146ea7</checksum>
+      </package_info>
+    </devicetype>
+    <devicetype>
+      <device>ea3</device>
+      <package_info>
+        <name>system-version</name>
+        <size>810</size>
+        <location>system-version_3.6.0.987654-res_all.deb</location>
+        <checksum>fe6063a0d018db03f338be1c50146ea7</checksum>
+      </package_info>
+    </devicetype>
+    <devicetype>
+      <device>ea5</device>
+      <package_info>
+        <name>system-version</name>
+        <size>810</size>
+        <location>system-version_3.6.0.987654-res_all.deb</location>
+        <checksum>fe6063a0d018db03f338be1c50146ea7</checksum>
+      </package_info>
+    </devicetype>
+  </update>
+</update_info>

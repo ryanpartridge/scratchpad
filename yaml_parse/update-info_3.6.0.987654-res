@@ -1,0 +1,13 @@
+<update-info>
+	<package>
+		<platform>ce5300</platform>
+		<name>system-version</name>
+		<dpkginfo></dpkginfo>
+		<filename>system-version_3.6.0.987654-res_all.deb</filename>
+		<filesize>810</filesize>
+		<md5sum>fe6063a0d018db03f338be1c50146ea7</md5sum>
+		<shutdownservice></shutdownservice>
+		<loadable>false</loadable>
+		<description>System Version</description>
+	</package>
+</update-info>

@@ -14,9 +14,9 @@ tests:
   - type: system-version
     target-version: 3.6.0
     title: Minimum Version Required
-    message: The system must be on at least version 3.3.1 in order to update to the requested version.
+    message: The system must be on at least version 3.5.0 in order to update to the requested version.
     parameters:
-      minimum-version: 3.3.1
+      minimum-version: 3.5.1
   - type: driver
     target-version: 3.0.0
     title: End of Support
@@ -31,3 +31,14 @@ tests:
     parameters:
       identifier: control4_hc800.c4i
       status: eos
+  - type: driver
+    target-version: 3.6.0
+    title: End of Support
+    message: The FooBar driver cannot be included in systems running OS 3.6.0 or later.
+    parameters:
+      identifier: foobar.c4i
+      status: eos
+  - type: invalid-zigbee
+    target-version: 3.6.0
+    title: Multi-Zap Configuration
+    message: Multiple Zap instances are not a supported configuration.
