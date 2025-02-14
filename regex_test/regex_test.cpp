@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 
 #include <boost/algorithm/string/regex.hpp>
 
@@ -50,6 +51,16 @@ int main(int argc, char* argv[])
     else
     {
         std::cout << "did not match the dependency" << std::endl;
+    }
+
+    std::regex mmpRegex = std::regex("[[:digit:]]+\\.[[:digit:]]+\\.[[:digit:]]+");
+    if (std::regex_match("3.10.2", mmpRegex))
+    {
+        std::cout << "target version matches the std::regex" << std::endl;
+    }
+    else
+    {
+        std::cout << "target version does not match the std::regex" << std::endl;
     }
 
     return 0;
