@@ -42,11 +42,21 @@ std::string timezoneNameNew()
     return tzStream.str();
 }
 
+std::string timezoneNameAlternative()
+{
+    auto now = time(nullptr);
+    auto ptm = localtime(&now);
+    char buffer[16] = {};
+    strftime(buffer, 15, "%Z", ptm);
+    return std::string(buffer);
+}
+
 int main(int argc, char* argv[])
 {
     std::cout << "starting tz_value" << std::endl;
-    std::cout << "timezone: " << timezoneName() << std::endl;
-    std::cout << "timezone (new): " << timezoneNameNew();
+    std::cout << "timezone: ***" << timezoneName() << "***" << std::endl;
+    std::cout << "timezone (new): ***" << timezoneNameNew() << "***" << std::endl;
+    std::cout << "timezone (alternative): ***" << timezoneNameAlternative() << "***" << std::endl;
 
     return 0;
 }
