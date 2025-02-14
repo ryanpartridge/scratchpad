@@ -1,6 +1,7 @@
 #include <iostream>
 #include <tuple>
 #include <string>
+#include <deque>
 
 using my_tuple = std::tuple<uint32_t, std::string>;
 
@@ -10,31 +11,41 @@ public:
     MyType() = default;
     explicit MyType(std::string const& value) :
         value_{value}
-    {}
+    {
+        std::cout << "default constructor (" << value_ << ")" << std::endl;
+    }
 
     MyType(MyType const& other) :
         value_{other.value_}
     {
-        std::cout << "const copy constructor" << std::endl;
+        std::cout << "const copy constructor (" << value_ << ")" << std::endl;
     }
 
     MyType(MyType& other) :
         value_{other.value_}
     {
-        std::cout << "non const copy constructor" << std::endl;
+        std::cout << "non const copy constructor (" << value_ << ")" << std::endl;
     }
 
     MyType(MyType&& other)
     {
-        std::cout << "move constructor" << std::endl;
         value_ = std::move(other.value_);
+        std::cout << "move constructor (" << value_ << ")" << std::endl;
     }
 
-    virtual ~MyType() = default;
+    virtual ~MyType()
+    {
+        std::cout << "destructor (" << value_ << ")" << std::endl;
+    }
 
     std::string const& value() const
     {
         return value_;
+    }
+
+    void print()
+    {
+        std::cout << "value: " << value_ << std::endl;
     }
 
 private:
@@ -72,12 +83,18 @@ int main(int argc, char* argv[])
     receiveByMove(std::move(t));
     t = returnByMove(1, std::string("hello again"));
 */
-    MyType m1("hello");
-    std::cout << "value of m1: " << m1.value() << std::endl;
-    passByConstRef(m1);
-    std::cout << "value of m1 after const ref function: " << m1.value() << std::endl;
-    passByNonConstRef(m1);
-    std::cout << "value of m1 after non const ref function: " << m1.value() << std::endl;
+
+    std::deque<MyType> mq;
+    mq.emplace_back("m1");
+    mq.emplace_back("m2");
+    mq.emplace_back("m3");
+
+    MyType m1 = std::move(mq.front());
+    mq.pop_front();
+    m1.print();
+
+    mq.clear();
+    mq.push_back(std::move(m1));
 
     return 0;
 }
