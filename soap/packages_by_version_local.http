@@ -1,11 +1,12 @@
-POST http://services.control4.com/Updates2x-testing/v2_0/Updates.asmx HTTP/1.1
+POST http://192.168.1.9:8080 HTTP/1.1
+SOAPAction: "http://services.control4.com/updates/v2_0/GetPackagesByVersion"
 Content-Type: text/xml
 
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://services.control4.com/updates/v2_0/">
     <soap:Header/>
     <soap:Body>
         <v2:GetPackagesByVersion>
-            <v2:version>4.1.0.739692-res</v2:version>
+            <v2:version>4.1.0.739881-res</v2:version>
         </v2:GetPackagesByVersion>
     </soap:Body>
 </soap:Envelope>

@@ -4,8 +4,8 @@ Content-Type: text/xml
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://services.control4.com/updates/v2_0/">
     <soap:Header/>
     <soap:Body>
-        <v2:GetPackagesByVersion>
+        <v2:GetUpdateInfoByVersion>
             <v2:version>4.1.0.739692-res</v2:version>
-        </v2:GetPackagesByVersion>
+        </v2:GetUpdateInfoByVersion>
     </soap:Body>
 </soap:Envelope>
