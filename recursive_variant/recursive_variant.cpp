@@ -34,12 +34,14 @@ public:
     void operator()(TestDataVector& value) const
     {
         TestDataVisitor visitor;
+        std::cout << "vector node" << std::endl;
         std::for_each(value.begin(), value.end(), boost::apply_visitor(visitor));
     }
 
     void operator()(TestDataMap& value) const
     {
         TestDataVisitor visitor;
+        std::cout << "map node" << std::endl;
         std::for_each(value.begin(), value.end(), [&visitor](TestDataMap::value_type nodePair)
             {
                 std::cout << "key value: " << nodePair.first << std::endl;
@@ -59,6 +61,14 @@ int main(int argc, char* argv[])
     rootRef.emplace("vector", TestDataVector{1, 2, 3});
     rootRef.emplace("map", TestDataMap{{"x", 24}, {"y", 25}, {"z", 26}});
 
+    std::cout << "original root: " << std::endl;
+    boost::apply_visitor(TestDataVisitor(), rootNode);
+
+    auto newRoot = std::move(rootNode);
+    std::cout << "new root: " << std::endl;
+    boost::apply_visitor(TestDataVisitor(), newRoot);
+
+    std::cout << "original root after move: " << std::endl;
     boost::apply_visitor(TestDataVisitor(), rootNode);
 
     std::cout << "exiting main" << std::endl;
